@@ -1,3 +1,15 @@
+2002-01-15 18:16  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.6-1mdk
+
+2002-01-15 18:14  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* gprintify.py: protect variables by surrounding them them ""
+
+2001-11-22 14:14  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: Linux-Mandrake => Mandrake Linux
+
 2001-11-22 09:34  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.5-1mdk
