@@ -86,6 +86,7 @@ while (<>) {
     s@[/]?(usr|%{[_]?prefix})/share@%{_datadir}@g;
     s@[/]?(usr|%{[_]?prefix})/include@%{_includedir}@g;
     s@[/]?(usr|%{[_]?prefix})/info@%{_infodir}@g;
+    s@[/]?etc/(rc.d/)?init.d@%{_initrddir}@g;
     s@/etc@%{_sysconfdir}@;
     s@/usr@%{prefix}@;
    print;
