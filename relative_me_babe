@@ -6,7 +6,7 @@
 ## description: Convert full link to relative links.
 
 my $r=$ENV{RPM_BUILD_ROOT};
-chdir($r) or "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+chdir($r) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 
 push my @files, split(/\n/, `find -type l 2> /dev/null`);
 foreach my $file (@files) {
