@@ -1,3 +1,16 @@
+2002-02-20 10:26  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.6-4mdk
+
+2002-02-20 10:20  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: oops grep => egrep
+
+2002-02-20 10:16  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: don't gprintify if init scripts doesn't contain a
+	source functions
+
 2002-02-16 22:13  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.6-3mdk
