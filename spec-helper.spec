@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.3
-%define release 3mdk
+%define release 4mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Fri Aug 18 2000 Pixel <pixel@mandrakesoft.com> 0.3-4mdk
+- clean_perl: remove the -x (silly me), don't remove *.ix (used for devel)
+
 * Thu Aug 17 2000 Pixel <pixel@mandrakesoft.com> 0.3-3mdk
 - spec-helper: add a rule to call clean_perl
 - clean_perl: created, removes .packlist and empty *.bs

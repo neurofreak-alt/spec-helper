@@ -1,6 +1,7 @@
 2000-08-18  Pixel  <pixel@mandrakesoft.com>
 
-	* clean_perl: remove the -x (silly me)
+	* clean_perl: remove the -x (silly me), don't remove *.ix (used
+	for devel)
 
 2000-08-17  Pixel  <pixel@mandrakesoft.com>
 
