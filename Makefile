@@ -12,7 +12,7 @@ VERSION:=$(shell grep '%define *version ' $(PACKAGE).spec| cut -d ' ' -f 3)
 RELEASE:=$(shell grep '%define *release ' $(PACKAGE).spec| cut -d ' ' -f 3)
 TAG := $(shell echo "V$(VERSION)_$(RELEASE)" | tr -- '-.' '__')
 
-FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py
+FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py fix-mo
 DISTFILES= AUTHORS Makefile ChangeLog Howto-spec-helper $(FILES) macroszification spec-helper.spec
 bindir=/usr/bin
 
