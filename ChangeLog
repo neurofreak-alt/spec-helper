@@ -1,3 +1,11 @@
+2003-07-25 12:28  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper.spec: 0.9.1-1mdk
+
+2003-07-25 12:27  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper: handle amd64
+
 2003-06-20 10:09  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.9-1mdk
