@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.9.2
-%define release 3mdk
+%define version 0.10
+%define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -22,7 +22,7 @@ Tools to ease the creation of rpm packages for the Mandrake Linux distribution.
 Compress man pages using bzip2, strip executables, convert links...
 
 %prep
-%setup
+%setup -q
 
 %build
 
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Tue Jan 27 2004 Frederic Lepied <flepied@mandrakesoft.com> 0.10-1mdk
+- translate menus
+
 * Thu Oct  9 2003 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.9.2-3mdk
 - also nuke /lib64/security/ paths
 
