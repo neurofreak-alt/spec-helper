@@ -53,10 +53,15 @@ test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "do
 test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relative_me_babe && echo "done"
 test -z "$DONT_CLEAN_PERL" && echo -n "Clean perl..." && clean_perl && echo "done"
 test -z "$DONT_SYMLINK_LIBS" && echo -n "Building libraries symlinks..." && lib_symlinks && echo "done"
-if [ -d $RPM_BUILD_ROOT/etc/rc.d/init.d -a -n "`ls $RPM_BUILD_ROOT/etc/rc.d/init.d/* 2> /dev/null`" ]; then
-    test -z "$DONT_GPRINTIFY" && echo -n "Gprintifying init scripts..." && gprintify.py $RPM_BUILD_ROOT/etc/rc.d/init.d/* && echo "done"
-elif [ -d $RPM_BUILD_ROOT/etc/init.d -a -n "`ls $RPM_BUILD_ROOT/etc/init.d/* 2> /dev/null`" ]; then
-    test -z "$DONT_GPRINTIFY" && echo -n "Gprintifying init scripts..." && gprintify.py $RPM_BUILD_ROOT/etc/init.d/* && echo "done"
+
+if test -z "$DONT_GPRINTIFY"; then
+    scripts=
+    for f in `ls $RPM_BUILD_ROOT/etc/rc.d/init.d/* $RPM_BUILD_ROOT/etc/init.d/* 2> /dev/null`; do
+	test -f $f && grep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f && scripts="$scripts $f"
+    done
+    if [ -n "$scripts" ]; then
+	echo -n "Gprintifying init scripts..." && gprintify.py $scripts && echo "done"
+    fi
 fi
 
 exit 0
