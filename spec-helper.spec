@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.6
-%define release 4mdk
+%define release 5mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Wed Jun 26 2002 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.6-5mdk
+- fix modules location in pam.d config files.
+
 * Wed Feb 20 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6-4mdk
 - don't gprintify if init scripts doesn't contain a source functions
 

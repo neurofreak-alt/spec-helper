@@ -23,13 +23,14 @@ export PATH
 
 # usage
 usage() {
-    echo "usage: spec-helper [-l|-c|-m|-s|-L]" 1>&2
+    echo "usage: spec-helper [-l|-c|-m|-s|-L|-g|-p]" 1>&2
     echo "-c don't clean up files" 1>&2
     echo "-m don't compress files" 1>&2
     echo "-s don't strip files" 1>&2
     echo "-l don't fix full link as relative." 1>&2
     echo "-L don't build lib symlinks." 1>&2
     echo "-g don't grpintify init scripts." 1>&2
+    echo "-p don't fix pam.d configs." 1>&2
 }
 
 # handle options
@@ -41,6 +42,7 @@ while [ $# != 0 ]; do
 	-l) DONT_RELINK=1;;
 	-L) DONT_SYMLINK_LIBS=1;;
 	-g) DONT_GPRINTIFY=1;;
+	-p) DONT_FIX_PAMD_CONFIGS=1;;
 	*) usage; exit 1;;
     esac
 
@@ -62,6 +64,19 @@ if test -z "$DONT_GPRINTIFY"; then
     if [ -n "$scripts" ]; then
 	echo -n "Gprintifying init scripts..." && gprintify.py $scripts && echo "done"
     fi
+fi
+
+if test -z "$DONT_FIX_PAMD_CONFIGS"; then
+	configs=`ls $RPM_BUILD_ROOT/etc/pam.d/* 2> /dev/null`
+	if [ -n "$configs" ]; then
+		echo -n "Fixing pam.d config files..."
+		lib64=
+		case `arch` in
+		x86_64* | sparc64* | ppc64* ) lib64=yes;;
+		esac
+		test -n "$lib64" && perl -pi -e "s|/lib/security|/lib64/security|" $configs
+		echo "done"
+	fi
 fi
 
 exit 0
