@@ -37,6 +37,13 @@ dis:
 	bzip2 -9vf ../$(NAME)-$(VERSION).tar
 	rm -rf $(NAME)-$(VERSION)
 
+changelog:
+	rcs2log | sed "s|@.*mandrakesoft\.com|@mandrakesoft.com|" | sed "s|@@|@|" | \
+	sed "s|/home/cvs/cooker/soft/$(NAME)/||g" > changenew
+	mv ChangeLog ChangeLog.old
+	cat changenew ChangeLog.old > ChangeLog
+	rm -f changenew
+
 rpm: ../$(NAME)-$(VERSION).tar.bz2
 	test -d $(RPM)/SOURCES && test -d $(RPM)/
 	cp -f ../$(NAME)-$(VERSION).tar.bz2 $(RPM)/SOURCES
