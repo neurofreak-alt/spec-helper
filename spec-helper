@@ -23,7 +23,7 @@ export PATH
 
 # usage
 usage() {
-    echo "usage: spec-helper [-l|-c|-m|-s|-L|-g|-p]" 1>&2
+    echo "usage: spec-helper [-l|-c|-m|-s|-L|-g|-p|-i]" 1>&2
     echo "-c don't clean up files" 1>&2
     echo "-m don't compress files" 1>&2
     echo "-s don't strip files" 1>&2
@@ -31,6 +31,7 @@ usage() {
     echo "-L don't build lib symlinks." 1>&2
     echo "-g don't grpintify init scripts." 1>&2
     echo "-p don't fix pam.d configs." 1>&2
+    echo "-i don't delete info dir." 1>&2
 }
 
 # handle options
@@ -43,6 +44,7 @@ while [ $# != 0 ]; do
 	-L) DONT_SYMLINK_LIBS=1;;
 	-g) DONT_GPRINTIFY=1;;
 	-p) DONT_FIX_PAMD_CONFIGS=1;;
+	-i) DONT_REMOVE_INFO_DIR=1;;
 	*) usage; exit 1;;
     esac
 
@@ -77,6 +79,12 @@ if test -z "$DONT_FIX_PAMD_CONFIGS"; then
 		test -n "$lib64" && perl -pi -e "s|/lib/security|/lib64/security|" $configs
 		echo "done"
 	fi
+fi
+
+dir=$RPM_BUILD_ROOT/usr/share/info/dir
+
+if test -z "$DONT_REMOVE_INFO_DIR" -a -f $dir -a ! -L $dir; then
+    echo -n "Removing info dir..." && rm -f $dir && echo done
 fi
 
 exit 0
