@@ -1,3 +1,31 @@
+2000-07-20  chmouel  <chmouel@mandrakesoft.com>
+
+	* Makefile: Add the changelog target
+
+	* strip_files: Clean up.
+
+2000-05-09  flepied  <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 	* 0.2-8mdk
+
+	* spec-helper:
+		* exit 0 if no RPM_BUILD_ROOT variable set to allow build with no BuildRoot.
+
+2000-04-23  chmouel  <chmouel@mandrakesoft.com>
+
+	* Makefile, spec-helper, spec-helper.spec, relative_me_babe:
+	relative_me_babe: a new greatest hit.
+
+2000-04-13  chmouel  <chmouel@mandrakesoft.com>
+
+	* ChangeLog, spec-helper.spec:
+	"Seethechangelog"
+
+2000-04-07  chmouel  <chmouel@mandrakesoft.com>
+
+	* compress_files:
+	Remove orphan link only for manpage.
+
 2000-04-07  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
 
 	* /home/cvs/cooker/soft/spec-helper/compress_files:
