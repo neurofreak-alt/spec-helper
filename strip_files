@@ -64,14 +64,10 @@ chdir($RPM_BUILD_ROOT) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 @shared_libs = @executables = @static_libs = ();
 find(\&testfile, $RPM_BUILD_ROOT);
 
-foreach (@shared_libs) {
-    # Note that all calls to strip on shared libs
-    # *must* inclde the --strip-unneeded.
-    system("strip", "--remove-section=.comment", "--remove-section=.note", "--strip-unneeded",$_);
-}
+# Note that all calls to strip on shared libs *must* include the --strip-unneeded.
+system("strip", "--remove-section=.comment", "--remove-section=.note", "--strip-unneeded",$_) foreach @shared_libs;
 
-foreach (@executables) {
-    system("strip", "--remove-section=.comment", "--remove-section=.note",$_);
-}
+system("strip", "--remove-section=.comment", "--remove-section=.note",$_) foreach @executables;
+
 
 # strip_files ends here
