@@ -53,9 +53,11 @@ if [[ ! -f $file ]];then
     usage $val;
 fi
 
-[[ -z $nocheck ]] && egrep -q "^Prefix:[[:space:]]+" $file || {
+[[ -z $nocheck ]] && egrep -q "%{?prefix}?" $file && {
+	egrep -q "^Prefix:[[:space:]]+" $file || {
     echo "sound like you don't have a Prefix set"
     exit;
+    }
 }
 
 [[ -z $nocheck ]] && egrep -q "^%configure" $file && {
