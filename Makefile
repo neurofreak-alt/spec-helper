@@ -7,7 +7,7 @@
 # Created On      : Fri Feb 18 08:11:21 2000
 #---------------------------------------------------------------
 
-VERSION=0.2
+VERSION=0.3
 FILES= spec-helper clean_files compress_files strip_files relative_me_babe
 DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES) macroszification
 NAME=spec-helper

@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.2
-%define release 9mdk
+%define version 0.3
+%define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,12 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Sat Jul 22 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.3-1mdk
+- macroszification:	Add check for Docdir: it's not good !!
+- macroszification: checking configure/makeinstall only if there is no
+  nocheck
+- macroszification:	Add the -o option to only process docdir and mandir
+
 * Thu Jul 20 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-9mdk
 - macroszification: a new greatest hit.
 
