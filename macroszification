@@ -1,16 +1,17 @@
 #!/bin/bash
 # -*- Mode: shell-script -*-
-# Copyright (C) 2000 by Chmouel Boudjnah <chmouel@mandrakesoft.com>
+# Copyright (C) 2000 by Chmouel Boudjnah <chmouel@mandrakesoft.com>,
+# MandrakeSoft
 # Redistribution of this file is permitted under the terms of the GNU 
 # Public License (GPL)
 ## description:
 # Macroszification of files to be mandrake compliant, also do some check.
 
-
 function usage () {
     rval=$1
     echo "Usage: $(basename $0) -d --help --nodiff --nocheck --clean SPEC-FILE"
     echo -e "\t-d: Product only a diff don't change nothing"
+    echo -e '\t-o: Only change the mandir/infodir'
     echo -e "\t--nocheck: Don't try do check about Prefix %configure"
     echo -e "\t--clean: remove the old files after"
     echo -e "\t--nodiff: I don't want to see the diff output"
@@ -21,6 +22,10 @@ while [[ $1 == -* ]];do
       case $1 in
 	  -d)
 	  only_diff=1;
+	  shift;
+	  ;;
+	  -o)
+	  only_fhs=1;
 	  shift;
 	  ;;
 	  --nocheck)
@@ -61,6 +66,8 @@ egrep -q "^%configure" $file && {
 }
 
 mv -f  $file $file.old
+
+if [[ -z $only_fhs ]];then
 cat $file.old | perl -e "
 while (<>) {
     s@[/]?(usr|%{[_]?prefix})/bin@%{_bindir}@g;
@@ -76,6 +83,15 @@ while (<>) {
    print;
 }
 " > $file
+else
+cat $file.old | perl -e "
+while (<>) {
+    s@[/]?(usr|%{[_]?prefix})/man@%{_mandir}@g;
+    s@[/]?(usr|%{[_]?prefix})/info@%{_infodir}@g;
+   print;
+}
+" > $file
+fi
 
 if [[ -z $nodiff ]];then
     diff -u $file.old $file
