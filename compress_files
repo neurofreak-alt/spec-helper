@@ -180,9 +180,9 @@ while (<FIND>) {
     if (! -e "$directory/$linkval" && -e "$directory/$linkval.bz2") {
 	system("rm","-f",$_);
 	system("ln","-sf","$linkval.bz2","$_.bz2");
-    } elsif (! -e "$directory/$linkval" && ! -e "$directory/linkval.bz2" )  {
-	#Bad link go on nowhere (any better idea) ?
-	unlink("$_");
+    } elsif (! -e "$directory/$linkval" && ! -e "$directory/linkval.bz2" && $directory =~ m|man/|)  {
+		#Bad link go on nowhere (any better idea) ?
+		unlink("$_");
     }
 	
 }
