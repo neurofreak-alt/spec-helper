@@ -10,7 +10,7 @@
 
 	* lib_symlinks: first version.
 
-2000-10-20 16:01  fpons
+2000-10-20 16:01  Fançois Pons <fpons@mandrakesoft.com>
 
 	* clean_files: modified clean_files to clean CVS directories.
 
