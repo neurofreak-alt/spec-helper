@@ -26,7 +26,7 @@ my @nested = (["Configuration", "System/Configuration"],
 
 	   ["Networking/IRC", "Internet/Chat"],
 	   ["Networking/WWW", "Internet/Web Browsers"],
-	   ["Networking", "Internet"],
+	   ["^Networking", "Internet"],
 	   
 	   ["Amusement", "More Applications/Games"],
 	   ["Session/Windowmanagers", "System/Session/Windowmanagers"],
