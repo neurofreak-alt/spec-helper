@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.2
-%define release 2mdk
+%define release 3mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -37,6 +37,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Fri Mar 24 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-3mdk
+- compress_files: If we found gzip file decompress and bzip2 them.
+
 * Thu Mar 23 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-2mdk
 - compress_files: Don't compress whatis and dir in /usr/{info|man}.
 

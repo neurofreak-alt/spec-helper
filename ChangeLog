@@ -1,3 +1,7 @@
+2000-03-24  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
+
+	* compress_files: If we found gzip file decompress and bzip2 them.
+
 2000-03-23  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* compress_files: Don't compress whatis and dir in /usr/{info|man}.
