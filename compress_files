@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #---------------------------------------------------------------
 # Project         : Linux-Mandrake
 # Module          : spec-helper
@@ -113,6 +113,22 @@ foreach $sofile (@sofiles) {
 
 push @files, split(/\n/,`find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" 2>/dev/null || true`);
 
+# Exclude files from compression.
+if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
+    @new=();
+    foreach (@files) {
+	$ok=1;
+	foreach $x (split(' ',$ENV{EXCLUDE_FROM_COMPRESS})) {
+	    if (/\Q$x\E/) {
+		$ok='';
+		last;
+	    }
+	}
+	push @new,$_ if $ok;
+    }
+    @files=@new;
+}
+	
 # Look for files with hard links. If we are going to compress both,
 # we can preserve the hard link across the compression and save
 # space in the end.
