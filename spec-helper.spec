@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.8
+%define version 0.9
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Fri Jun 20 2003 Frederic Lepied <flepied@mandrakesoft.com> 0.9-1mdk
+- don't strip /usr/lib/debug files (Götz Waschk) (bug #4087)
+
 * Fri Feb 14 2003 Frederic Lepied <flepied@mandrakesoft.com> 0.8-1mdk
 - added fix-po from Pablo to fix korean translation of GNOME
 
