@@ -1,3 +1,15 @@
+2004-02-06 10:55  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.10.1-1mdk
+
+2004-02-06 10:55  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* translate_menu.pl: don't put 4 " in section field
+
+2004-02-06 10:48  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* translate_menu.pl: use " around the section name
+
 2004-01-27 17:58  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* Makefile: added translate_menu.pl
