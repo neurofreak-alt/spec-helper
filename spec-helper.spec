@@ -35,7 +35,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc Howto-spec-helper ChangeLog
+%doc AUTHORS Howto-spec-helper ChangeLog
 %{_bindir}/macroszification
 %{_datadir}/spec-helper
 
