@@ -1,0 +1,19 @@
+#!/bin/sh -x
+
+d=$RPM_BUILD_ROOT/usr/lib/perl5
+
+[ -d $d ] || exit 0
+
+
+find $d -name ".packlist" | xargs rm -f
+
+for i in $(find $d -name "*.bs"); do
+    if [ -s $i ]; then
+      echo "non empty *.bs file, please mail pixel@mandrakesoft.com about this!"
+    else
+      rm -f $i
+    fi
+done
+
+# remove .ix's
+find $d -name "*.ix" | xargs rm -f

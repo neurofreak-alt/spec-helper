@@ -40,7 +40,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Thu Aug 17 2000 Pixel <pixel@mandrakesoft.com> 0.3-3mdk
-- spec-helper: add a rule to remove .packlist's
+- spec-helper: add a rule to call clean_perl
+- clean_perl: created, removes .packlist and empty *.bs
 - Makefile (rpm): change the dependency to dis
 
 * Thu Jul 27 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.3-2mdk
