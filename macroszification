@@ -65,6 +65,12 @@ fi
     }
 }
 
+[[ -z $nocheck ]] && egrep -q "^Docdir:[[:space:]]+" $file && {
+	echo "You have a Docdir entry, it's not good !!"
+	exit;
+}
+
+
 mv -f  $file $file.old
 
 if [[ -z $only_fhs ]];then
