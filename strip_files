@@ -18,6 +18,12 @@ use File::Find;
 my (@shared_libs, @executables, @static_libs);
 my @exclude_files = (split(' ', $ENV{EXCLUDE_FROM_STRIP}), "/usr/lib/debug");
 
+# TODO: we should write a binding for libfile...
+sub expensive_test {
+    my ($file) = @_;
+    my $type = `file $file`;
+}
+
 sub testfile() {
     local $_ = $_;
     return if -l $_ || -d $_; # Skip directories and symlinks always.
@@ -32,9 +38,8 @@ sub testfile() {
     # Does its filename look like a shared library?
     if (m/.*\.so.*?/) {
 	# Ok, do the expensive test.
-	my $type=`file $_`;
-	if ($type =~ m/.*ELF.*shared/) {
-	    push @shared_libs, $fn;
+	if (expensive_test($_) =~ m/.*ELF.*shared/) {
+	    push @executables, $fn;
 	    return;
 	}
     }
@@ -43,8 +48,7 @@ sub testfile() {
     my (undef, undef, $mode, undef) = stat(_);
     if ($mode & 0111) {
 	# Ok, expensive test.
-	my $type=`file $_`;
-	if ($type =~ m/.*ELF.*executable/) {
+	if (expensive_test($_) =~ m/.*ELF.*executable/) {
 	    push @executables, $fn;
 	    return;
 	}
