@@ -36,9 +36,9 @@ sub testfile() {
     }
     
     # Does its filename look like a shared library?
-    if (m/.*\.so.*?/) {
+    if (m/\.so/) {
 	# Ok, do the expensive test.
-	if (expensive_test($_) =~ m/.*ELF.*shared/) {
+	if (expensive_test($_) =~ m/ELF.*shared/) {
 	    push @executables, $fn;
 	    return;
 	}
@@ -48,14 +48,14 @@ sub testfile() {
     my (undef, undef, $mode, undef) = stat(_);
     if ($mode & 0111) {
 	# Ok, expensive test.
-	if (expensive_test($_) =~ m/.*ELF.*executable/) {
+	if (expensive_test($_) =~ m/ELF.*executable/) {
 	    push @executables, $fn;
 	    return;
 	}
     }
     
     # Is it a static library, and not a debug library?
-    if (m/lib.*\.a/ && ! m/.*_g\.a/) {
+    if (m/lib.*\.a/ && ! m/_g\.a/) {
 	push @static_libs, $fn;
 	return;
     }
