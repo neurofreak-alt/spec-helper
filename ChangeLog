@@ -1,3 +1,13 @@
+2000-04-07  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+
+	* /home/cvs/cooker/soft/spec-helper/compress_files:
+	Remove orphan link only for manpage.
+
+2000-04-07  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+
+	* /home/cvs/cooker/soft/spec-helper/compress_files:
+	Remove orphan link only for manpage.
+
 2000-04-06  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
 
 	* compress_files: When we find an orphan man pages, erase it (any
