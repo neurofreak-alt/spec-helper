@@ -7,9 +7,9 @@
 # Created On      : Fri Feb 18 08:11:21 2000
 #---------------------------------------------------------------
 
-VERSION=0.1
+VERSION=0.2
 FILES= spec-helper clean_files compress_files strip_files
-DISTFILES= Makefile $(FILES)
+DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES)
 NAME=spec-helper
 DIST=$(NAME)-$(VERSION)
 
@@ -32,18 +32,16 @@ install:
 dis:
 	rm -rf $(NAME)-$(VERSION) ../$(NAME)-$(VERSION).tar*
 	mkdir -p $(NAME)-$(VERSION)
-	find . -not -name "$(NAME)-$(VERSION)"|cpio -pd $(NAME)-$(VERSION)/
-	find $(NAME)-$(VERSION) -type d -name CVS -o -name .cvsignore -o -name unused |xargs rm -rf
-	perl -p -i -e 's|^%define version.*|%define version $(VERSION)|' $(NAME).spec
-	tar cf ../$(NAME)-$(VERSION).tar $(NAME)-$(VERSION)
-	bzip2 -9f ../$(NAME)-$(VERSION).tar
+	ln $(DISTFILES) $(NAME)-$(VERSION)
+	tar cvf ../$(NAME)-$(VERSION).tar $(NAME)-$(VERSION)
+	bzip2 -9vf ../$(NAME)-$(VERSION).tar
 	rm -rf $(NAME)-$(VERSION)
 
-rpm: dis ../$(NAME)-$(VERSION).tar.bz2 $(RPM)
+rpm: ../$(NAME)-$(VERSION).tar.bz2
+	test -d $(RPM)/SOURCES && test -d $(RPM)/
 	cp -f ../$(NAME)-$(VERSION).tar.bz2 $(RPM)/SOURCES
-	cp -f $(NAME).spec $(RPM)/SPECS/
 	-rpm -ba --clean --rmsource $(NAME).spec
-	rm -f ../$(NAME)-$(VERSION).tar.bz2
+	rm -f $(NAME)-$(VERSION).tar.bz2
 
 # Local variables:
 # mode: makefile
