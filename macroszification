@@ -9,11 +9,12 @@
 
 function usage () {
     rval=$1
-    echo "Usage: $(basename $0) -d --nocheck --clean SPEC-FILE"
+    echo "Usage: $(basename $0) -d --help --nodiff --nocheck --clean SPEC-FILE"
     echo -e "\t-d: Product only a diff don't change nothing"
     echo -e "\t--nocheck: Don't try do check about Prefix %configure"
     echo -e "\t--clean: remove the old files after"
     echo -e "\t--nodiff: I don't want to see the diff output"
+    echo -e "\t--help: This help"
     exit $rval;
 }
 while [[ $1 == -* ]];do
