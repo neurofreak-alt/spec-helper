@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.2
-%define release 4mdk
+%define release 5mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -38,6 +38,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Wed Apr  5 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-5mdk
+- compress_files: When we find an orphan man pages, erase it (any better 
+  idea ?)
+
 * Fri Mar 31 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-4mdk
 - spec-helper.spec: Adjust groups.
 - initscripts.spec: Requires: perl

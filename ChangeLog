@@ -1,3 +1,12 @@
+2000-04-06  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+
+	* compress_files: When we find an orphan man pages, erase it (any
+	better idea ?)
+
+2000-04-01  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+
+	* spec-helper.spec: Requires: perl.
+
 2000-03-31  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
 
 	* spec-helper.spec: Requires: perl.

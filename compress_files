@@ -172,7 +172,7 @@ foreach (keys %hardlinks) {
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
-open (FIND,"find usr/man -type l |");
+open (FIND,"find $RPM_BUILD_ROOT -type l |");
 while (<FIND>) {
     chomp;
     ($directory)=m:(.*)/:;
