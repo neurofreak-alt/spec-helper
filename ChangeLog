@@ -1,13 +1,22 @@
-2000-08-18  Pixel  <pixel@mandrakesoft.com>
+2000-08-26 12:36  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
-	* clean_perl: remove the -x (silly me), don't remove *.ix (used
-	for devel)
+	* macroszification: Add initrddir macroszification.
 
-2000-08-17  Pixel  <pixel@mandrakesoft.com>
+2000-08-17 16:16  Pixel <pixel@mandrakesoft.com>
 
-	* spec-helper: add a rule to call clean_perl
-	* clean_perl: created, removes .packlist, empty *.bs and *.ix
-	* Makefile (rpm): change the dependency to dis
+	* clean_perl: no_comment
+
+2000-08-17 16:11  Pixel <pixel@mandrakesoft.com>
+
+	* clean_perl: no_comment
+
+2000-08-17 06:05  Pixel <pixel@mandrakesoft.com>
+
+	* Makefile, clean_perl, spec-helper: no_comment
+
+2000-08-17 05:28  Pixel <pixel@mandrakesoft.com>
+
+	* Makefile, spec-helper: no_comment
 
 2000-07-29 22:19  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
