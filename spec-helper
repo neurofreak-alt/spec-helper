@@ -74,11 +74,7 @@ if test -z "$DONT_FIX_PAMD_CONFIGS"; then
 	configs=`ls $RPM_BUILD_ROOT/etc/pam.d/* 2> /dev/null`
 	if [ -n "$configs" ]; then
 		echo -n "Fixing pam.d config files..."
-		lib64=
-		case $RPM_ARCH in
-		amd64* | x86_64* | sparc64* | ppc64* ) lib64=yes;;
-		esac
-		test -n "$lib64" && perl -pi -e "s|/lib/security|/lib64/security|" $configs
+		perl -pi -e "s|/lib/security/||" $configs
 		echo "done"
 	fi
 fi
