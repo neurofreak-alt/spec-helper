@@ -13,6 +13,10 @@ if [ -z "$RPM_BUILD_ROOT" ]; then
     exit 0
 fi
 
+if [ ! -d $RPM_BUILD_ROOT ]; then
+    exit 0
+fi
+
 SPEC_HELPER_ROOT=${SPEC_HELPER_ROOT=/usr/share/spec-helper}
 PATH=$SPEC_HELPER_ROOT:$PATH
 export PATH
