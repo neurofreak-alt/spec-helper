@@ -9,7 +9,7 @@
 
 VERSION=0.2
 FILES= spec-helper clean_files compress_files strip_files relative_me_babe
-DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES)
+DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES) macroszification
 NAME=spec-helper
 DIST=$(NAME)-$(VERSION)
 bindir=/usr/bin
