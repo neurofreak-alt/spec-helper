@@ -111,7 +111,7 @@ foreach $sofile (@sofiles) {
     system "ln","-sf",$sodest,$sofile;
 }
 
-push @files, split(/\n/,`find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" 2>/dev/null || true`);
+push @files, split(/\n/,`find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
 
 # Exclude files from compression.
 if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
