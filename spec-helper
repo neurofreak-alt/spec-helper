@@ -19,11 +19,12 @@ export PATH
 
 # usage
 usage() {
-    echo "usage: spec-helper [-l|-c|-m|-s]" 1>&2
+    echo "usage: spec-helper [-l|-c|-m|-s|-L]" 1>&2
     echo "-c don't clean up files" 1>&2
     echo "-m don't compress files" 1>&2
     echo "-s don't strip files" 1>&2
     echo "-l don't fix full link as relative." 1>&2
+    echo "-L don't build lib symlinks." 1>&2
 }
 
 # handle options
@@ -33,6 +34,7 @@ while [ $# != 0 ]; do
 	-m) DONT_COMPRESS=1;;
 	-s) DONT_STRIP=1;;
 	-l) DONT_RELINK=1;;
+	-L) DONT_SYMLINK_LIBS=1;;
 	*) usage; exit 1;;
     esac
 
@@ -44,6 +46,7 @@ test -z "$DONT_COMPRESS" && echo -n "Compressing files..." && compress_files && 
 test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "done"
 test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relative_me_babe && echo "done"
 test -z "$DONT_CLEAN_PERL" && echo -n "Clean perl..." && clean_perl && echo "done"
+test -z "$DONT_SYMLINK_LIBS" && echo -n "Building libraries symlinks..." && lib_symlinks && echo "done"
 
 exit 0
 
