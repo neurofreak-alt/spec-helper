@@ -23,7 +23,7 @@ export PATH
 
 # usage
 usage() {
-    echo "usage: spec-helper [-l|-c|-m|-s|-L|-g|-p|-i|-mo]" 1>&2
+    echo "usage: spec-helper [-l|-c|-m|-s|-L|-g|-p|-i|-mo|-M]" 1>&2
     echo "-c don't clean up files" 1>&2
     echo "-m don't compress files" 1>&2
     echo "-s don't strip files" 1>&2
@@ -33,6 +33,7 @@ usage() {
     echo "-p don't fix pam.d configs." 1>&2
     echo "-i don't delete info dir." 1>&2
     echo "-mo don't fix bad translations." 1>&2
+    echo "-M don't translate menus." 1>&2
 }
 
 # handle options
@@ -47,6 +48,7 @@ while [ $# != 0 ]; do
 	-p) DONT_FIX_PAMD_CONFIGS=1;;
 	-i) DONT_REMOVE_INFO_DIR=1;;
 	-mo) DONT_FIX_MO=1;;
+	-M) DONT_TRANSLATE_MENU=1;;
 	*) usage; exit 1;;
     esac
 
@@ -87,6 +89,10 @@ fi
 
 if test -z "$DONT_FIX_MO" -a -n "$(ls $RPM_BUILD_ROOT/usr/share/locale/ko/LC_MESSAGES/*.mo 2> /dev/null)"; then
     echo -n "Fixing translations..." && fix-mo && echo done
+fi
+
+if test -z "$DONT_TRANSLATE_MENU" -a -d $RPM_BUILD_ROOT/usr/lib/menu; then
+    echo "Translating menus:" && translate_menu.pl $RPM_BUILD_ROOT/usr/lib/menu/* && echo done
 fi
 
 exit 0
