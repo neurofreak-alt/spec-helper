@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.5
+%define version 0.6
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -9,6 +9,7 @@ Release: %{release}
 # get the source from our cvs repository (see
 # http://www.linuxmandrake.com/en/cvs.php3)
 Source0: %{name}-%{version}.tar.bz2
+URL: http://www.linux-mandrake.com
 License: GPL
 Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -39,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Tue Jan 15 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6-1mdk
+- correct gprintify to protect the shell variables by ""
+
 * Thu Nov 22 2001 Frederic Lepied <flepied@mandrakesoft.com> 0.5-1mdk
 - gprintify init scripts.
 
