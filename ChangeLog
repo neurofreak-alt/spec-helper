@@ -1,73 +1,149 @@
-2000-07-20  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
+2000-07-22 21:51  chmouel
 
-	* macroszification: a new greatest hit.
+	* spec-helper.spec, Makefile: 0.3
 
-2000-07-20  chmouel  <chmouel@mandrakesoft.com>
+2000-07-22 21:48  chmouel
+
+	* macroszification: Add check for Docdir: it's not good !!
+
+2000-07-22 21:46  chmouel
+
+	* macroszification: checking configure/makeinstall only if there is
+	no nocheck
+
+2000-07-22 21:45  chmouel
+
+	* macroszification: Add the -o option to only process docdir and
+	mandir
+
+2000-07-20 22:05  chmouel
+
+	* macroszification: Upgrade help.
+
+2000-07-20 21:37  chmouel
+
+	* Makefile: Sometime if feel stupid to commit and don't test
+	(correct make rpm again)
+
+2000-07-20 21:34  chmouel
+
+	* Makefile: add macroszification to DISTFILES=
+
+2000-07-20 21:32  chmouel
+
+	* Makefile: Correction of Make diff.
+
+2000-07-20 21:29  chmouel
+
+	* ChangeLog, Makefile, spec-helper.spec, macroszification:
+	macroszification: a new greatest hit.
+
+2000-07-20 21:10  chmouel
+
+	* ChangeLog: [no log message]
+
+2000-07-20 21:07  chmouel
 
 	* Makefile: Add the changelog target
 
+2000-07-20 21:07  chmouel
+
 	* strip_files: Clean up.
 
-2000-05-09  flepied  <flepied@mandrakesoft.com>
+2000-05-09 07:10  flepied
 
-	* spec-helper.spec: 	* 0.2-8mdk
+	* spec-helper.spec:	* 0.2-8mdk
 
-	* spec-helper:
-		* exit 0 if no RPM_BUILD_ROOT variable set to allow build with no BuildRoot.
+2000-05-09 07:09  flepied
 
-2000-04-23  chmouel  <chmouel@mandrakesoft.com>
+	* spec-helper:	* exit 0 if no RPM_BUILD_ROOT variable set to allow
+	build with no BuildRoot.
 
-	* Makefile, spec-helper, spec-helper.spec, relative_me_babe:
+2000-04-23 03:45  chmouel
+
+	* relative_me_babe, spec-helper, spec-helper.spec, Makefile:
 	relative_me_babe: a new greatest hit.
 
-2000-04-13  chmouel  <chmouel@mandrakesoft.com>
+2000-04-13 22:45  chmouel
 
-	* ChangeLog, spec-helper.spec:
-	"Seethechangelog"
+	* ChangeLog, spec-helper.spec: "Seethechangelog"
 
-2000-04-07  chmouel  <chmouel@mandrakesoft.com>
+2000-04-07 16:52  chmouel
 
-	* compress_files:
-	Remove orphan link only for manpage.
+	* compress_files: Remove orphan link only for manpage.
 
-2000-04-07  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+2000-04-06 04:22  chmouel
 
-	* /home/cvs/cooker/soft/spec-helper/compress_files:
-	Remove orphan link only for manpage.
+	* ChangeLog, compress_files, spec-helper.spec: "Seethechangelog"
 
-2000-04-07  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
-
-	* /home/cvs/cooker/soft/spec-helper/compress_files:
-	Remove orphan link only for manpage.
-
-2000-04-06  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+2000-04-06 04:19  chmouel
 
 	* compress_files: When we find an orphan man pages, erase it (any
 	better idea ?)
 
-2000-04-01  chmouel  <chmouel@mururoa.us.mandrakesoft.com>
+2000-04-01 05:10  chmouel
+
+	* ChangeLog, spec-helper.spec: "Seethechangelog"
+
+2000-04-01 05:07  chmouel
+
+	* spec-helper.spec: [no log message]
+
+2000-04-01 05:07  chmouel
 
 	* spec-helper.spec: Requires: perl.
 
-2000-03-31  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
+2000-03-24 15:20  chmouel
 
-	* spec-helper.spec: Requires: perl.
-	* spec-helper.spec: Adjust groups.
+	* ChangeLog, spec-helper.spec: "Seethechangelog"
 
-2000-03-24  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
+2000-03-24 15:18  chmouel
 
-	* compress_files: If we found gzip file decompress and bzip2 them.
+	* compress_files: If we found gzip file decompress and bzip2 thme.
 
-2000-03-23  Chmouel Boudjnah <chmouel@mandrakesoft.com>
+2000-03-23 18:37  chmouel
+
+	* ChangeLog, spec-helper.spec: "Seethechangelog"
+
+2000-03-23 18:35  chmouel
 
 	* compress_files: Don't compress whatis and dir in /usr/{info|man}.
-	
-2000-02-28  Frederic Lepied  <flepied@mandrakesoft.com>
 
-	* 0.2: use EXCLUDE_FROM_COMPRESS and EXCLUDE_FROM_STRIP environment
-	variables to list exceptions.
+2000-02-28 15:46  flepied
 
-2000-02-18  Chmouel Boudjnah  <chmouel@mandrakesoft.com>
-	* spec-helper.spec: cvs import.
-	* Makefile: rules for cvs and specs.
+	* ChangeLog:	* 0.2.
+
+2000-02-28 15:43  flepied
+
+	* Makefile:	* clean dis rules.
+
+2000-02-28 15:42  flepied
+
+	* spec-helper.spec:	* 0.2-1mdk.
+
+2000-02-28 15:40  flepied
+
+	* strip_files:	* use EXCLUDE_FROM_STRIP env variable to list files
+	to exclude
+	from stripping.
+
+2000-02-28 15:39  flepied
+
+	* compress_files:	* use EXCLUDE_FROM_COMPRESS env variable to
+	list files to exlcude
+	from compression.
+
+2000-02-23 07:50  chmouel
+
+	* Howto-spec-helper, spec-helper.spec: "See_The_Changelog"
+
+2000-02-18 21:00  chmouel
+
+	* Makefile, clean_files, spec-helper, ChangeLog, compress_files,
+	spec-helper.spec, strip_files: Initial revision
+
+2000-02-18 21:00  chmouel
+
+	* Makefile, clean_files, spec-helper, ChangeLog, compress_files,
+	spec-helper.spec, strip_files: First_Import
 
