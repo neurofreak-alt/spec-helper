@@ -10,7 +10,7 @@
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "no RPM_BUILD_ROOT variable; exiting." 1>&2
-    exit 1
+    exit 0
 fi
 
 SPEC_HELPER_ROOT=${SPEC_HELPER_ROOT=/usr/share/spec-helper}
@@ -23,7 +23,7 @@ usage() {
     echo "-c don't clean up files" 1>&2
     echo "-m don't compress files" 1>&2
     echo "-s don't strip files" 1>&2
-    echo "-l don't fix full link as relative."
+    echo "-l don't fix full link as relative." 1>&2
 }
 
 # handle options
@@ -42,7 +42,7 @@ done
 test -z "$DONT_CLEANUP" && echo -n "Cleaning files..." && clean_files && echo "done"
 test -z "$DONT_COMPRESS" && echo -n "Compressing files..." && compress_files && echo "done"
 test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "done"
-test -z "$DONT_RELINK" && echo -n "Relativisation of links..." && relative_me_babe && echo "done"
+test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relative_me_babe && echo "done"
 
 exit 0
 
