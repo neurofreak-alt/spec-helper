@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 d=$RPM_BUILD_ROOT/usr/lib/perl5
 
