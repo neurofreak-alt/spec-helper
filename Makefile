@@ -7,8 +7,8 @@
 # Created On      : Fri Feb 18 08:11:21 2000
 #---------------------------------------------------------------
 
-VERSION=0.3
-FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe
+VERSION=0.4
+FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks
 DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES) macroszification
 NAME=spec-helper
 DIST=$(NAME)-$(VERSION)
