@@ -1,3 +1,11 @@
+2003-10-09 15:49  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper.spec: 0.9.2-3mdk
+
+2003-10-09 15:48  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper: also nuke /lib64/security/ paths
+
 2003-10-09 09:50  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.9.2-2mdk
