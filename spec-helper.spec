@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.9.1
+%define version 0.9.2
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Fri Aug  1 2003 Pixel <pixel@mandrakesoft.com> 0.9.2-1mdk
+- remove file alike /usr/lib/perl5/5.8.*/i386-linux-thread-multi/perllocal.pod
+
 * Fri Jul 25 2003 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.9.1-1mdk
 - handle amd64 in main spec-helper script
 
