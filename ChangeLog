@@ -1,3 +1,11 @@
+2003-06-20 10:09  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.9-1mdk
+
+2003-06-20 10:08  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* strip_files: don't strip /usr/lib/debug files (Götz Waschk)
+
 2003-02-14 09:28  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* Makefile: add fix-mo to the files list
