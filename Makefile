@@ -25,13 +25,16 @@ install:
 	install -d -m 755 $(DESTDIR)/usr/share/spec-helper
 	install -m 755 $(FILES) $(DESTDIR)/usr/share/spec-helper
 
+clean:
+	find . -name '*~' | xargs rm -f
+
 # rules to build a test rpm
 
 localrpm: localdist buildrpm
 
 localdist: cleandist dir localcopy tar
 
-cleandist:
+cleandist: clean
 	rm -rf $(PACKAGE)-$(VERSION) $(PACKAGE)-$(VERSION).tar.bz2
 
 dir:
