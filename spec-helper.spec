@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.1
-%define release 3mdk
+%define version 0.2
+%define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -37,6 +37,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Mon Feb 28 2000 Frederic Lepied <flepied@mandrakesoft.com> 0.2-1mdk
+- 0.2: added EXCLUDE_FROM_COMPRESS and EXCLUDE_FROM_STRIP environment
+variables.
+
 * Tue Feb 22 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.1-3mdk
 - Add mail of fred about spec-helper as doc.
 
