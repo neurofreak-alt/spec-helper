@@ -13,22 +13,22 @@ my @nested = (["Configuration", "System/Configuration"],
 
 	   ["Applications/Monitoring", "System/Monitoring"],
 	   ["Applications/Publishing", "Office/Publishing"],
-	   ["Applications/File tools", "System/File tools"],
-	   ["Applications/Text tools", "System/Text tools"],
+	   ["Applications/File tools", "System/File Tools"],
+	   ["Applications/Text tools", "System/Text Tools"],
 	   ["Applications/Archiving", "System/Archiving"],
-	   ["Applications", "More applications"],
+	   ["Applications", "More Applications"],
 
 	   ["Terminals", "System/Terminals"],
 	   
-	   ["Documentation", "More applications/Documentation"],
+	   ["Documentation", "More Applications/Documentation"],
 	   
            ["Office/PDA", "Office/Communications/PDA"],
 
 	   ["Networking/IRC", "Internet/Chat"],
-	   ["Networking/WWW", "Internet/Web browsers"],
+	   ["Networking/WWW", "Internet/Web Browsers"],
 	   ["Networking", "Internet"],
 	   
-	   ["Amusement", "More applications/Games"],
+	   ["Amusement", "More Applications/Games"],
 	   ["Session/Windowmanagers", "System/Session/Windowmanagers"],
 	   );
 
@@ -46,13 +46,13 @@ sub translate {
 
 # process each file passed on cli:
 foreach my $file (@ARGV) {
-    open(my $FILE, "<$file");
+    open(my $FILE, "<$file") or die $!;
     my @lines = <$FILE>;
     close($FILE);
-    open($FILE, ">$file");
+    open($FILE, ">$file") or die $!;
     foreach my $l (@lines) {
 	chomp($l);
-	if ($l =~ /(.*section=)"([^"]+)"(\s+.*)/ || $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/) {
+	if ($l =~ /(.*section=)"([^"]+)"(\s*.*)/ || $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/) {
 	    my ($beg, $section, $end) = ($1, $2, $3);
             $section = translate($section);
             $l = qq($beg"$section"$end);
