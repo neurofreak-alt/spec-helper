@@ -1,3 +1,7 @@
+2004-01-27 17:58  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* Makefile: added translate_menu.pl
+
 2004-01-27 17:57  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.10-1mdk
