@@ -1,8 +1,13 @@
-2003-07-25 12:28  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2003-08-01 15:56  Pixel <pixel@mandrakesoft.com>
+
+	* clean_perl, spec-helper.spec: remove file alike
+	/usr/lib/perl5/5.8.*/i386-linux-thread-multi/perllocal.pod
+
+2003-07-25 12:28  gbeauchesne
 
 	* spec-helper.spec: 0.9.1-1mdk
 
-2003-07-25 12:27  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2003-07-25 12:27  gbeauchesne
 
 	* spec-helper: handle amd64
 
@@ -55,19 +60,19 @@
 	* clean_files: remove .cvsignore fixed removing of CVS dirs (thx to
 	Stephane Chatty)
 
-2002-07-24 14:00  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2002-07-24 14:00  gbeauchesne
 
 	* spec-helper.spec: 0.6-6mdk
 
-2002-07-24 13:56  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2002-07-24 13:56  gbeauchesne
 
 	* lib_symlinks: Fix for lib64 architectures
 
-2002-07-24 13:53  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2002-07-24 13:53  gbeauchesne
 
 	* spec-helper: Use $RPM_ARCH, not arch
 
-2002-06-26 14:18  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+2002-06-26 14:18  gbeauchesne
 
 	* spec-helper, spec-helper.spec: - spec-helper: fix modules
 	location in pam.d config files.  - spec-helper.spec: 0.6-5mdk
