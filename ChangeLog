@@ -1,3 +1,11 @@
+2000-07-29 22:19  Chmouel Boudjnah <chmouel@mandrakesoft.com>
+
+	* .username: We use now ../common/username
+
+2000-07-29 22:18  Chmouel Boudjnah <chmouel@mandrakesoft.com>
+
+	* Makefile: Use username for changelog from ../common/
+
 2000-07-27 07:48  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* macroszification: Check Prefix only when %{?prefix}? is present
