@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.9.2
-%define release 1mdk
+%define release 2mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Thu Oct  9 2003 Frederic Lepied <flepied@mandrakesoft.com> 0.9.2-2mdk
+- remove /lib/security from pam config files
+
 * Fri Aug  1 2003 Pixel <pixel@mandrakesoft.com> 0.9.2-1mdk
 - remove file alike /usr/lib/perl5/5.8.*/i386-linux-thread-multi/perllocal.pod
 
