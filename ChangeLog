@@ -1,3 +1,23 @@
+2005-01-07 14:38  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.11-1mdk
+
+2005-01-07 14:38  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* strip_files: handle file names starting with -
+
+2005-01-07 14:37  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* translate_menu.pl: fix Networking translation
+
+2004-08-10 09:20  Thierry Vignaud <tvignaud@mandrakesoft.com>
+
+	* spec-helper.spec: fix 0.10.2-1mdk's changelog
+
+2004-08-10 09:06  Rafael Garcia-Suarez <rgarciasuarez@mandrakesoft.com>
+
+	* spec-helper.spec: 0.10.2-1mdk
+
 2004-08-10 08:48  Rafael Garcia-Suarez <rgarciasuarez@mandrakesoft.com>
 
 	* translate_menu.pl: Fix regexp for translation of menu entries.
@@ -244,7 +264,7 @@
 
 	* lib_symlinks: first version.
 
-2000-10-20 16:01  Fançois Pons
+2000-10-20 16:01  FanÃ§ois Pons
 
 	* clean_files, spec-helper.spec: modified clean_files to clean CVS
 	  directories.
