@@ -15,7 +15,7 @@ import sys
 import re
 
 echo_regex=re.compile('^(.*)echo +(-[en]+)?')
-string_regex=re.compile('^(.*?)\$?"([^"]*?)"([^>\|\[\]]*|.*\|\|.*)$')
+string_regex=re.compile('^([^"]*?)\$?"([^"]*[^\\\\])"([^>\|\[\]]*|.*\|\|.*)$')
 var_regex=re.compile('(\$[a-zA-Z0-9_{}]+(?:\[\$[a-zA-Z0-9_{}]+\])?}?)')
 init_func_regex=re.compile('(.*(daemon|action|success|failure|passed)\s*.*)')
 
@@ -36,7 +36,7 @@ def process_vars(str, trail):
     if var_res:
         ret=var_regex.sub('%s', str) + trail
         for v in var_res:
-            ret = ret + ' ' + v
+            ret = ret + ' "' + v + '"'
         return ret
     else:
         return str + trail
