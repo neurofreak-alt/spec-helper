@@ -14,6 +14,7 @@ Group: Development/Tools
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 BuildArchitectures: noarch
+Requires: perl
 
 %description
 Tools to ease the creation of rpm packages for the Linux-Mandrake distribution.
@@ -37,6 +38,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Fri Mar 31 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-3mdk
+- initscripts.spec: Requires: perl
+
 * Fri Mar 24 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-3mdk
 - compress_files: If we found gzip file decompress and bzip2 them.
 
