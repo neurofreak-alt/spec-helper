@@ -42,7 +42,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue Aug 10 2004 Rafael Garcia-Suarez <rgarciasuarez@mandrakesoft.com> 0.10.2-1mdk
 - Fix translation of menu entries
-- Other cleanups and speedups
+- Other cleanups and speedups (tvignaud
 
 * Fri Feb  6 2004 Frederic Lepied <flepied@mandrakesoft.com> 0.10.1-1mdk
 - use " around the section name in spec-helper
