@@ -1,0 +1,29 @@
+From: Frederic Lepied <flepied@mandrakesoft.com>
+Subject: [Cooker] spec-helper
+To: cooker@linux-mandrake.com
+Date: 22 Feb 2000 14:45:21 +0100
+
+For information.
+
+Starting  from  rpm-3.0.4-0.2mdk,  the  spec-helper  package  must  be
+installed as a dependency of the rpm-build package.
+
+The  spec-helper script  is called  automatically  at the  end of  the
+%install  section to  compress info  and  man pages,  strip files  and
+remove backup files from the $RPM_BUILD_ROOT dir. The %install section
+can be  cleaned off this  tasks but the  %files section about  man and
+info pages must be specified without  the .bz2 extension but with an *
+instead. The goal is to have vendor neutral spec files.
+
+Example:
+
+%files
+/usr/man/man1/alias.1*
+
+and not
+
+%files
+/usr/man/man1/alias.1.bz2
+
+-- 
+Fred - May the source be with you
