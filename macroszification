@@ -58,7 +58,7 @@ fi
     exit;
 }
 
-egrep -q "^%configure" $file && {
+[[ -z $nocheck ]] && egrep -q "^%configure" $file && {
     egrep -q "^%makeinstall" $file || {
 	echo "sound like you don't have a %makeinstall"
 	exit;
