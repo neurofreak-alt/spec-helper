@@ -47,7 +47,7 @@ changelog:
 	cat changenew ChangeLog.old > ChangeLog
 	rm -f changenew
 
-rpm: $(NAME)-$(VERSION).tar.bz2
+rpm: ../$(NAME)-$(VERSION).tar.bz2
 	test -d $(RPM)/SOURCES && test -d $(RPM)/
 	cp -f ../$(NAME)-$(VERSION).tar.bz2 $(RPM)/SOURCES
 	-rpm -ba --clean --rmsource $(NAME).spec
