@@ -10,7 +10,7 @@ Release: %{release}
 # http://www.linuxmandrake.com/en/cvs.php3)
 Source0: %{name}-%{version}.tar.bz2
 Copyright: GPL
-Group: Development/Tools
+Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 BuildArchitectures: noarch
@@ -39,6 +39,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Fri Mar 31 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-4mdk
+- spec-helper.spec: Adjust groups.
 - initscripts.spec: Requires: perl
 
 * Fri Mar 24 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-3mdk
