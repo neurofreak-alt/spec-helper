@@ -1,3 +1,15 @@
+2002-07-24 14:00  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper.spec: 0.6-6mdk
+
+2002-07-24 13:56  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* lib_symlinks: Fix for lib64 architectures
+
+2002-07-24 13:53  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
+
+	* spec-helper: Use $RPM_ARCH, not arch
+
 2002-06-26 14:18  Gwenole Beauchesne <gbeauchesne@mandrakesoft.com>
 
 	* spec-helper, spec-helper.spec: - spec-helper: fix modules
@@ -285,10 +297,10 @@
 2000-02-18 21:00  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* Makefile, clean_files, spec-helper, compress_files,
-	spec-helper.spec, strip_files: Initial revision
+	spec-helper.spec, strip_files: First_Import
 
 2000-02-18 21:00  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* Makefile, clean_files, spec-helper, compress_files,
-	spec-helper.spec, strip_files: First_Import
+	spec-helper.spec, strip_files: Initial revision
 
