@@ -16,36 +16,35 @@ use File::Find;
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
 my (@shared_libs, @executables, @static_libs);
-my @exclude_files = (split(' ',$ENV{EXCLUDE_FROM_STRIP}),"/usr/lib/debug");
+my @exclude_files = (split(' ', $ENV{EXCLUDE_FROM_STRIP}), "/usr/lib/debug");
 
-sub testfile {
-
-    return if -l $_ or -d $_; # Skip directories and symlinks always.
-
-    $fn="$File::Find::dir/$_";
+sub testfile() {
+    local $_ = $_;
+    return if -l $_ || -d $_; # Skip directories and symlinks always.
+    my $fn = "$File::Find::dir/$_";
 
     # See if we were asked to exclude this file.
     # Note that we have to test on the full filename, including directory.
     foreach my $f (@exclude_files) {
-	return if ($fn=~m/\Q$f\E/);
+	return if $fn =~ m/\Q$f\E/;
     }
     
     # Does its filename look like a shared library?
     if (m/.*\.so.*?/) {
 	# Ok, do the expensive test.
 	my $type=`file $_`;
-	if ($type=~m/.*ELF.*shared/) {
+	if ($type =~ m/.*ELF.*shared/) {
 	    push @shared_libs, $fn;
 	    return;
 	}
     }
     
     # Is it executable? -x isn't good enough, so we need to use stat.
-    (undef,undef,$mode,undef)=stat(_);
+    my (undef, undef, $mode, undef) = stat(_);
     if ($mode & 0111) {
 	# Ok, expensive test.
 	my $type=`file $_`;
-	if ($type=~m/.*ELF.*executable/) {
+	if ($type =~ m/.*ELF.*executable/) {
 	    push @executables, $fn;
 	    return;
 	}
@@ -59,20 +58,20 @@ sub testfile {
 }
 
 ################################################################################
-$RPM_BUILD_ROOT=$ENV{RPM_BUILD_ROOT};
-chdir($RPM_BUILD_ROOT) || die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+my $RPM_BUILD_ROOT = $ENV{RPM_BUILD_ROOT};
+chdir($RPM_BUILD_ROOT) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 
-@shared_libs=@executables=@static_libs=();
-find(\&testfile,$RPM_BUILD_ROOT);
+@shared_libs = @executables = @static_libs = ();
+find(\&testfile, $RPM_BUILD_ROOT);
 
 foreach (@shared_libs) {
     # Note that all calls to strip on shared libs
     # *must* inclde the --strip-unneeded.
-    system("strip","--remove-section=.comment","--remove-section=.note","--strip-unneeded",$_);
+    system("strip", "--remove-section=.comment", "--remove-section=.note", "--strip-unneeded",$_);
 }
 
 foreach (@executables) {
-    system("strip","--remove-section=.comment","--remove-section=.note",$_);
+    system("strip", "--remove-section=.comment", "--remove-section=.note",$_);
 }
 
 # strip_files ends here

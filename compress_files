@@ -15,8 +15,8 @@ use File::Find;
 ################################################################################
 # Returns the basename of the argument passed to it.
 sub basename {
-    my $fn=shift;
-    $fn=~s:^.*/(.*?)$:$1:;
+    my $fn = shift;
+    $fn =~ s!^.*/(.*?)$!$1!;
     return $fn;
 }
 
@@ -24,7 +24,7 @@ sub basename {
 # Returns the directory name of the argument passed to it.
 sub dirname {
     my $fn=shift;
-    $fn=~s:^(.*)/.*?$:$1:;
+    $fn =~ s!^(.*)/.*?$!$1!;
     return $fn;
 }
 
@@ -45,11 +45,11 @@ sub xargs {
 	$static_length+=length($_)+1;
     }
     
-    my @collect=();
+    my @collect;
     my $length=$static_length;
     foreach (@$args) {
 	if (length($_) + 1 + $static_length > $command_max) {
-	    error("This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? \"@_ $_\"");
+	    error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
 	}
 	$length+=length($_) + 1;
 	if ($length < $command_max) {
@@ -57,7 +57,7 @@ sub xargs {
 	}
 	else {
 	    system(@_,@collect) if $#collect > -1;
-	    @collect=($_);
+	    @collect = $_;
 	    $length=$static_length + length($_) + 1;
 	}
     }
@@ -68,7 +68,8 @@ sub xargs {
 # Check if a file is a .so man page, for use by File::Find.
 my @sofiles;
 my @sodests;
-sub find_so_man {
+sub find_so_man() {
+    local $_ = $_;
     # The -s test is becuase a .so file tends to be small. We don't want
     # to open every man page. 1024 is arbitrary.
     if (! -f $_ || -s $_ > 1024) {
@@ -76,10 +77,11 @@ sub find_so_man {
     }
 
     # Test first line of file for the .so thing.
-    open (SOTEST,$_);
-    my $l=<SOTEST>;
-    close SOTEST;
-    if ($l=~m/\.so\s+(.*)/) {
+    my $SOTEST;
+    open($SOTEST, $_);
+    my $l=<$SOTEST>;
+    close $SOTEST;
+    if ($l =~ m/\.so\s+(.*)/) {
 	my $solink=$1;
 	# This test is here to prevent links like ... man8/../man8/foo.8
 	if (basename($File::Find::dir) eq dirname($solink)) {
@@ -89,39 +91,37 @@ sub find_so_man {
 	    $solink="../$solink";
 	}
 	
-	push @sofiles,"$File::Find::dir/$_";
-	push @sodests,$solink;
+	push @sofiles, "$File::Find::dir/$_";
+	push @sodests, $solink;
     }
 }
 
 ################################################################################
-$RPM_BUILD_ROOT=$ENV{RPM_BUILD_ROOT};
-chdir($RPM_BUILD_ROOT) || die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+my $RPM_BUILD_ROOT = $ENV{RPM_BUILD_ROOT};
+chdir($RPM_BUILD_ROOT) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 
 # Now the .so conversion.
-@sofiles=@sodests=();
-foreach $dir (qw{usr/man usr/X11R6/man usr/lib/perl5/man}) {
-    if (-e "$dir") {
-	find(\&find_so_man, "$dir");
-    }
+@sofiles = @sodests = ();
+foreach my $dir (qw{usr/man usr/X11R6/man usr/lib/perl5/man}) {
+    find(\&find_so_man, $dir) if -e $dir;
 }
-foreach $sofile (@sofiles) {
-    my $sodest=shift(@sodests);
-    system "rm","-f",$sofile;
-    system "ln","-sf",$sodest,$sofile;
+foreach my $sofile (@sofiles) {
+    my $sodest = shift(@sodests);
+    system "rm", "-f",$sofile;
+    system "ln", "-sf",$sodest,$sofile;
 }
 
-push @files, split(/\n/,`find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
+my @files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
 
-push @gz_files, split(/\n/,`find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
-if (@gz_files) {xargs(\@gz_files,"gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0);}
+my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
+if (@gz_files) { xargs(\@gz_files, "gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
 
 # Exclude files from compression.
 if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
-    @new=();
+    my @new;
     foreach (@files) {
-	$ok=1;
-	foreach $x (split(' ',$ENV{EXCLUDE_FROM_COMPRESS})) {
+	my $ok = 1;
+	foreach my $x (split(' ', $ENV{EXCLUDE_FROM_COMPRESS})) {
 	    if (/\Q$x\E/) {
 		$ok='';
 		last;
@@ -135,18 +135,18 @@ if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
 # Look for files with hard links. If we are going to compress both,
 # we can preserve the hard link across the compression and save
 # space in the end.
-my @f=();
-my %hardlinks;
+my @f;
+my (%hardlinks, %seen);
 foreach (@files) {
-    ($dev, $inode, undef, $nlink)=stat($_);
+    my ($dev, $inode, undef, $nlink)=stat($_);
     if ($nlink > 1) {
 	if (! $seen{"$inode.$dev"}) {
-	    $seen{"$inode.$dev"}=$_;
+	    $seen{"$inode.$dev"} = $_;
 	    push @f, $_;
 	}
 	else {
 	    # This is a hardlink.
-	    $hardlinks{$_}=$seen{"$inode.$dev"};
+	    $hardlinks{$_} = $seen{"$inode.$dev"};
 	}
     }
     else {
@@ -156,9 +156,9 @@ foreach (@files) {
 
 if (@f) {
     # Make executables not be anymore.
-    xargs(\@f,"chmod","a-x");
+    xargs(\@f, "chmod", "a-x");
     
-    xargs(\@f,"bzip2","-9f");
+    xargs(\@f, "bzip2", "-9f");
 }
 
 	
@@ -166,23 +166,25 @@ if (@f) {
 # they are again.
 foreach (keys %hardlinks) {
     # Remove old file.
-    system("rm","-f","$_");
+    system("rm", "-f", $_);
     # Make new hardlink.
-    system("ln","$hardlinks{$_}.bz2","$_.bz2");
+    system("ln", "$hardlinks{$_}.bz2", "$_.bz2");
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
-open (FIND,"find $RPM_BUILD_ROOT -type l |");
-while (<FIND>) {
+my $FIND;
+open($FIND, "find $RPM_BUILD_ROOT -type l |");
+while (<$FIND>) {
+    local $_ = $_;
     chomp;
-    ($directory)=m:(.*)/:;
-    $linkval=readlink($_);
+    my ($directory) = m!(.*)/!;
+    my $linkval = readlink($_);
     if (! -e "$directory/$linkval" && -e "$directory/$linkval.bz2") {
-	system("rm","-f",$_);
-	system("ln","-sf","$linkval.bz2","$_.bz2");
+	system("rm", "-f", $_);
+	system("ln", "-sf", "$linkval.bz2", "$_.bz2");
     } elsif (! -e "$directory/$linkval" && ! -e "$directory/linkval.bz2" && $directory =~ m|man/|)  {
 		#Bad link go on nowhere (any better idea) ?
-		unlink("$_");
+		unlink($_);
     }
 	
 }

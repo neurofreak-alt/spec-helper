@@ -9,7 +9,7 @@
 # Purpose         : change the menu sections
 #---------------------------------------------------------------
 
-@nested = (["Configuration", "System/Configuration"],
+my @nested = (["Configuration", "System/Configuration"],
 
 	   ["Applications/Monitoring", "System/Monitoring"],
 	   ["Applications/Publishing", "Office/Publishing"],
@@ -36,7 +36,7 @@ sub translate {
     my ($str) = @_;
 
     foreach my $t (@nested) {
-	if ($str =~ /(.*)$t->[0](.*)/ and not ($str =~ /$t->[1]/) ) {
+	if ($str =~ /(.*)$t->[0](.*)/ && $str !~ /$t->[1]/) {
 	    print "$str => $1$t->[1]$2\n";
 	    return "$1$t->[1]$2";
 	}
@@ -46,16 +46,16 @@ sub translate {
 
 # process each file passed on cli:
 foreach my $file (@ARGV) {
-    open (my $FILE, "<$file");
+    open(my $FILE, "<$file");
     my @lines = <$FILE>;
     close($FILE);
-    open ($FILE, ">$file");
-    for my $l (@lines) {
+    open($FILE, ">$file");
+    foreach my $l (@lines) {
 	chomp($l);
-	if (( $l =~ /(.*section=)"([^"]+)"(\s+.*)/ ) or ( $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/ )) {
+	if ($l =~ /(.*section=)"([^"]+)"(\s+.*)/ || $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/) {
 	    my ($beg, $section, $end) = ($1, $2, $3);
             $section = translate($section);
-            $l = "$beg\"$section\"$end";
+            $l = qq($beg"$section"$end);
 	}
 	print $FILE "$l\n";
     }

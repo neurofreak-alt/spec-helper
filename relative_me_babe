@@ -9,10 +9,9 @@ my $r=$ENV{RPM_BUILD_ROOT};
 chdir($r) or "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 
 push my @files, split(/\n/, `find -type l 2> /dev/null`);
-for (@files) {
-    my $file = $_;
-    my $link=readlink($file);
-    if ($link =~ /^\//) {
+foreach my $file (@files) {
+    my $link = readlink($file);
+    if ($link =~ m!^/!) {
 	$link =~ s|^/||;
 	# Ugly ? no simply chmou.
 	(my $dirname = $file) =~ s|/[^/]*$||; $dirname =~ s|/[^/]+|../|g; $dirname =~ s|^\.||;
