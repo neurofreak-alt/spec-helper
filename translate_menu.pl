@@ -55,7 +55,7 @@ foreach my $file (@ARGV) {
 	if (( $l =~ /(.*section=")([^"]+)("\s+.*)/ ) or ( $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/ )) {
 	    my ($beg, $section, $end) = ($1, $2, $3);
             $section = translate($section);
-            $l = "$beg$section$end";
+            $l = "$beg\"$section\"$end";
 	}
 	print $FILE "$l\n";
     }
