@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.7
+%define version 0.8
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -15,7 +15,7 @@ Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 BuildArchitectures: noarch
-Requires: perl /sbin/ldconfig findutils /usr/bin/python
+Requires: perl /sbin/ldconfig findutils /usr/bin/python gettext
 
 %description
 Tools to ease the creation of rpm packages for the Mandrake Linux distribution.
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Fri Feb 14 2003 Frederic Lepied <flepied@mandrakesoft.com> 0.8-1mdk
+- added fix-po from Pablo to fix korean translation of GNOME
+
 * Fri Dec 13 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.7-1mdk
 - remove /usr/share/info/dir if not a symlink
 
