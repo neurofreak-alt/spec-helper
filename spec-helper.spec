@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.4
-%define release 1mdk
+%define release 2mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Tue Aug 21 2001 Frederic Lepied <flepied@mandrakesoft.com> 0.4-2mdk
+- work cleanly with the packages without file
+
 * Mon Nov 13 2000 Frederic Lepied <flepied@mandrakesoft.com> 0.4-1mdk
 - added lib_symlinks to call ldconfig which builds the right symlinks
 to libraries.
