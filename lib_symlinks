@@ -1,0 +1,26 @@
+#!/bin/sh
+#---------------------------------------------------------------
+# Project         : Linux-Mandrake
+# Module          : spec-helper
+# File            : lib_symlinks
+# Version         : $Id$
+# Author          : Frederic Lepied
+# Created On      : Tue Nov  7 08:33:05 2000
+# Description	  : Run ldconfig to create symlinks to libraries.
+#
+# Copyright (C) 2000 by Frederic Lepied <flepied@mandrakesoft.com>
+# Redistribution of this file is permitted under the terms of the GNU 
+# Public License (GPL)
+#---------------------------------------------------------------
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    exit 0
+fi
+
+libs=`find $RPM_BUILD_ROOT -name lib -a -type d`
+
+if [ -n "$libs" -o -n "$EXTRA_LIBS_TO_SYMLINK" ]; then
+    /sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
+fi
+
+# lib_symlinks ends here
