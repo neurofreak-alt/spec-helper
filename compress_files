@@ -172,7 +172,7 @@ foreach (keys %hardlinks) {
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
-open (FIND,"find $RPM_BUILD_ROOT -type l |");
+open (FIND,"find usr/man -type l |");
 while (<FIND>) {
     chomp;
     ($directory)=m:(.*)/:;
@@ -180,7 +180,11 @@ while (<FIND>) {
     if (! -e "$directory/$linkval" && -e "$directory/$linkval.bz2") {
 	system("rm","-f",$_);
 	system("ln","-sf","$linkval.bz2","$_.bz2");
+    } elsif (! -e "$directory/$linkval" && ! -e "$directory/linkval.bz2" )  {
+	#Bad link go on nowhere (any better idea) ?
+	unlink("$_");
     }
+	
 }
 
 # compress_files ends here
