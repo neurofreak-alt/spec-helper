@@ -16,9 +16,10 @@ use File::Find;
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
 my (@shared_libs, @executables, @static_libs);
-my $exclude_files=defined($ENV{EXCLUDE_FROM_STRIP}) ? split(' ',$ENV{EXCLUDE_FROM_STRIP}) : ();
+my $exclude_files=defined($ENV{EXCLUDE_FROM_STRIP}) ? split(' ',$ENV{EXCLUDE_FROM_STRIP}) : undef;
 
 sub testfile {
+
     return if -l $_ or -d $_; # Skip directories and symlinks always.
 
     $fn="$File::Find::dir/$_";
@@ -75,9 +76,5 @@ foreach (@shared_libs) {
 foreach (@executables) {
     system("strip","--remove-section=.comment","--remove-section=.note",$_);
 }
-
-# foreach (@static_libs) {
-#     system("strip","--strip-debug",$_);
-# }
 
 # strip_files ends here
