@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.3
-%define release 7mdk
+%define version 0.4
+%define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -14,7 +14,7 @@ Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 BuildArchitectures: noarch
-Requires: perl
+Requires: perl /sbin/ldconfig findutils
 
 %description
 Tools to ease the creation of rpm packages for the Linux-Mandrake distribution.
@@ -39,6 +39,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Mon Nov 13 2000 Frederic Lepied <flepied@mandrakesoft.com> 0.4-1mdk
+- added lib_symlinks to call ldconfig which builds the right symlinks
+to libraries.
+
 * Fri Oct 20 2000 François Pons <fpons@mandrakesoft.com> 0.3-7mdk
 - clean_files: remove CVS directories.
 
