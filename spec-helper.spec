@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.6
-%define release 1mdk
+%define release 3mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -15,7 +15,7 @@ Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 BuildArchitectures: noarch
-Requires: perl /sbin/ldconfig findutils
+Requires: perl /sbin/ldconfig findutils /usr/bin/python
 
 %description
 Tools to ease the creation of rpm packages for the Mandrake Linux distribution.
@@ -40,6 +40,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Sat Feb 16 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6-3mdk
+- don't call gprintify if init.d is empty.
+
+* Mon Jan 28 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6-2mdk
+- requires /usr/bin/python for gprintify (Florin)
+
 * Tue Jan 15 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6-1mdk
 - correct gprintify to protect the shell variables by ""
 
