@@ -17,7 +17,7 @@ BuildArchitectures: noarch
 Requires: perl /sbin/ldconfig findutils
 
 %description
-Tools to ease the creation of rpm packages for the Linux-Mandrake distribution.
+Tools to ease the creation of rpm packages for the Mandrake Linux distribution.
 Compress man pages using bzip2, strip executables, convert links...
 
 %prep
