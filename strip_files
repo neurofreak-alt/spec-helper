@@ -1,0 +1,73 @@
+#!/usr/bin/perl -w
+#---------------------------------------------------------------
+# Project         : Linux-Mandrake
+# Module          : spec-helper
+# File            : strip_files
+# Version         : $Id$
+# Author          : Frederic Lepied
+# Created On      : Thu Feb 10 09:23:02 2000
+# Purpose         : Strip files.
+#---------------------------------------------------------------
+
+use File::Find;
+
+################################################################################
+# Check if a file is an elf binary, shared library, or static library,
+# for use by File::Find. It'll fill the following 3 arrays with anything
+# it finds:
+my (@shared_libs, @executables, @static_libs);
+sub testfile {
+    return if -l $_ or -d $_; # Skip directories and symlinks always.
+
+    $fn="$File::Find::dir/$_";
+    
+    # Does its filename look like a shared library?
+    if (m/.*\.so.*?/) {
+	# Ok, do the expensive test.
+	my $type=`file $_`;
+	if ($type=~m/.*ELF.*shared.*/) {
+	    push @shared_libs, $fn;
+	    return;
+	}
+    }
+    
+    # Is it executable? -x isn't good enough, so we need to use stat.
+    (undef,undef,$mode,undef)=stat(_);
+    if ($mode & 0111) {
+	# Ok, expensive test.
+	my $type=`file $_`;
+	if ($type=~m/.*ELF.*executable.*/) {
+	    push @executables, $fn;
+	    return;
+	}
+    }
+    
+    # Is it a static library, and not a debug library?
+    if (m/lib.*\.a/ && ! m/.*_g\.a/) {
+	push @static_libs, $fn;
+	return;
+    }
+}
+
+################################################################################
+$RPM_BUILD_ROOT=$ENV{RPM_BUILD_ROOT};
+chdir($RPM_BUILD_ROOT) || die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+
+@shared_libs=@executables=@static_libs=();
+find(\&testfile,$RPM_BUILD_ROOT);
+
+foreach (@shared_libs) {
+    # Note that all calls to strip on shared libs
+    # *must* inclde the --strip-unneeded.
+    system("strip","--remove-section=.comment","--remove-section=.note","--strip-unneeded",$_);
+}
+
+foreach (@executables) {
+    system("strip","--remove-section=.comment","--remove-section=.note",$_);
+}
+
+# foreach (@static_libs) {
+#     system("strip","--strip-debug",$_);
+# }
+
+# strip_files ends here

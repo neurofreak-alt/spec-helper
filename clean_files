@@ -1,0 +1,23 @@
+#!/usr/bin/perl -w
+#---------------------------------------------------------------
+# Project         : Linux-Mandrake
+# Module          : spec-helper
+# File            : clean_files
+# Version         : $Id$
+# Author          : Frederic Lepied
+# Created On      : Thu Feb 10 10:29:18 2000
+# Purpose         : remove backup files.
+#---------------------------------------------------------------
+
+################################################################################
+$RPM_BUILD_ROOT=$ENV{RPM_BUILD_ROOT};
+chdir($RPM_BUILD_ROOT) || die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+
+system(split(/\s+/,"find . -type f -a
+	        ( -name #*# -o -name *~ -o -name DEADJOE
+		 -o -name *.orig -o -name *.rej -o -name *.bak
+		 -o -name .*.orig -o -name .*.rej -o -name .SUMS
+		 -o -name TAGS -o -name core -o ( -path */.deps/* -a -name *.P )
+		) -exec rm -f {} ;"));
+
+# clean_files ends here

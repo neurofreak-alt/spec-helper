@@ -1,0 +1,46 @@
+#!/bin/sh
+#---------------------------------------------------------------
+# Project         : Linux-Mandrake
+# Module          : bin
+# File            : spec-helper
+# Version         : $Id$
+# Author          : Frederic Lepied
+# Created On      : Wed Feb  9 16:25:21 2000
+#---------------------------------------------------------------
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "no RPM_BUILD_ROOT variable; exiting." 1>&2
+    exit 1
+fi
+
+SPEC_HELPER_ROOT=${SPEC_HELPER_ROOT=/usr/share/spec-helper}
+PATH=$SPEC_HELPER_ROOT:$PATH
+export PATH
+
+# usage
+usage() {
+    echo "usage: spec-helper [-c|-m|-s]" 1>&2
+    echo "-c don't clean up files" 1>&2
+    echo "-m don't compress files" 1>&2
+    echo "-s don't strip files" 1>&2
+}
+
+# handle options
+while [ $# != 0 ]; do
+    case $1 in
+	-c) DONT_CLEANUP=1;;
+	-m) DONT_COMPRESS=1;;
+	-s) DONT_STRIP=1;;
+	*) usage; exit 1;;
+    esac
+
+    shift
+done
+
+test -z "$DONT_CLEANUP" && echo -n "Cleaning files..." && clean_files && echo "done"
+test -z "$DONT_COMPRESS" && echo -n "Compressing files..." && compress_files && echo "done"
+test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "done"
+
+exit 0
+
+# spec-helper ends here
