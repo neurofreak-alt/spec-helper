@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.3
-%define release 5mdk
+%define release 6mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Mon Sep  4 2000 Pixel <pixel@mandrakesoft.com> 0.3-6mdk
+- fix EXCLUDE_FROM_STRIP in strip_files
+
 * Sat Aug 26 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.3-5mdk
 - macroszification: Add initrddir macroszification.
 - spec-helper.spec: macroszification :-(

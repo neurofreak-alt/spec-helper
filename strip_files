@@ -16,7 +16,7 @@ use File::Find;
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
 my (@shared_libs, @executables, @static_libs);
-my $exclude_files=defined($ENV{EXCLUDE_FROM_STRIP}) ? split(' ',$ENV{EXCLUDE_FROM_STRIP}) : undef;
+my @exclude_files = split(' ',$ENV{EXCLUDE_FROM_STRIP});
 
 sub testfile {
 
@@ -24,12 +24,10 @@ sub testfile {
 
     $fn="$File::Find::dir/$_";
 
-    if ($exclude_files) {
-	# See if we were asked to exclude this file.
-	# Note that we have to test on the full filename, including directory.
-	foreach my $f ($exclude_files) {
-	    return if ($fn=~m/\Q$f\E/);
-	}
+    # See if we were asked to exclude this file.
+    # Note that we have to test on the full filename, including directory.
+    foreach my $f (@exclude_files) {
+	return if ($fn=~m/\Q$f\E/);
     }
     
     # Does its filename look like a shared library?
