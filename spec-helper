@@ -91,6 +91,8 @@ fi
 
 if test -z "$DONT_FIX_MO" -a -n "$(ls $RPM_BUILD_ROOT/usr/share/locale/ko/LC_MESSAGES/*.mo 2> /dev/null)"; then
     echo -n "Fixing translations..." && fix-mo && echo done
+fi
+
 exit 0
 
 # spec-helper ends here
