@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.2
-%define release 6mdk
+%define release 7mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -18,7 +18,7 @@ Requires: perl
 
 %description
 Tools to ease the creation of rpm packages for the Linux-Mandrake distribution.
-Compress man pages using bzip2, strip executables, ...
+Compress man pages using bzip2, strip executables, convert links...
 
 %prep
 %setup
@@ -38,6 +38,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Sat Apr 22 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-7mdk
+- relative_me_babe: a new greatest hit.
+
 * Fri Apr  7 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-6mdk
 - compress_files: Remove orphan link only for manpage.
 
