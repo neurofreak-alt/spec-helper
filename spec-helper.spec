@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.3
-%define release 4mdk
+%define release 5mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -36,9 +36,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc Howto-spec-helper ChangeLog
 %{_bindir}/macroszification
-/usr/share/spec-helper
+%{_datadir}/spec-helper
 
 %changelog
+* Sat Aug 26 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.3-5mdk
+- macroszification: Add initrddir macroszification.
+- spec-helper.spec: macroszification :-(
+
 * Fri Aug 18 2000 Pixel <pixel@mandrakesoft.com> 0.3-4mdk
 - clean_perl: remove the -x (silly me), don't remove *.ix (used for devel)
 
