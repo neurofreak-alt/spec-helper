@@ -1,0 +1,89 @@
+#!/bin/bash
+# -*- Mode: shell-script -*-
+# Copyright (C) 2000 by Chmouel Boudjnah <chmouel@mandrakesoft.com>
+# Redistribution of this file is permitted under the terms of the GNU 
+# Public License (GPL)
+## description:
+# Macroszification of files to be mandrake compliant, also do some check.
+
+
+function usage () {
+    rval=$1
+    echo "Usage: $(basename $0) -d --nocheck --clean SPEC-FILE"
+    echo -e "\t-d: Product only a diff don't change nothing"
+    echo -e "\t--nocheck: Don't try do check about Prefix %configure"
+    echo -e "\t--clean: remove the old files after"
+    echo -e "\t--nodiff: I don't want to see the diff output"
+    exit $rval;
+}
+while [[ $1 == -* ]];do
+      case $1 in
+	  -d)
+	  only_diff=1;
+	  shift;
+	  ;;
+	  --nocheck)
+	  nocheck=1;
+	  shift;
+	  ;;
+	  --nodiff)
+	  nodiff=1;
+	  shift;
+	  ;;
+	  --clean)
+	  clean=1;
+	  shift;
+	  ;;
+	  -*)
+	  usage 0
+	  ;;
+      esac
+done
+
+file=$1;
+
+if [[ ! -f $file ]];then
+    echo -e "Error: i really need a spec file to work\n";
+    usage $val;
+fi
+
+[[ -z $nocheck ]] && egrep -q "^Prefix:[[:space:]]+" $file || {
+    echo "sound like you don't have a Prefix set"
+    exit;
+}
+
+egrep -q "^%configure" $file && {
+    egrep -q "^%makeinstall" $file || {
+	echo "sound like you don't have a %makeinstall"
+	exit;
+    }
+}
+
+mv -f  $file $file.old
+cat $file.old | perl -e "
+while (<>) {
+    s@[/]?(usr|%{[_]?prefix})/bin@%{_bindir}@g;
+    s@[/]?(usr|%{[_]?prefix})/man@%{_mandir}@g;
+    s@[/]?(usr|%{[_]?prefix})/sbin@%{_sbindir}@g;
+    s@[/]?(usr|%{[_]?prefix})/etc@%{_sysconfdir}@g;
+    s@[/]?(usr|%{[_]?prefix})/lib@%{_libdir}@g;
+    s@[/]?(usr|%{[_]?prefix})/share@%{_datadir}@g;
+    s@[/]?(usr|%{[_]?prefix})/include@%{_includedir}@g;
+    s@[/]?(usr|%{[_]?prefix})/info@%{_infodir}@g;
+    s@/etc@%{_sysconfdir}@;
+    s@/usr@%{prefix}@;
+   print;
+}
+" > $file
+
+if [[ -z $nodiff ]];then
+    diff -u $file.old $file
+fi
+
+if [[ -n $only_diff ]];then
+    mv -f $file.old $file
+fi
+
+if [[ -n $clean ]];then
+    rm -f $file.old
+fi

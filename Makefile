@@ -12,6 +12,7 @@ FILES= spec-helper clean_files compress_files strip_files relative_me_babe
 DISTFILES= Makefile ChangeLog Howto-spec-helper $(FILES)
 NAME=spec-helper
 DIST=$(NAME)-$(VERSION)
+bindir=/usr/bin
 
 all:
 	@echo "use make install or make dist"
@@ -26,6 +27,8 @@ dist:
 	rm -rf $(DIST)
 
 install:
+	install -d -m755 $(bindir)
+	install -m755 macroszification $(bindir)/
 	install -d -m 755 $(DESTDIR)/usr/share/spec-helper
 	install -m 755 $(FILES) $(DESTDIR)/usr/share/spec-helper
 

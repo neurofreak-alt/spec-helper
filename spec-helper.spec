@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.2
-%define release 8mdk
+%define release 9mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -27,7 +27,7 @@ Compress man pages using bzip2, strip executables, convert links...
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT bindir=%{buildroot}/%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -35,9 +35,13 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc Howto-spec-helper ChangeLog
+%{_bindir}/macroszification
 /usr/share/spec-helper
 
 %changelog
+* Thu Jul 20 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.2-9mdk
+- macroszification: a new greatest hit.
+
 * Tue May  9 2000 Frederic Lepied <flepied@mandrakesoft.com> 0.2-8mdk
 - exit 0 if no RPM_BUILD_ROOT variable set to allow build with no BuildRoot.
 
