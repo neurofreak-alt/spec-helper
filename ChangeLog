@@ -1,3 +1,11 @@
+2002-02-16 22:13  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.6-3mdk
+
+2002-02-16 22:13  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: don't call gprintify if init.d is empty.
+
 2002-01-15 18:16  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.6-1mdk
