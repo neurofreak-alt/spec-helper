@@ -1,3 +1,8 @@
+2000-08-17  Pixel  <pixel@mandrakesoft.com>
+
+	* spec-helper: add a rule to remove .packlist's
+	* Makefile (rpm): change the dependency to dis
+
 2000-07-29 22:19  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* .username: We use now ../common/username

@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.3
-%define release 2mdk
+%define release 3mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/spec-helper
 
 %changelog
+* Thu Aug 17 2000 Pixel <pixel@mandrakesoft.com> 0.3-3mdk
+- spec-helper: add a rule to remove .packlist's
+- Makefile (rpm): change the dependency to dis
+
 * Thu Jul 27 2000 Chmouel Boudjnah <chmouel@mandrakesoft.com> 0.3-2mdk
 - macroszification: Check Prefix only when %{?prefix}? is present in
 the spec file
