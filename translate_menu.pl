@@ -52,7 +52,7 @@ foreach my $file (@ARGV) {
     open ($FILE, ">$file");
     for my $l (@lines) {
 	chomp($l);
-	if (( $l =~ /(.*section=")([^"]+)("\s+.*)/ ) or ( $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/ )) {
+	if (( $l =~ /(.*section=)"([^"]+)"(\s+.*)/ ) or ( $l =~ /(.*section=)([^"].+?)((\s|\\)+.*)/ )) {
 	    my ($beg, $section, $end) = ($1, $2, $3);
             $section = translate($section);
             $l = "$beg\"$section\"$end";
