@@ -1,3 +1,7 @@
+2000-03-23  Chmouel Boudjnah <chmouel@mandrakesoft.com>
+
+	* compress_files: Don't compress whatis and dir in /usr/{info|man}.
+	
 2000-02-28  Frederic Lepied  <flepied@mandrakesoft.com>
 
 	* 0.2: use EXCLUDE_FROM_COMPRESS and EXCLUDE_FROM_STRIP environment
