@@ -1,3 +1,11 @@
+2002-12-13 12:53  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.7-1mdk
+
+2002-12-13 12:52  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: remove info dir if not the one from info-install
+
 2002-08-29 07:38  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.6.1-1mdk
