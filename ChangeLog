@@ -1,3 +1,7 @@
+2003-02-14 09:28  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* Makefile: add fix-mo to the files list
+
 2003-02-14 09:11  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.8-1mdk
