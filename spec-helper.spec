@@ -1,6 +1,6 @@
 %define name spec-helper
 %define version 0.3
-%define release 6mdk
+%define release 7mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Fri Oct 20 2000 François Pons <fpons@mandrakesoft.com> 0.3-7mdk
+- clean_files: remove CVS directories.
+
 * Mon Sep  4 2000 Pixel <pixel@mandrakesoft.com> 0.3-6mdk
 - fix EXCLUDE_FROM_STRIP in strip_files
 
