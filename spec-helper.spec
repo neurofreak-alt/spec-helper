@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.6.1
+%define version 0.7
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Fri Dec 13 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.7-1mdk
+- remove /usr/share/info/dir if not a symlink
+
 * Thu Aug 29 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6.1-1mdk
 - fixed clean_files to remove correctly the CVS dirs (thx to Stephane Chatty)
 - clean_files removes .cvsignore
