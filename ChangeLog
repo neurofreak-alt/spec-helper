@@ -1,3 +1,19 @@
+2003-02-14 09:11  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper.spec: 0.8-1mdk
+
+2003-02-14 09:10  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: fix syntax
+
+2003-02-14 09:09  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* spec-helper: add fi-mo call
+
+2003-02-14 09:08  Frederic Lepied <flepied@mandrakesoft.com>
+
+	* fix-mo: first version
+
 2002-12-13 12:53  Frederic Lepied <flepied@mandrakesoft.com>
 
 	* spec-helper.spec: 0.7-1mdk
