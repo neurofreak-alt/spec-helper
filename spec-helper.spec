@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.6
-%define release 6mdk
+%define version 0.6.1
+%define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -40,6 +40,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Thu Aug 29 2002 Frederic Lepied <flepied@mandrakesoft.com> 0.6.1-1mdk
+- fixed clean_files to remove correctly the CVS dirs (thx to Stephane Chatty)
+- clean_files removes .cvsignore
+
 * Wed Jul 24 2002 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.6-6mdk
 - fix lib64 support, use $RPM_ARCH and don't execute arch command.
 
