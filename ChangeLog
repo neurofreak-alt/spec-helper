@@ -1,3 +1,8 @@
+2000-07-27 07:48  Chmouel Boudjnah <chmouel@mandrakesoft.com>
+
+	* macroszification: Check Prefix only when %{?prefix}? is present
+	in the spec file
+
 2000-07-27 07:30  Chmouel Boudjnah <chmouel@mandrakesoft.com>
 
 	* Makefile: Product better ChangeLog with cvs2cl.
