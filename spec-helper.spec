@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.10.1
+%define version 0.10.2
 %define release 1mdk
 
 Summary: Tools to ease the creation of rpm packages
@@ -18,7 +18,7 @@ BuildArchitectures: noarch
 Requires: perl /sbin/ldconfig findutils /usr/bin/python gettext
 
 %description
-Tools to ease the creation of rpm packages for the Mandrake Linux distribution.
+Tools to ease the creation of rpm packages for the Mandrakelinux distribution.
 Compress man pages using bzip2, strip executables, convert links...
 
 %prep
@@ -40,6 +40,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Tue Aug 10 2004 Rafael Garcia-Suarez <rgarciasuarez@mandrakesoft.com> 0.10.2-1mdk
+- Fix translation of menu entries
+- Other cleanups and speedups
+
 * Fri Feb  6 2004 Frederic Lepied <flepied@mandrakesoft.com> 0.10.1-1mdk
 - use " around the section name in spec-helper
 
