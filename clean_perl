@@ -4,7 +4,6 @@ d=$RPM_BUILD_ROOT/usr/lib/perl5
 
 [ -d $d ] || exit 0
 
-
 find $d -name ".packlist" | xargs rm -f
 
 # remove file alike /usr/lib/perl5/5.8.*/i386-linux-thread-multi/perllocal.pod
@@ -12,8 +11,8 @@ perl -MConfig -e 'unlink "$ENV{RPM_BUILD_ROOT}$Config{installarchlib}/perllocal.
 
 for i in $(find $d -name "*.bs"); do
     if [ -s $i ]; then
-      echo "non empty *.bs file, please mail pixel@mandrakesoft.com about this!"
+	echo "non empty .bs file, please mail rgarciasuarez@mandriva.com about this!"
     else
-      rm -f $i
+	rm -f $i
     fi
 done
