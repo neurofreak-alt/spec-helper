@@ -17,7 +17,10 @@ if [ -z "$RPM_BUILD_ROOT" ]; then
     exit 0
 fi
 
-libs=`find $RPM_BUILD_ROOT -type d -a "(" -name lib -o -name lib64 ")"`
+libs=`find $RPM_BUILD_ROOT -type d \
+   -a "(" -name lib -o -name lib64 ")" \
+   -a ! "(" -path '*/usr/src/debug*' -o -path '*/usr/lib/debug*' ")" \
+   `
 
 if [ -n "$libs" -o -n "$EXTRA_LIBS_TO_SYMLINK" ]; then
     /sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
