@@ -8,8 +8,8 @@
 #---------------------------------------------------------------
 
 PACKAGE=spec-helper
-VERSION:=$(shell grep '%define *version ' $(PACKAGE).spec| cut -d ' ' -f 3)
-RELEASE:=$(shell grep '%define *release ' $(PACKAGE).spec| cut -d ' ' -f 3)
+VERSION:=$(shell rpm --qf %{VERSION} -q --specfile spec-helper.spec)
+RELEASE:=$(shell rpm --qf %{RELEASE} -q --specfile spec-helper.spec)
 TAG := $(shell echo "V$(VERSION)_$(RELEASE)" | tr -- '-.' '__')
 
 FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py fix-mo translate_menu.pl

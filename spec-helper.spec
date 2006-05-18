@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.11
-%define release 1mdk
+%define version 0.12
+%define release %mkrel 1
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Thu May 18 2006 Olivier Thauvin <thauvin@aerov.jussieu.fr> 0.12-1mdk
+- 0.12 (fix #21079)
+
 * Fri Jan  7 2005 Frederic Lepied <flepied@mandrakesoft.com> 0.11-1mdk
 - Fix translation of Internet menu entry
 - handle file names starting with -
