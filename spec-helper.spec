@@ -1,24 +1,21 @@
 %define name spec-helper
 %define version 0.12
-%define release %mkrel 1
+%define release %mkrel 2
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
 Version: %{version}
 Release: %{release}
-# get the source from our cvs repository (see
-# http://www.linuxmandrake.com/en/cvs.php3)
 Source0: %{name}-%{version}.tar.bz2
-URL: http://www.linux-mandrake.com
+URL: http://www.mandriva.com
 License: GPL
 Group: Development/Other
 BuildRoot: %{_tmppath}/%{name}-buildroot
-Prefix: %{_prefix}
-BuildArchitectures: noarch
+BuildArch: noarch
 Requires: perl /sbin/ldconfig findutils /usr/bin/python gettext
 
 %description
-Tools to ease the creation of rpm packages for the Mandrakelinux distribution.
+Tools to ease the creation of rpm packages for the Mandriva Linux distribution.
 Compress man pages using bzip2, strip executables, convert links...
 
 %prep
@@ -40,6 +37,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/spec-helper
 
 %changelog
+* Thu May 18 2006 Olivier Thauvin <nanardon@mandriva.org> 0.12-2mdk
+- remove 'mdk' words
+
 * Thu May 18 2006 Olivier Thauvin <thauvin@aerov.jussieu.fr> 0.12-1mdk
 - 0.12 (fix #21079)
 
