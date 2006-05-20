@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Olivier Thauvin Sat May 20 14:47:17 CEST 2006:
+# This file is now deprecated, see spec-helper.macro.in
+
 #---------------------------------------------------------------
 # Project         : Mandrake Linux
 # Module          : spec-helper
@@ -61,39 +65,11 @@ test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "do
 test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relative_me_babe && echo "done"
 test -z "$DONT_CLEAN_PERL" && echo -n "Clean perl..." && clean_perl && echo "done"
 test -z "$DONT_SYMLINK_LIBS" && echo -n "Building libraries symlinks..." && lib_symlinks && echo "done"
-
-if test -z "$DONT_GPRINTIFY"; then
-    scripts=
-    for f in `ls $RPM_BUILD_ROOT/etc/rc.d/init.d/* $RPM_BUILD_ROOT/etc/init.d/* 2> /dev/null`; do
-	test -f $f && egrep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f && scripts="$scripts $f"
-    done
-    if [ -n "$scripts" ]; then
-	echo -n "Gprintifying init scripts..." && gprintify.py $scripts && echo "done"
-    fi
-fi
-
-if test -z "$DONT_FIX_PAMD_CONFIGS"; then
-	configs=`ls $RPM_BUILD_ROOT/etc/pam.d/* 2> /dev/null`
-	if [ -n "$configs" ]; then
-		echo -n "Fixing pam.d config files..."
-		perl -pi -e "s,/(lib|lib64)/security/,," $configs
-		echo "done"
-	fi
-fi
-
-dir=$RPM_BUILD_ROOT/usr/share/info/dir
-
-if test -z "$DONT_REMOVE_INFO_DIR" -a -f $dir -a ! -L $dir; then
-    echo -n "Removing info dir..." && rm -f $dir && echo done
-fi
-
-if test -z "$DONT_FIX_MO" -a -n "$(ls $RPM_BUILD_ROOT/usr/share/locale/ko/LC_MESSAGES/*.mo 2> /dev/null)"; then
-    echo -n "Fixing translations..." && fix-mo && echo done
-fi
-
-if test -z "$DONT_TRANSLATE_MENU" -a -d $RPM_BUILD_ROOT/usr/lib/menu; then
-    echo "Translating menus:" && translate_menu.pl $RPM_BUILD_ROOT/usr/lib/menu/* && echo done
-fi
+test -z "$DONT_GPRINTIFY" && echo -n "printify initscripts..." && gprintify && echo "done"
+test -z "$DONT_FIX_PAMD_CONFIGS" && echo -n "Fixing pam.d config files..." && fixpamd && echo "done"
+test -z "$DONT_REMOVE_INFO_DIR" && echo -n "Removing info dir..." && remove_info_dir && echo "done"
+test -z "$DONT_FIX_MO" && echo -n "Fixing translations..." && fix-mo && echo "done"
+test -z "$DONT_TRANSLATE_MENU" && echo -n "Translating menus..." && translate_menu.pl && echo "done"
 
 exit 0
 

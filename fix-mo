@@ -19,6 +19,8 @@ TMP2=$KO_MESSAGES/tmpfile2
 
 ret=0
 
+[ -f "$KO_MESSAGES/*.mo" ] || exit 0
+
 for i in $KO_MESSAGES/*.mo ; do
     msgunfmt -o $TMP $i
     if grep -qi '^"Content-Type: text/plain; charset=euc-kr.n"$' $TMP; then
