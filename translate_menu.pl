@@ -9,6 +9,12 @@
 # Purpose         : change the menu sections
 #---------------------------------------------------------------
 
+my $menudir = `rpm --eval %_menudir`;
+chomp($menudir);
+
+$ENV{RPM_BUILD_ROOT} or exit(0);
+! -d "$ENV{RPM_BUILD_ROOT}/$menudir/" || exit(0);
+
 my @nested = (["Configuration", "System/Configuration"],
 
 	   ["Applications/Monitoring", "System/Monitoring"],
@@ -45,7 +51,8 @@ sub translate {
 }
 
 # process each file passed on cli:
-foreach my $file (@ARGV) {
+
+foreach my $file (glob("$ENV{RPM_BUILD_ROOT}/$menudir/*")) {
     open(my $FILE, "<$file") or die $!;
     my @lines = <$FILE>;
     close($FILE);
