@@ -10,7 +10,7 @@
     %{?!dont_lceanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
     %{?!dont_symlinks_libs:  [ -n "$DONT_SYMLINK_LIBS" ]  || %_spec_helper_dir/lib_symlinks} \
     %{?!dont_gprintify:      [ -n "$DONT_GPRINTIFY" ]     || %_spec_helper_dir/gprintify} \
-    %{?!dont_fix_mo:         [ -n "$DONT_FIX_MO" ]        || %_spec_helper_dir/fix_mo} \
+    %{?!dont_fix_mo:         [ -n "$DONT_FIX_MO" ]        || %_spec_helper_dir/fix-mo} \
     %{?!dont_translate_menu: [ -n "$DONT_TRANSLATE_MENU"] || %_spec_helper_dir/translate_menu.pl} \
 %nil
 
