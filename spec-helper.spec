@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.20
+%define version 0.21
 %define release %mkrel 1
 
 Summary: Tools to ease the creation of rpm packages
@@ -38,6 +38,9 @@ rm -rf $RPM_BUILD_ROOT
 %_sys_macros_dir/%{name}.macros
 
 %changelog
+* Sat May 20 2006 Olivier Thauvin <nanardon@mandriva.org> 0.21-1mdk
+- fix typo in macros
+
 * Sat May 20 2006 Olivier Thauvin <nanardon@mandriva.org> 0.20-1mdk
 - cleanup
 - split scripts, provide macros to disable it one by one
