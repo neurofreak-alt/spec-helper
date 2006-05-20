@@ -1,6 +1,6 @@
 %define name spec-helper
-%define version 0.12
-%define release %mkrel 2
+%define version 0.20
+%define release %mkrel 1
 
 Summary: Tools to ease the creation of rpm packages
 Name: %{name}
@@ -25,7 +25,7 @@ Compress man pages using bzip2, strip executables, convert links...
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT bindir=%{buildroot}/%{_bindir}
+make install DESTDIR=$RPM_BUILD_ROOT bindir=%{_bindir} rpmmacrosdir=%_sys_macros_dir 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -35,8 +35,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS Howto-spec-helper ChangeLog
 %{_bindir}/macroszification
 %{_datadir}/spec-helper
+%_sys_macros_dir/%{name}.macros
 
 %changelog
+* Sat May 20 2006 Olivier Thauvin <nanardon@mandriva.org> 0.20-1mdk
+- cleanup
+- split scripts, provide macros to disable it one by one
+- rpm 4.4 integration using macrofile
+
 * Thu May 18 2006 Olivier Thauvin <nanardon@mandriva.org> 0.12-2mdk
 - remove 'mdk' words
 
