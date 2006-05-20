@@ -12,18 +12,25 @@ VERSION:=$(shell rpm --qf %{VERSION} -q --specfile spec-helper.spec)
 RELEASE:=$(shell rpm --qf %{RELEASE} -q --specfile spec-helper.spec)
 TAG := $(shell echo "V$(VERSION)_$(RELEASE)" | tr -- '-.' '__')
 
-FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py fix-mo translate_menu.pl
-DISTFILES= AUTHORS Makefile ChangeLog Howto-spec-helper $(FILES) macroszification spec-helper.spec
+FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py fix-mo translate_menu.pl \
+	   fixpamd gprintify remove_info_dir
+MACROSFILE = $(PACKAGE).macros
+DISTFILES= AUTHORS Makefile ChangeLog Howto-spec-helper $(FILES) macroszification spec-helper.spec $(MACROSFILE).in
 bindir=/usr/bin
+
+spec_helper_dir=/usr/share/spec-helper
+rpmmacrosdir=/etc/rpm
 
 all:
 	@echo "use make install or make dist"
 
-install:
-	install -d -m755 $(bindir)
-	install -m755 macroszification $(bindir)/
-	install -d -m 755 $(DESTDIR)/usr/share/spec-helper
-	install -m 755 $(FILES) $(DESTDIR)/usr/share/spec-helper
+install: $(MACROSFILE)
+	install -d -m755 $(DESTDIR)$(bindir)
+	install -m755 macroszification $(DESTDIR)$(bindir)/
+	install -d -m 755 $(DESTDIR)$(spec_helper_dir)
+	install -m 755 $(FILES) $(DESTDIR)$(spec_helper_dir)
+	install -d -m 755 $(DESTDIR)/$(rpmmacrosdir)
+	install -m 644 $(MACROSFILE) $(DESTDIR)/$(rpmmacrosdir)
 
 clean:
 	find . -name '*~' | xargs rm -f
@@ -47,6 +54,9 @@ tar:
 	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
 	bzip2 -9vf $(PACKAGE)-$(VERSION).tar
 	rm -rf $(PACKAGE)-$(VERSION)
+
+spec-helper.macros: spec-helper.macros.in
+	cat $< | sed -e 's:@SPEC_HELPER_ROOT@:$(spec_helper_dir):' > $@
 
 buildrpm:
 	rpm -ta $(PACKAGE)-$(VERSION).tar.bz2
