@@ -8,7 +8,7 @@ if test -z "$DONT_GPRINTIFY"; then
     test -f $f && egrep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f && scripts="$scripts $f"
     done
     if [ -n "$scripts" ]; then
-    echo -n "Gprintifying init scripts..." && gprintify.py $scripts && echo "done"
+    echo -n "Gprintifying init scripts..." && /usr/share/spec-helper/gprintify.py $scripts && echo "done"
     fi
 fi
 
