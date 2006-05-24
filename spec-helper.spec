@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.22
+%define version 0.23
 %define release %mkrel 1
 
 Summary: Tools to ease the creation of rpm packages
@@ -38,6 +38,9 @@ rm -rf $RPM_BUILD_ROOT
 %_sys_macros_dir/%{name}.macros
 
 %changelog
+* Wed May 24 2006 Olivier Thauvin <nanardon@mandriva.org> 0.23-1mdk
+- add missing call in macro file (spturtle)
+
 * Mon May 22 2006 Olivier Thauvin <nanardon@mandriva.org> 0.22-1mdk
 - fix gprintify path
 
