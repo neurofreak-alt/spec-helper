@@ -62,7 +62,7 @@ done
 test -z "$DONT_CLEANUP" && echo -n "Cleaning files..." && clean_files && echo "done"
 test -z "$DONT_COMPRESS" && echo -n "Compressing files..." && compress_files && echo "done"
 test -z "$DONT_STRIP" && echo -n "Stripping files..." && strip_files && echo "done"
-test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relative_me_babe && echo "done"
+test -z "$DONT_RELINK" && echo -n "Relativisation of symlinks..." && relink_symlinks && echo "done"
 test -z "$DONT_CLEAN_PERL" && echo -n "Clean perl..." && clean_perl && echo "done"
 test -z "$DONT_SYMLINK_LIBS" && echo -n "Building libraries symlinks..." && lib_symlinks && echo "done"
 test -z "$DONT_GPRINTIFY" && echo -n "printify initscripts..." && gprintify && echo "done"

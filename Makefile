@@ -12,8 +12,8 @@ VERSION:=$(shell rpm --qf %{VERSION} -q --specfile spec-helper.spec)
 RELEASE:=$(shell rpm --qf %{RELEASE} -q --specfile spec-helper.spec)
 TAG := $(shell echo "V$(VERSION)_$(RELEASE)" | tr -- '-.' '__')
 
-FILES= spec-helper clean_files clean_perl compress_files strip_files relative_me_babe lib_symlinks gprintify.py fix-mo translate_menu.pl \
-	   fixpamd gprintify remove_info_dir
+FILES=spec-helper clean_files clean_perl compress_files strip_files lib_symlinks gprintify.py fix-mo translate_menu.pl \
+	fixpamd gprintify remove_info_dir relink_symlinks
 MACROSFILE = $(PACKAGE).macros
 DISTFILES= AUTHORS Makefile ChangeLog Howto-spec-helper $(FILES) macroszification spec-helper.spec $(MACROSFILE).in
 bindir=/usr/bin
