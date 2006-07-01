@@ -12,7 +12,7 @@ sub relativize {
 
     $link =~ s{^/}{};
     my $dirname = $File::Find::dir;
-    $dirname =~ s/^$ENV{RPM_BUILD_ROOT}//;
+    $dirname =~ s/^\Q$ENV{RPM_BUILD_ROOT}\E//;
     $dirname =~ s{/[^/]+}{../}g;
 
     unlink $_;
