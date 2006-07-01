@@ -65,6 +65,6 @@ rpm: changelog dist buildrpm
 
 dist: cleandist dir tar
 
-changelog: ../common/username.xml
-	svn2cl --accum --strip-prefix=soft/rpm/spec-helper/trunk --authors ../common/username.xml
+changelog:
+	svn2cl --accum --strip-prefix=soft/rpm/spec-helper/trunk --authors
 	rm -f ChangeLog.bak

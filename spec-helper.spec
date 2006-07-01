@@ -1,5 +1,5 @@
 %define name spec-helper
-%define version 0.23
+%define version 0.24
 %define release %mkrel 1
 
 Summary: Tools to ease the creation of rpm packages
@@ -38,6 +38,10 @@ rm -rf $RPM_BUILD_ROOT
 %_sys_macros_dir/%{name}.macros
 
 %changelog
+* Sat Jul 01 2006 Olivier Thauvin <nanardon@mandriva.org> 0.24-1mdv2007.0
+- 0.24
+- Replace relative_me_babe by relink_symlinks, by Guillaume Rousse (bug #22983)
+
 * Wed May 24 2006 Olivier Thauvin <nanardon@mandriva.org> 0.23-1mdk
 - add missing call in macro file (spturtle)
 
