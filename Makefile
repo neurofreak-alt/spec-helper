@@ -61,10 +61,10 @@ buildrpm:
 
 # rules to build a distributable rpm
 
-rpm: changelog dist buildrpm
+rpm: changelog localdist buildrpm
 
-dist: cleandist dir tar
+dist: cleandist dir localcopy tar
 
 changelog:
-	svn2cl --accum --strip-prefix=soft/rpm/spec-helper/trunk --authors
+	svn2cl --accum --strip-prefix=soft/rpm/spec-helper/trunk
 	rm -f ChangeLog.bak
