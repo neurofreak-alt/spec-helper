@@ -1,6 +1,33 @@
-2006-05-24 15:58  Olivier Thauvin <thauvin@aerov.jussieu.fr>
+2006-07-01 19:00  nanardon
 
-	* spec-helper.spec: - 0.23
+	* Makefile, spec-helper.spec: - dont use username.xml, path level
+	  change with branch and svn cat impossible with anonymous access
+	  outside mandriva
+
+2006-07-01 18:53  nanardon
+
+	* relink_symlinks: - fix potential bug with buildroot than include
+	  regexp meta character
+
+2006-07-01 18:53  nanardon
+
+	* relink_symlinks: - fix potential bug with buildroot than include
+	  regexp meta character
+
+2006-07-01 18:53  nanardon
+
+	* relink_symlinks: - fix potential bug with buildroot than include
+	  regexp meta character
+
+2006-06-07 13:12  rafael
+
+	* Makefile: Make the makefile svn-compliant
+
+2006-06-07 13:06  rafael
+
+	* Makefile, relative_me_babe, relink_symlinks, spec-helper,
+	  spec-helper.macros.in: Replace relative_me_babe by
+	  relink_symlinks, by Guillaume Rousse (bug #22983)
 
 2006-05-24 15:56  Olivier Thauvin <thauvin@aerov.jussieu.fr>
 
