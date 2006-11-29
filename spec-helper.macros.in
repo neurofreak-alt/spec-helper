@@ -7,7 +7,7 @@
     %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || %_spec_helper_dir/compress_files} \
     %{?!dont_strip:          [ -n "$DONT_STRIP" ]         || %_spec_helper_dir/strip_files} \
     %{?!dont_relink:         [ -n "$DONT_RELINK" ]        || %_spec_helper_dir/relink_symlinks} \
-    %{?!dont_lceanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
+    %{?!dont_cleanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
     %{?!dont_symlinks_libs:  [ -n "$DONT_SYMLINK_LIBS" ]  || %_spec_helper_dir/lib_symlinks} \
     %{?!dont_gprintify:      [ -n "$DONT_GPRINTIFY" ]     || %_spec_helper_dir/gprintify} \
     %{?!dont_fix_mo:         [ -n "$DONT_FIX_MO" ]        || %_spec_helper_dir/fix-mo} \
