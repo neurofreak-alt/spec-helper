@@ -21,12 +21,12 @@ install: $(MACROS_FILES)
 	install -d -m 755 $(DESTDIR)$(bindir)
 	install -m 755 $(BIN_FILES) $(DESTDIR)$(bindir)
 	install -d -m 755 $(DESTDIR)$(pkgdatadir)
-	install -m 755 $(SCRIPTS) $(DESTDIR)$(pkgdatadir)
+	install -m 755 $(SCRIPT_FILES) $(DESTDIR)$(pkgdatadir)
 	install -d -m 755 $(DESTDIR)/$(rpmmacrosdir)
 	install -m 644 $(MACROS_FILES) $(DESTDIR)/$(rpmmacrosdir)
 
 spec-helper.macros: spec-helper.macros.in
-	sed -e 's:@SPEC_HELPER_ROOT@:$(pkgdatadir):' < $< > $@
+	sed -e 's:@pkgdatadir@:$(pkgdatadir):' < $< > $@
 
 clean:
 	rm -f *~

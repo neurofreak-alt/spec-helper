@@ -1,6 +1,6 @@
 # $Id$
 
-%_spec_helper_dir @SPEC_HELPER_ROOT@
+%_spec_helper_dir @pkgdatadir@
 
 %__spec_helper_post \
     %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]       || %_spec_helper_dir/clean_files} \
