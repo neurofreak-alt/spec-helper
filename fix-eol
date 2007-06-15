@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+# convert end of line patterns from DOS to UNIX
+
+use strict;
+use File::Find;
+use File::Temp;
+
+die "No build root defined" unless $ENV{RPM_BUILD_ROOT};
+
+# normalize build root
+my $buildroot = $ENV{RPM_BUILD_ROOT};
+$buildroot =~ s|/$||;
+
+my %exclude_files = (
+    map { $buildroot . $_ => 1 }
+    split(' ', $ENV{EXCLUDE_FROM_EOL_CONVERSION})
+);
+
+find(\&convert, $buildroot);
+
+sub convert {
+    # reject symlinks
+    return unless -f $_;
+    # reject binary files
+    return unless -T $_;
+    # reject excluded files
+    return if $exclude_files{$File::Find::name};
+
+    # check if first line has less than 80 characters and ends with \r\n
+    open(my $in, '<', $_) or die "Unable to open file $_: $!";
+    my $line =  <$in>;
+    if (length($line) <= 80 && $line =~ s/\r\n$/\n/) {
+        # process all file
+        my $out = File::Temp->new(DIR => '.', UNLINK => 0);
+        print $out $line;
+        while ($line = <$in> && defined $line) {
+            $line =~ s/\r\n$/\n/;
+            print $out $line;
+        }
+        my $tmp = $out->filename;
+        $out = undef;
+
+        rename($tmp, $_) or die "Unable to rename $tmp to $_: $!";
+    }
+
+    close($in);
+}
