@@ -1,3 +1,6 @@
+2007-06-24 Anssi Hannula <anssi@mandriva.org> 0.26
+	* fix fix-eol to not break files it tries to convert
+
 2007-06-15 Guillaume Rousse <guillomovitch@mandriva.org> 0.25
 	* switch to a manual Changelog
 	* new helper script: fix-eol

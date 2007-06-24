@@ -33,7 +33,7 @@ sub convert {
         # process all file
         my $out = File::Temp->new(DIR => '.', UNLINK => 0);
         print $out $line;
-        while ($line = <$in> && defined $line) {
+        while (($line = <$in>) && defined $line) {
             $line =~ s/\r\n$/\n/;
             print $out $line;
         }
