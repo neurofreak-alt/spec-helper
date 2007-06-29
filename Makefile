@@ -7,7 +7,7 @@ SCRIPT_FILES = spec-helper clean_files clean_perl compress_files strip_files \
                fixpamd gprintify remove_info_dir relink_symlinks fix-eol
 BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
-FILES        = AUTHORS Makefile NEWS Howto-spec-helper \
+FILES        = AUTHORS Makefile NEWS README \
 	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in)
 
 bindir       = /usr/bin
