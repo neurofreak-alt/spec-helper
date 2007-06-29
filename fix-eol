@@ -40,7 +40,10 @@ sub convert {
         my $tmp = $out->filename;
         $out = undef;
 
+        # rename file, taking care to keep original permissions
+        my $perms = (stat $_)[2] & 07777;
         rename($tmp, $_) or die "Unable to rename $tmp to $_: $!";
+        chmod($perms, $_);
     }
 
     close($in);
