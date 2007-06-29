@@ -1,6 +1,7 @@
 2007-06-30 Guillaume Rousse <guillomovitch@mandriva.org> 0.26.1
 	* rename ChangeLog to NEWS
 	* rename Howto-spec-helper to README
+	* drop deprecated spec-helper script
 
 2007-06-24 Anssi Hannula <anssi@mandriva.org> 0.26
 	* fix fix-eol to not corrupt files it tries to convert
