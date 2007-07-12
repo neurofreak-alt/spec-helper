@@ -41,17 +41,17 @@ cleandist: clean
 dir:
 	mkdir $(PACKAGE)-$(VERSION)
 
-localcopy:
-	tar c $(FILES) | tar x -C $(PACKAGE)-$(VERSION)
+localcopy: dir
+	tar c $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar x)
 
-tar:
+tar: dir
 	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
 	bzip2 -9vf $(PACKAGE)-$(VERSION).tar
 	rm -rf $(PACKAGE)-$(VERSION)
 
 # rules to build a public distribution
 
-dist: cleandist dir localcopy tar svntag
+dist: tar
 
 svntag:
 	svn cp -m 'version $(VERSION)' $(SVNPATH)/trunk $(SVNPATH)/tags/v$(VERSION)
