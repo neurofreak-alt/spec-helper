@@ -1,3 +1,6 @@
+2007-07-12 Olivier Thauvin <nanardon@mandriva.org>
+    * use lzma by default for man and info pages
+
 2007-06-30 Guillaume Rousse <guillomovitch@mandriva.org> 0.26.1
 	* rename ChangeLog to NEWS
 	* rename Howto-spec-helper to README
