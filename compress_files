@@ -111,10 +111,12 @@ foreach my $sofile (@sofiles) {
     system "ln", "-sf",$sodest,$sofile;
 }
 
-my @files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
+my @files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" -a ! -name "*.lzma"  ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
 
 my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
 if (@gz_files) { xargs(\@gz_files, "gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
+my @bz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.bz2" 2>/dev/null || true`);
+if (@bz_files) { xargs(\@bz_files, "bzip2", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
 
 # Exclude files from compression.
 if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
@@ -158,7 +160,7 @@ if (@f) {
     # Make executables not be anymore.
     xargs(\@f, "chmod", "a-x");
     
-    xargs(\@f, "bzip2", "-9f");
+    xargs(\@f, "lzma", "-9f");
 }
 
 	
@@ -168,7 +170,7 @@ foreach (keys %hardlinks) {
     # Remove old file.
     system("rm", "-f", $_);
     # Make new hardlink.
-    system("ln", "$hardlinks{$_}.bz2", "$_.bz2");
+    system("ln", "$hardlinks{$_}.lzma", "$_.lzma");
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
@@ -179,10 +181,10 @@ while (<$FIND>) {
     chomp;
     my ($directory) = m!(.*)/!;
     my $linkval = readlink($_);
-    if (! -e "$directory/$linkval" && -e "$directory/$linkval.bz2") {
+    if (! -e "$directory/$linkval" && -e "$directory/$linkval.lzma") {
 	system("rm", "-f", $_);
-	system("ln", "-sf", "$linkval.bz2", "$_.bz2");
-    } elsif (! -e "$directory/$linkval" && ! -e "$directory/linkval.bz2" && $directory =~ m|man/|)  {
+	system("ln", "-sf", "$linkval.lzma", "$_.lzma");
+    } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval.lzma" && $directory =~ m|man/|)  {
 		#Bad link go on nowhere (any better idea) ?
 		unlink($_);
     }
