@@ -42,9 +42,9 @@ dir:
 	mkdir $(PACKAGE)-$(VERSION)
 
 localcopy: dir
-	tar c $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar x)
+	tar cf - $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar xf -)
 
-tar: dir
+tar: dir localcopy
 	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
 	bzip2 -9vf $(PACKAGE)-$(VERSION).tar
 	rm -rf $(PACKAGE)-$(VERSION)
