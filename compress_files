@@ -160,7 +160,7 @@ if (@f) {
     # Make executables not be anymore.
     xargs(\@f, "chmod", "a-x");
     
-    xargs(\@f, "lzma", "-9f");
+    xargs(\@f, "lzma", "-9f", "--text");
 }
 
 	
