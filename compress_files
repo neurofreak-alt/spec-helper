@@ -97,6 +97,9 @@ sub find_so_man() {
 }
 
 ################################################################################
+my $ext = $ARGV[0] ||= '.gz';
+die "Unknown extension $ext" unless $ext =~ /^\.(?:gz|bz2|lzma)$/;
+
 my $RPM_BUILD_ROOT = $ENV{RPM_BUILD_ROOT};
 chdir($RPM_BUILD_ROOT) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
 
@@ -113,10 +116,18 @@ foreach my $sofile (@sofiles) {
 
 my @files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f ! -name "*.gz" -a ! -name "*.bz2" -a ! -name "*.lzma"  ! -name 'dir' ! -name 'whatis' 2>/dev/null || true`);
 
-my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
-if (@gz_files) { xargs(\@gz_files, "gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
-my @bz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.bz2" 2>/dev/null || true`);
-if (@bz_files) { xargs(\@bz_files, "bzip2", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
+if ($ext ne '.gz') {
+    my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
+    if (@gz_files) { xargs(\@gz_files, "gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
+}
+if ($ext ne '.bz2') {
+    my @bz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.bz2" 2>/dev/null || true`);
+    if (@bz_files) { xargs(\@bz_files, "bzip2", "-d"); $? ? die "Something wrong with the decompression of the bzip2 man/info file, fix this ASAP" : exec($0) }
+}
+if ($ext ne '.lzma') {
+    my @lzma_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.lzma" 2>/dev/null || true`);
+    if (@lzma_files) { xargs(\@lzma_files, "lzmash", "-d"); $? ? die "Something wrong with the decompression of the lzma man/info file, fix this ASAP" : exec($0) }
+}
 
 # Exclude files from compression.
 if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
@@ -160,7 +171,12 @@ if (@f) {
     # Make executables not be anymore.
     xargs(\@f, "chmod", "a-x");
     
-    xargs(\@f, "lzma", "-9f", "--text");
+    my @command = $ext eq '.gz'   ? qw/gzip -9f/
+                : $ext eq '.bz2'  ? qw/bzip2 -9f/
+                : $ext eq '.lzma' ? qw/lzma -9f --text/
+                :                     qw//
+                ;
+    xargs(\@f, @command);
 }
 
 	
@@ -170,7 +186,7 @@ foreach (keys %hardlinks) {
     # Remove old file.
     system("rm", "-f", $_);
     # Make new hardlink.
-    system("ln", "$hardlinks{$_}.lzma", "$_.lzma");
+    system("ln", "$hardlinks{$_}$ext", "$_$ext");
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
@@ -181,10 +197,10 @@ while (<$FIND>) {
     chomp;
     my ($directory) = m!(.*)/!;
     my $linkval = readlink($_);
-    if (! -e "$directory/$linkval" && -e "$directory/$linkval.lzma") {
+    if (! -e "$directory/$linkval" && -e "$directory/$linkval$ext") {
 	system("rm", "-f", $_);
-	system("ln", "-sf", "$linkval.lzma", "$_.lzma");
-    } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval.lzma" && $directory =~ m|man/|)  {
+	system("ln", "-sf", "$linkval$ext", "$_$ext");
+    } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval$ext" && $directory =~ m|man/|)  {
 		#Bad link go on nowhere (any better idea) ?
 		unlink($_);
     }
