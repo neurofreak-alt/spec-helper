@@ -118,21 +118,27 @@ if ($ext ne '.gz') {
     my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
     if (@gz_files) {
         xargs(\@gz_files, "gzip", "-d");
-        $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0)
+        die "Something wrong with the decompression of the gzip man/info file"
+            if $?;
+        push(@files, map { substr($_, 0, -3) } @gz_files);
     }
 }
 if ($ext ne '.bz2') {
     my @bz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.bz2" 2>/dev/null || true`);
     if (@bz_files) {
         xargs(\@bz_files, "bzip2", "-d");
-        $? ? die "Something wrong with the decompression of the bzip2 man/info file, fix this ASAP" : exec($0)
+        die "Something wrong with the decompression of the bzip2 man/info file"
+            if $?;
+        push(@files, map { substr($_, 0, -4) } @bz_files);
     }
 }
 if ($ext ne '.lzma') {
     my @lzma_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.lzma" 2>/dev/null || true`);
     if (@lzma_files) { 
         xargs(\@lzma_files, "lzmash", "-d");
-        $? ? die "Something wrong with the decompression of the lzma man/info file, fix this ASAP" : exec($0)
+        die "Something wrong with the decompression of the lzma man/info file"
+            if $?;
+        push(@files, map { substr($_, 0, -5) } @lzma_files);
     }
 }
 
