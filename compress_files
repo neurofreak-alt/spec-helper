@@ -23,7 +23,7 @@ sub basename {
 ################################################################################
 # Returns the directory name of the argument passed to it.
 sub dirname {
-    my $fn=shift;
+    my $fn = shift;
     $fn =~ s!^(.*)/.*?$!$1!;
     return $fn;
 }
@@ -34,32 +34,31 @@ sub dirname {
 # parameters that are the command and any parameters that should be passed to
 # it each time.
 sub xargs {
-    my $args=shift;
+    my $args = shift;
 
     # The kernel can accept command lines up to 20k worth of characters.
-    my $command_max=20000;
+    my $command_max = 20000;
 
     # Figure out length of static portion of command.
-    my $static_length=0;
+    my $static_length = 0;
     foreach (@_) {
-	$static_length+=length($_)+1;
+        $static_length += length($_)+1;
     }
-    
+
     my @collect;
-    my $length=$static_length;
+    my $length = $static_length;
     foreach (@$args) {
-	if (length($_) + 1 + $static_length > $command_max) {
-	    error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
-	}
-	$length+=length($_) + 1;
-	if ($length < $command_max) {
-	    push @collect, $_;
-	}
-	else {
-	    system(@_,@collect) if $#collect > -1;
-	    @collect = $_;
-	    $length=$static_length + length($_) + 1;
-	}
+        if (length($_) + 1 + $static_length > $command_max) {
+            error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
+        }
+        $length+=length($_) + 1;
+        if ($length < $command_max) {
+            push @collect, $_;
+        } else {
+            system(@_,@collect) if $#collect > -1;
+            @collect = $_;
+            $length = $static_length + length($_) + 1;
+        }
     }
     system(@_,@collect) if $#collect > -1;
 }
@@ -73,26 +72,25 @@ sub find_so_man() {
     # The -s test is becuase a .so file tends to be small. We don't want
     # to open every man page. 1024 is arbitrary.
     if (! -f $_ || -s $_ > 1024) {
-	return;
+        return;
     }
 
     # Test first line of file for the .so thing.
     my $SOTEST;
     open($SOTEST, $_);
-    my $l=<$SOTEST>;
+    my $l = <$SOTEST>;
     close $SOTEST;
     if ($l =~ m/\.so\s+(.*)/) {
-	my $solink=$1;
-	# This test is here to prevent links like ... man8/../man8/foo.8
-	if (basename($File::Find::dir) eq dirname($solink)) {
-	    $solink=basename($solink);
-	}
-	else {
-	    $solink="../$solink";
-	}
-	
-	push @sofiles, "$File::Find::dir/$_";
-	push @sodests, $solink;
+        my $solink=$1;
+        # This test is here to prevent links like ... man8/../man8/foo.8
+        if (basename($File::Find::dir) eq dirname($solink)) {
+            $solink = basename($solink);
+        } else {
+            $solink = "../$solink";
+        }
+
+        push @sofiles, "$File::Find::dir/$_";
+        push @sodests, $solink;
     }
 }
 
@@ -118,68 +116,75 @@ my @files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/
 
 if ($ext ne '.gz') {
     my @gz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.gz" 2>/dev/null || true`);
-    if (@gz_files) { xargs(\@gz_files, "gzip", "-d"); $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0) }
+    if (@gz_files) {
+        xargs(\@gz_files, "gzip", "-d");
+        $? ? die "Something wrong with the decompression of the gzip man/info file, fix this ASAP" : exec($0)
+    }
 }
 if ($ext ne '.bz2') {
     my @bz_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.bz2" 2>/dev/null || true`);
-    if (@bz_files) { xargs(\@bz_files, "bzip2", "-d"); $? ? die "Something wrong with the decompression of the bzip2 man/info file, fix this ASAP" : exec($0) }
+    if (@bz_files) {
+        xargs(\@bz_files, "bzip2", "-d");
+        $? ? die "Something wrong with the decompression of the bzip2 man/info file, fix this ASAP" : exec($0)
+    }
 }
 if ($ext ne '.lzma') {
     my @lzma_files = split(/\n/, `find usr/info usr/share/info usr/man usr/share/man usr/X11*/man usr/lib/perl5/man -type f -name "*.lzma" 2>/dev/null || true`);
-    if (@lzma_files) { xargs(\@lzma_files, "lzmash", "-d"); $? ? die "Something wrong with the decompression of the lzma man/info file, fix this ASAP" : exec($0) }
+    if (@lzma_files) { 
+        xargs(\@lzma_files, "lzmash", "-d");
+        $? ? die "Something wrong with the decompression of the lzma man/info file, fix this ASAP" : exec($0)
+    }
 }
 
 # Exclude files from compression.
 if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
     my @new;
     foreach (@files) {
-	my $ok = 1;
-	foreach my $x (split(' ', $ENV{EXCLUDE_FROM_COMPRESS})) {
-	    if (/\Q$x\E/) {
-		$ok='';
-		last;
-	    }
-	}
-	push @new,$_ if $ok;
+        my $ok = 1;
+        foreach my $x (split(' ', $ENV{EXCLUDE_FROM_COMPRESS})) {
+            if (/\Q$x\E/) {
+                $ok = '';
+                last;
+            }
+        }
+        push @new,$_ if $ok;
     }
-    @files=@new;
+    @files = @new;
 }
-	
+
 # Look for files with hard links. If we are going to compress both,
 # we can preserve the hard link across the compression and save
 # space in the end.
 my @f;
 my (%hardlinks, %seen);
 foreach (@files) {
-    my ($dev, $inode, undef, $nlink)=stat($_);
+    my ($dev, $inode, undef, $nlink) = stat($_);
     if ($nlink > 1) {
-	if (! $seen{"$inode.$dev"}) {
-	    $seen{"$inode.$dev"} = $_;
-	    push @f, $_;
-	}
-	else {
-	    # This is a hardlink.
-	    $hardlinks{$_} = $seen{"$inode.$dev"};
-	}
-    }
-    else {
-	push @f, $_;
+        if (! $seen{"$inode.$dev"}) {
+            $seen{"$inode.$dev"} = $_;
+            push @f, $_;
+        } else {
+            # This is a hardlink.
+            $hardlinks{$_} = $seen{"$inode.$dev"};
+        }
+    } else {
+        push @f, $_;
     }
 }
 
 if (@f) {
     # Make executables not be anymore.
     xargs(\@f, "chmod", "a-x");
-    
+
     my @command = $ext eq '.gz'   ? qw/gzip -9f/
                 : $ext eq '.bz2'  ? qw/bzip2 -9f/
                 : $ext eq '.lzma' ? qw/lzma -9f --text/
-                :                     qw//
+                :                   qw//
                 ;
     xargs(\@f, @command);
 }
 
-	
+
 # Now change over any files we can that used to be hard links so
 # they are again.
 foreach (keys %hardlinks) {
@@ -198,13 +203,13 @@ while (<$FIND>) {
     my ($directory) = m!(.*)/!;
     my $linkval = readlink($_);
     if (! -e "$directory/$linkval" && -e "$directory/$linkval$ext") {
-	system("rm", "-f", $_);
-	system("ln", "-sf", "$linkval$ext", "$_$ext");
+        system("rm", "-f", $_);
+        system("ln", "-sf", "$linkval$ext", "$_$ext");
     } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval$ext" && $directory =~ m|man/|)  {
-		#Bad link go on nowhere (any better idea) ?
-		unlink($_);
+        #Bad link go on nowhere (any better idea) ?
+        unlink($_);
     }
-	
+
 }
 
 # compress_files ends here
