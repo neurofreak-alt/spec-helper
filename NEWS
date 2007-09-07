@@ -1,3 +1,7 @@
+2007-08-07 Guillaume Rousse <guillomovitch@mandriva.org> 0.27.2
+	* drop an ugly hack in compress_file, fixing issue
+	  with files converted from other compression format
+
 2007-08-04 Guillaume Rousse <guillomovitch@mandriva.org> 0.27.1
 	* pass compression format as argument to compress_files
 	  (make spec-helper backportable again)
