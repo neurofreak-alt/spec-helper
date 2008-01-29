@@ -2,6 +2,7 @@
 # convert end of line patterns from DOS to UNIX
 
 use strict;
+use warnings;
 use File::Find;
 use File::Temp;
 
