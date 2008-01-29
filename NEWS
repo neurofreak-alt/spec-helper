@@ -1,3 +1,7 @@
+2008-01-29 Guillaume Rousse <guillomovitch@mandriva.org> 0.28.0
+	* exhaustive documentation
+	* perl scripts cleanup
+
 2007-08-07 Guillaume Rousse <guillomovitch@mandriva.org> 0.27.2
 	* drop an ugly hack in compress_file, fixing issue
 	  with files converted from other compression format
