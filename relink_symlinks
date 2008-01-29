@@ -2,6 +2,7 @@
 # relativize absolute symlinks
 
 use strict;
+use warnings;
 use File::Find;
 
 sub relativize {
