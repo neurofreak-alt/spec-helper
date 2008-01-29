@@ -1,29 +1,55 @@
-From: Frederic Lepied <flepied@mandrakesoft.com>
-Subject: [Cooker] spec-helper
-To: cooker@linux-mandrake.com
-Date: 22 Feb 2000 14:45:21 +0100
+spec-helper is a set of helper scripts to be executed at package installation
+time. They are automatically invocated at the end of the %install section to
+perform various tasks. Here is a list of them, along with their usage
+instructions:
 
-For information.
+clean_files
+remove backup files.
+Set DONT_CLEANUP to disable.
 
-Starting  from  rpm-3.0.4-0.2mdk,  the  spec-helper  package  must  be
-installed as a dependency of the rpm-build package.
+compress_files
+compress man and info pages.
+Set DONT_COMPRESS to disable.
 
-The  spec-helper script  is called  automatically  at the  end of  the
-%install  section to  compress info  and  man pages,  strip files  and
-remove backup files from the $RPM_BUILD_ROOT dir. The %install section
-can be  cleaned off this  tasks but the  %files section about  man and
-info pages must be specified without  the .bz2 extension but with an *
-instead. The goal is to have vendor neutral spec files.
+strip_files
+Strip binary files.
+Set DONT_STRIP to disable, or EXCLUDE_FROM_STRIP to give a space-separated list
+of files exceptions.
 
-Example:
+relink_symlinks
+Relativize absolute symlinks.
+Set DONT_RELINK to disable.
 
-%files
-/usr/man/man1/alias.1*
+clean_perl
+Remove useless files in perl tree.
+Set DONT_CLEAN_PERL to disable.
 
-and not
+lib_symlinks
+Run ldconfig to create symlinks to libraries.
+Set DONT_SYMLINK_LIBS to disable.
 
-%files
-/usr/man/man1/alias.1.bz2
+gprintify
+rewrite "bla $TOTO bla" in "bla %s bla" $TOTO in
+echo/failure/success/passed/daemon/action and replace echo by gprintf.
+Set DONT_GPRINTIFY to disable.
 
--- 
-Fred - May the source be with you
+fix-mo
+Fix bad translations.
+Set DONT_FIX_MO to disable.
+
+translate_menu
+Change the menu sections.
+Set DONT_TRANSLATE_MENU to disable.
+
+fixpamd
+Fix pam.d config files.
+Set DONT_FIX_PAMD_CONFIGS to disable.
+
+remove_info_dir
+Remove info directories.
+Set DONT_REMOVE_INFO_DIR to disable.
+
+fix-eol
+Convert end of line patterns from DOS to UNIX.
+Set DONT_FIX_EOL to disable, or EXCLUDE_FROM_EOL_CONVERSION to give a
+space-separated list of files exceptions.
