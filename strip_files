@@ -37,7 +37,7 @@ sub testfile() {
     # See if we were asked to exclude this file.
     # Note that we have to test on the full filename, including directory.
     foreach my $f (@exclude_files) {
-	return if $fn =~ m/\Q$f\E/;
+        return if $fn =~ m/\Q$f\E/;
     }
     
     # Does its filename look like a shared library?
@@ -46,7 +46,7 @@ sub testfile() {
 	if (expensive_test($_) =~ m/ELF.*shared/) {
 	    push @executables, $fn;
 	    return;
-	}
+        }
     }
     
     # Is it executable? -x isn't good enough, so we need to use stat.
@@ -56,13 +56,13 @@ sub testfile() {
 	if (expensive_test($_) =~ m/ELF.*executable/) {
 	    push @executables, $fn;
 	    return;
-	}
+        }
     }
     
     # Is it a static library, and not a debug library?
     if (m/lib.*\.a/ && ! m/_g\.a/) {
-	push @static_libs, $fn;
-	return;
+        push @static_libs, $fn;
+        return;
     }
 }
 
@@ -75,10 +75,17 @@ chdir($buildroot) or die "Can't cd to $buildroot: $!";
 @shared_libs = @executables = @static_libs = ();
 find(\&testfile, $buildroot);
 
-# Note that all calls to strip on shared libs *must* include the --strip-unneeded.
-system("strip", "--remove-section=.comment", "--remove-section=.note", "--strip-unneeded",$_) foreach @shared_libs;
+# Note that all calls to strip on shared libs *must* include the
+# --strip-unneeded.
+system(
+    "strip",
+    "--remove-section=.comment",
+    "--remove-section=.note",
+    "--strip-unneeded",
+    $_) foreach @shared_libs;
 
-system("strip", "--remove-section=.comment", "--remove-section=.note",$_) foreach @executables;
-
-
-# strip_files ends here
+system(
+    "strip",
+    "--remove-section=.comment",
+    "--remove-section=.note",
+    $_) foreach @executables;
