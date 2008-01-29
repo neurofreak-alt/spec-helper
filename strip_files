@@ -18,7 +18,10 @@ use File::Find;
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
 my (@shared_libs, @executables, @static_libs);
-my @exclude_files = (split(' ', $ENV{EXCLUDE_FROM_STRIP}), "/usr/lib/debug");
+my @exclude_files = ( 
+    $ENV{EXCLUDE_FROM_STRIP} ? split(' ', $ENV{EXCLUDE_FROM_STRIP}) : (),
+    "/usr/lib/debug"
+);
 
 # TODO: we should write a binding for libfile...
 sub expensive_test {
