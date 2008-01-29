@@ -14,9 +14,10 @@ use strict;
 use warnings;
 $ENV{DONT_CLEANUP} and exit(0);
 
-my $RPM_BUILD_ROOT = $ENV{RPM_BUILD_ROOT};
-$RPM_BUILD_ROOT or exit(0); # case RPM_BUILD_ROOT is not used
-chdir($RPM_BUILD_ROOT) or die "Can't cd to $ENV{RPM_BUILD_ROOT}: $!";
+my $buildroot = $ENV{RPM_BUILD_ROOT};
+die "No build root defined" unless $buildroot;
+die "Invalid build root" unless -d $buildroot;
+chdir($buildroot) or die "Can't cd to $buildroot: $!";
 
 system(split(/\s+/, "find . -type f -a
 	        ( -name #*# -o -name *~ -o -name DEADJOE -o -name .cvsignore

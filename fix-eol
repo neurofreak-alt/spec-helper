@@ -6,10 +6,10 @@ use warnings;
 use File::Find;
 use File::Temp;
 
-die "No build root defined" unless $ENV{RPM_BUILD_ROOT};
-
-# normalize build root
 my $buildroot = $ENV{RPM_BUILD_ROOT};
+die "No build root defined" unless $buildroot;
+die "Invalid build root" unless -d $buildroot;
+# normalize build root
 $buildroot =~ s|/$||;
 
 my %exclude_files = (

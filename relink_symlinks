@@ -5,6 +5,12 @@ use strict;
 use warnings;
 use File::Find;
 
+my $buildroot = $ENV{RPM_BUILD_ROOT};
+die "No build root defined" unless $buildroot;
+die "Invalid build root" unless -d $buildroot;
+# normalize build root
+$buildroot =~ s|/$||;
+
 sub relativize {
     return unless -l $_;
 
@@ -13,14 +19,11 @@ sub relativize {
 
     $link =~ s{^/}{};
     my $dirname = $File::Find::dir;
-    $dirname =~ s/^\Q$ENV{RPM_BUILD_ROOT}\E//;
+    $dirname =~ s/^\Q$buildroot\E//;
     $dirname =~ s{/[^/]+}{../}g;
 
     unlink $_;
     symlink $dirname . $link, $_;
 }
 
-die "No build root defined\n" unless $ENV{RPM_BUILD_ROOT};
-
-$ENV{RPM_BUILD_ROOT} =~ s{/$}{};
-find(\&relativize, $ENV{RPM_BUILD_ROOT});
+find(\&relativize, $buildroot);

@@ -12,11 +12,14 @@
 use strict;
 use warnings;
 
+my $buildroot = $ENV{RPM_BUILD_ROOT};
+die "No build root defined" unless $buildroot;
+die "Invalid build root" unless -d $buildroot;
+
 my $menudir = `rpm --eval %_menudir`;
 chomp($menudir);
 
-$ENV{RPM_BUILD_ROOT} or exit(0);
-! -d "$ENV{RPM_BUILD_ROOT}/$menudir/" || exit(0);
+! -d "$buildroot/$menudir/" || exit(0);
 
 my @nested = (["Configuration", "System/Configuration"],
 
