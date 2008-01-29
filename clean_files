@@ -1,30 +1,37 @@
 #!/usr/bin/perl
-#---------------------------------------------------------------
-# Project         : Linux-Mandrake
-# Module          : spec-helper
-# File            : clean_files
-# Version         : $Id$
-# Author          : Frederic Lepied
-# Created On      : Thu Feb 10 10:29:18 2000
-# Purpose         : remove backup files.
-#---------------------------------------------------------------
+# remove backup files
 
-################################################################################
 use strict;
 use warnings;
+use File::Find;
+use File::Path;
 
 my $buildroot = $ENV{RPM_BUILD_ROOT};
 die "No build root defined" unless $buildroot;
 die "Invalid build root" unless -d $buildroot;
-chdir($buildroot) or die "Can't cd to $buildroot: $!";
+# normalize build root
+$buildroot =~ s|/$||;
 
-system(split(/\s+/, "find . -type f -a
-	        ( -name #*# -o -name *~ -o -name DEADJOE -o -name .cvsignore
-		 -o -name *.orig -o -name *.rej -o -name *.bak
-		 -o -name .*.orig -o -name .*.rej -o -name .SUMS
-		 -o -name TAGS -o -name core -o ( -path */.deps/* -a -name *.P )
-		) -exec rm -f {} ;"));
+sub clean {
+    if (-f $_) {
+        unlink $_ if $_ =~ /^(?:
+            #.*#        |
+            .\*~        |
+            DEADJOE     |
+            \.cvsignore |
+            .*\.orig    |
+            .*\.rej     |
+            .*\.bak     |
+            .*\.SUMS    |
+            TAGS        |
+            core        |
+            )$/x;
+        unlink $_ if $File::Find::name =~ /\/\.deps\// && $_ =~ /\.P$/;
+    }
 
-system("find . -type d -a -name CVS | xargs rm -rf");
+    if (-d $_) {
+        rmtree($_) if $_ =~ /^CVS$/;
+    }
+}
 
-# clean_files ends here
+finddepth(\&clean, $buildroot);
