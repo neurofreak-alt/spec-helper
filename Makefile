@@ -3,7 +3,7 @@ VERSION = 0.27.2
 SVNPATH = svn+ssh://svn.mandriva.com/svn/soft/rpm/$(PACKAGE)
 
 SCRIPT_FILES = clean_files clean_perl compress_files strip_files \
-	       lib_symlinks gprintify.py fix-mo translate_menu.pl \
+	       lib_symlinks gprintify.py fix-mo translate_menu \
                fixpamd gprintify remove_info_dir relink_symlinks fix-eol
 BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
