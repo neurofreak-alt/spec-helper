@@ -12,7 +12,6 @@
 ################################################################################
 use strict;
 use warnings;
-$ENV{DONT_CLEANUP} and exit(0);
 
 my $buildroot = $ENV{RPM_BUILD_ROOT};
 die "No build root defined" unless $buildroot;
