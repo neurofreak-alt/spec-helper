@@ -9,6 +9,8 @@
 # Purpose         : compress man and info pages.
 #---------------------------------------------------------------
 
+use strict;
+use warnings;
 use Cwd;
 use File::Find;
 

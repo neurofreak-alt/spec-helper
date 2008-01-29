@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #---------------------------------------------------------------
 # Project         : Mandrake Linux
 # Module          : spec-helper
@@ -8,6 +8,9 @@
 # Created On      : Mon Jan 26 13:37:49 2004
 # Purpose         : change the menu sections
 #---------------------------------------------------------------
+
+use strict;
+use warnings;
 
 my $menudir = `rpm --eval %_menudir`;
 chomp($menudir);
