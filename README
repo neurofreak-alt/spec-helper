@@ -9,7 +9,8 @@ Set DONT_CLEANUP to disable.
 
 compress_files
 compress man and info pages.
-Set DONT_COMPRESS to disable.
+Set DONT_COMPRESS to disable, or EXCLUDE_FROM_COMPRESS to give a
+space-separated list of files exceptions.
 
 strip_files
 Strip binary files.
