@@ -14,7 +14,8 @@ $buildroot =~ s|/$||;
 
 my %exclude_files = (
     map { $buildroot . $_ => 1 }
-    split(' ', $ENV{EXCLUDE_FROM_EOL_CONVERSION})
+    $ENV{EXCLUDE_FROM_EOL_CONVERSION} ?
+        split(' ', $ENV{EXCLUDE_FROM_EOL_CONVERSION}) : ()
 );
 
 find(\&convert, $buildroot);
