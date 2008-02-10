@@ -1,13 +1,6 @@
 #!/usr/bin/perl
-#---------------------------------------------------------------
-# Project         : Linux-Mandrake
-# Module          : spec-helper
-# File            : compress_files
-# Version         : $Id$
-# Author          : Frederic Lepied
-# Created On      : Thu Feb 10 08:04:11 2000
-# Purpose         : compress man and info pages.
-#---------------------------------------------------------------
+# $Id$
+# compress man and info pages.
 
 use strict;
 use warnings;
@@ -221,5 +214,3 @@ while (<$FIND>) {
     }
 
 }
-
-# compress_files ends here
