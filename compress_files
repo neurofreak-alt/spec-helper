@@ -16,6 +16,13 @@ die "No build root defined" unless $buildroot;
 die "Invalid build root" unless -d $buildroot;
 chdir($buildroot) or die "Can't cd to $buildroot: $!";
 
+my $exclude_pattern = join('|',
+    map { '(:?' . quotemeta($_) . ')' }
+    $ENV{EXCLUDE_FROM_COMPRESS} ?
+        split(' ', $ENV{EXCLUDE_FROM_COMPRESS}) : ()
+);
+$exclude_pattern = qr/$exclude_pattern/;
+
 # Now the .so conversion.
 my (@sofiles, @sodests);
 foreach my $dir (qw{usr/man usr/X11R6/man usr/lib/perl5/man}) {
@@ -55,22 +62,6 @@ if ($ext ne '.lzma') {
             if $?;
         push(@files, map { substr($_, 0, -5) } @lzma_files);
     }
-}
-
-# Exclude files from compression.
-if (@files && defined($ENV{EXCLUDE_FROM_COMPRESS})) {
-    my @new;
-    foreach (@files) {
-        my $ok = 1;
-        foreach my $x (split(' ', $ENV{EXCLUDE_FROM_COMPRESS})) {
-            if (/\Q$x\E/) {
-                $ok = '';
-                last;
-            }
-        }
-        push @new,$_ if $ok;
-    }
-    @files = @new;
 }
 
 # Look for files with hard links. If we are going to compress both,
@@ -175,6 +166,8 @@ sub find_so_man() {
     if (! -f $_ || -s $_ > 1024) {
         return;
     }
+    # skip excluded files
+    return if $File::Find::name =~ $exclude_pattern;
 
     # Test first line of file for the .so thing.
     my $SOTEST;
