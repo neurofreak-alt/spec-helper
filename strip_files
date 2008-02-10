@@ -26,10 +26,13 @@ sub expensive_test {
 }
 
 sub testfile() {
-    local $_ = $_;
-    return if -l $_ || -d $_; # Skip directories and symlinks always.
-    # reject excluded files
+    # skip symlinks
+    return if -l $_;
+    # skip directories
+    return if -d $_;
+    # skip excluded files
     return if $File::Find::name =~ $exclude_pattern;
+
     my $fn = "$File::Find::dir/$_";
 
     # Does its filename look like a shared library?

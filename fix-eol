@@ -23,11 +23,13 @@ $exclude_pattern = qr/$exclude_pattern/;
 find(\&convert, $buildroot);
 
 sub convert {
-    # reject symlinks
-    return unless -f $_;
-    # reject binary files
+    # skip symlinks
+    return if -l $_;
+    # skip directories
+    return if -d $_;
+    # skip binary files
     return unless -T $_;
-    # reject excluded files
+    # skip excluded files
     return if $File::Find::name =~ $exclude_pattern;
 
     # check if first line has less than 80 characters and ends with \r\n
