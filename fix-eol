@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# $Id$
 # convert end of line patterns from DOS to UNIX
 
 use strict;
