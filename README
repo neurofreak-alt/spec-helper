@@ -10,12 +10,12 @@ Set DONT_CLEANUP to disable.
 compress_files
 compress man and info pages.
 Set DONT_COMPRESS to disable, or EXCLUDE_FROM_COMPRESS to give a
-space-separated list of files exceptions.
+space-separated list of regexps matching files to exclude.
 
 strip_files
 Strip binary files.
 Set DONT_STRIP to disable, or EXCLUDE_FROM_STRIP to give a space-separated list
-of files exceptions.
+of regexps matching files to exclude.
 
 relink_symlinks
 Relativize absolute symlinks.
@@ -53,4 +53,4 @@ Set DONT_REMOVE_INFO_DIR to disable.
 fix-eol
 Convert end of line patterns from DOS to UNIX.
 Set DONT_FIX_EOL to disable, or EXCLUDE_FROM_EOL_CONVERSION to give a
-space-separated list of files exceptions.
+space-separated list of of regexps matching files to exclude.
