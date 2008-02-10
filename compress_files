@@ -160,12 +160,13 @@ sub xargs {
 
 # Check if a file is a .so man page, for use by File::Find.
 sub find_so_man() {
-    local $_ = $_;
+    # skip symlinks
+    return if -l $_;
+    # skip directories
+    return if -d $_;
     # The -s test is becuase a .so file tends to be small. We don't want
     # to open every man page. 1024 is arbitrary.
-    if (! -f $_ || -s $_ > 1024) {
-        return;
-    }
+    return if -s $_ > 1024;
     # skip excluded files
     return if $File::Find::name =~ $exclude_pattern;
 
@@ -183,7 +184,7 @@ sub find_so_man() {
             $solink = "../$solink";
         }
 
-        push @sofiles, "$File::Find::dir/$_";
+        push @sofiles, $File::Find::name;
         push @sodests, $solink;
     }
 }
