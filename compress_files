@@ -8,73 +8,6 @@ use Cwd;
 use File::Find;
 use File::Basename;
 
-################################################################################
-# Run a command that may have a huge number of arguments, like xargs does.
-# Pass in a reference to an array containing the arguments, and then other
-# parameters that are the command and any parameters that should be passed to
-# it each time.
-sub xargs {
-    my $args = shift;
-
-    # The kernel can accept command lines up to 20k worth of characters.
-    my $command_max = 20000;
-
-    # Figure out length of static portion of command.
-    my $static_length = 0;
-    foreach (@_) {
-        $static_length += length($_)+1;
-    }
-
-    my @collect;
-    my $length = $static_length;
-    foreach (@$args) {
-        if (length($_) + 1 + $static_length > $command_max) {
-            error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
-        }
-        $length+=length($_) + 1;
-        if ($length < $command_max) {
-            push @collect, $_;
-        } else {
-            system(@_,@collect) if $#collect > -1;
-            @collect = $_;
-            $length = $static_length + length($_) + 1;
-        }
-    }
-    system(@_,@collect) if $#collect > -1;
-}
-
-################################################################################
-# Check if a file is a .so man page, for use by File::Find.
-my @sofiles;
-my @sodests;
-sub find_so_man() {
-    local $_ = $_;
-    # The -s test is becuase a .so file tends to be small. We don't want
-    # to open every man page. 1024 is arbitrary.
-    if (! -f $_ || -s $_ > 1024) {
-        return;
-    }
-
-    # Test first line of file for the .so thing.
-    my $SOTEST;
-    open($SOTEST, $_);
-    my $l = <$SOTEST>;
-    close $SOTEST;
-    if ($l =~ m/\.so\s+(.*)/) {
-        my $solink=$1;
-        # This test is here to prevent links like ... man8/../man8/foo.8
-        if (basename($File::Find::dir) eq dirname($solink)) {
-            $solink = basename($solink);
-        } else {
-            $solink = "../$solink";
-        }
-
-        push @sofiles, "$File::Find::dir/$_";
-        push @sodests, $solink;
-    }
-}
-
-################################################################################
 my $ext = $ARGV[0] ||= '.gz';
 die "Unknown extension $ext" unless $ext =~ /^\.(?:gz|bz2|lzma)$/;
 
@@ -84,7 +17,7 @@ die "Invalid build root" unless -d $buildroot;
 chdir($buildroot) or die "Can't cd to $buildroot: $!";
 
 # Now the .so conversion.
-@sofiles = @sodests = ();
+my (@sofiles, @sodests);
 foreach my $dir (qw{usr/man usr/X11R6/man usr/lib/perl5/man}) {
     find(\&find_so_man, $dir) if -e $dir;
 }
@@ -198,4 +131,66 @@ while (<$FIND>) {
         unlink($_);
     }
 
+}
+
+# Run a command that may have a huge number of arguments, like xargs does.
+# Pass in a reference to an array containing the arguments, and then other
+# parameters that are the command and any parameters that should be passed to
+# it each time.
+sub xargs {
+    my $args = shift;
+
+    # The kernel can accept command lines up to 20k worth of characters.
+    my $command_max = 20000;
+
+    # Figure out length of static portion of command.
+    my $static_length = 0;
+    foreach (@_) {
+        $static_length += length($_)+1;
+    }
+
+    my @collect;
+    my $length = $static_length;
+    foreach (@$args) {
+        if (length($_) + 1 + $static_length > $command_max) {
+            error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
+        }
+        $length+=length($_) + 1;
+        if ($length < $command_max) {
+            push @collect, $_;
+        } else {
+            system(@_,@collect) if $#collect > -1;
+            @collect = $_;
+            $length = $static_length + length($_) + 1;
+        }
+    }
+    system(@_,@collect) if $#collect > -1;
+}
+
+# Check if a file is a .so man page, for use by File::Find.
+sub find_so_man() {
+    local $_ = $_;
+    # The -s test is becuase a .so file tends to be small. We don't want
+    # to open every man page. 1024 is arbitrary.
+    if (! -f $_ || -s $_ > 1024) {
+        return;
+    }
+
+    # Test first line of file for the .so thing.
+    my $SOTEST;
+    open($SOTEST, $_);
+    my $l = <$SOTEST>;
+    close $SOTEST;
+    if ($l =~ m/\.so\s+(.*)/) {
+        my $solink=$1;
+        # This test is here to prevent links like ... man8/../man8/foo.8
+        if (basename($File::Find::dir) eq dirname($solink)) {
+            $solink = basename($solink);
+        } else {
+            $solink = "../$solink";
+        }
+
+        push @sofiles, "$File::Find::dir/$_";
+        push @sodests, $solink;
+    }
 }
