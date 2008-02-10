@@ -6,22 +6,7 @@ use strict;
 use warnings;
 use Cwd;
 use File::Find;
-
-################################################################################
-# Returns the basename of the argument passed to it.
-sub basename {
-    my $fn = shift;
-    $fn =~ s!^.*/(.*?)$!$1!;
-    return $fn;
-}
-
-################################################################################
-# Returns the directory name of the argument passed to it.
-sub dirname {
-    my $fn = shift;
-    $fn =~ s!^(.*)/.*?$!$1!;
-    return $fn;
-}
+use File::Basename;
 
 ################################################################################
 # Run a command that may have a huge number of arguments, like xargs does.
