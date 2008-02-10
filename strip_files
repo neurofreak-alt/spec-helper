@@ -6,11 +6,12 @@ use strict;
 use warnings;
 use File::Find;
 
-################################################################################
-# Check if a file is an elf binary, shared library, or static library,
-# for use by File::Find. It'll fill the following 3 arrays with anything
-# it finds:
-my (@shared_libs, @executables, @static_libs);
+my $buildroot = $ENV{RPM_BUILD_ROOT};
+die "No build root defined" unless $buildroot;
+die "Invalid build root" unless -d $buildroot;
+# normalize build root
+$buildroot =~ s|/$||;
+
 my $exclude_pattern = join('|',
     map { '(:?' . quotemeta($_) . ')' }
     $ENV{EXCLUDE_FROM_STRIP} ?
@@ -19,12 +20,33 @@ my $exclude_pattern = join('|',
 );
 $exclude_pattern = qr/$exclude_pattern/;
 
+my (@shared_libs, @executables, @static_libs);
+find(\&testfile, $buildroot);
+
+# Note that all calls to strip on shared libs *must* include the
+# --strip-unneeded.
+system(
+    "strip",
+    "--remove-section=.comment",
+    "--remove-section=.note",
+    "--strip-unneeded",
+    $_) foreach @shared_libs;
+
+system(
+    "strip",
+    "--remove-section=.comment",
+    "--remove-section=.note",
+    $_) foreach @executables;
+
 # TODO: we should write a binding for libfile...
 sub expensive_test {
     my ($file) = @_;
     my $type = `file -- $file`;
 }
 
+# Check if a file is an elf binary, shared library, or static library,
+# for use by File::Find. It'll fill the following 3 arrays with anything
+# it finds:
 sub testfile() {
     # skip symlinks
     return if -l $_;
@@ -58,27 +80,3 @@ sub testfile() {
         return;
     }
 }
-
-################################################################################
-my $buildroot = $ENV{RPM_BUILD_ROOT};
-die "No build root defined" unless $buildroot;
-die "Invalid build root" unless -d $buildroot;
-chdir($buildroot) or die "Can't cd to $buildroot: $!";
-
-@shared_libs = @executables = @static_libs = ();
-find(\&testfile, $buildroot);
-
-# Note that all calls to strip on shared libs *must* include the
-# --strip-unneeded.
-system(
-    "strip",
-    "--remove-section=.comment",
-    "--remove-section=.note",
-    "--strip-unneeded",
-    $_) foreach @shared_libs;
-
-system(
-    "strip",
-    "--remove-section=.comment",
-    "--remove-section=.note",
-    $_) foreach @executables;
