@@ -33,13 +33,11 @@ sub testfile() {
     # skip excluded files
     return if $File::Find::name =~ $exclude_pattern;
 
-    my $fn = "$File::Find::dir/$_";
-
     # Does its filename look like a shared library?
     if (m/\.so/) {
 	# Ok, do the expensive test.
 	if (expensive_test($_) =~ m/ELF.*shared/) {
-	    push @executables, $fn;
+	    push @executables, $File::Find::name;
 	    return;
         }
     }
@@ -49,14 +47,14 @@ sub testfile() {
     if ($mode & 0111) {
 	# Ok, expensive test.
 	if (expensive_test($_) =~ m/ELF.*executable/) {
-	    push @executables, $fn;
+	    push @executables, $File::Find::name;
 	    return;
         }
     }
     
     # Is it a static library, and not a debug library?
     if (m/lib.*\.a/ && ! m/_g\.a/) {
-        push @static_libs, $fn;
+        push @static_libs, $File::Find::name;
         return;
     }
 }
