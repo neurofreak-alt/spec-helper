@@ -35,7 +35,7 @@ sub convert {
     # check if first line has less than 80 characters and ends with \r\n
     open(my $in, '<', $_) or die "Unable to open file $_: $!";
     my $line =  <$in>;
-    if (length($line) <= 80 && $line =~ s/\r\n$/\n/) {
+    if (defined $line && length($line) <= 80 && $line =~ s/\r\n$/\n/) {
         # process all file
         my $out = File::Temp->new(DIR => '.', UNLINK => 0);
         print $out $line;
