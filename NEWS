@@ -1,3 +1,9 @@
+2008-02-10 Guillaume Rousse <guillomovitch@mandriva.org> 0.28.1
+	* more perl code clean up
+	* better script name consistency
+	* fix some warnings
+	* make EXCLUDE_FROM_EOL_CONVERSION a list of regexp
+
 2008-01-29 Guillaume Rousse <guillomovitch@mandriva.org> 0.28.0
 	* exhaustive documentation
 	* perl scripts cleanup
