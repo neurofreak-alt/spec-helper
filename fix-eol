@@ -12,11 +12,12 @@ die "Invalid build root" unless -d $buildroot;
 # normalize build root
 $buildroot =~ s|/$||;
 
-my %exclude_files = (
-    map { $buildroot . $_ => 1 }
+my $exclude_pattern = join('|',
+    map { '(:?' . quotemeta($_) . ')' }
     $ENV{EXCLUDE_FROM_EOL_CONVERSION} ?
         split(' ', $ENV{EXCLUDE_FROM_EOL_CONVERSION}) : ()
 );
+$exclude_pattern = qr/$exclude_pattern/;
 
 find(\&convert, $buildroot);
 
@@ -26,7 +27,7 @@ sub convert {
     # reject binary files
     return unless -T $_;
     # reject excluded files
-    return if $exclude_files{$File::Find::name};
+    return if $File::Find::name =~ $exclude_pattern;
 
     # check if first line has less than 80 characters and ends with \r\n
     open(my $in, '<', $_) or die "Unable to open file $_: $!";
