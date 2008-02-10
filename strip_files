@@ -1,13 +1,6 @@
 #!/usr/bin/perl
-#---------------------------------------------------------------
-# Project         : Linux-Mandrake
-# Module          : spec-helper
-# File            : strip_files
-# Version         : $Id$
-# Author          : Frederic Lepied
-# Created On      : Thu Feb 10 09:23:02 2000
-# Purpose         : Strip files.
-#---------------------------------------------------------------
+# $Id$
+# Strip files
 
 use strict;
 use warnings;
