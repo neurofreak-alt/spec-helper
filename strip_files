@@ -35,20 +35,20 @@ sub testfile() {
 
     # Does its filename look like a shared library?
     if (m/\.so/) {
-	# Ok, do the expensive test.
-	if (expensive_test($_) =~ m/ELF.*shared/) {
-	    push @executables, $File::Find::name;
-	    return;
+        # Ok, do the expensive test.
+        if (expensive_test($_) =~ m/ELF.*shared/) {
+            push @executables, $File::Find::name;
+            return;
         }
     }
     
     # Is it executable? -x isn't good enough, so we need to use stat.
     my (undef, undef, $mode, undef) = stat(_);
     if ($mode & 0111) {
-	# Ok, expensive test.
-	if (expensive_test($_) =~ m/ELF.*executable/) {
-	    push @executables, $File::Find::name;
-	    return;
+        # Ok, expensive test.
+        if (expensive_test($_) =~ m/ELF.*executable/) {
+            push @executables, $File::Find::name;
+            return;
         }
     }
     
