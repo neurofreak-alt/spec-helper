@@ -21,7 +21,7 @@ my $exclude_pattern = join('|',
 $exclude_pattern = qr/$exclude_pattern/;
 
 my (@shared_libs, @executables, @static_libs);
-find(\&testfile, $buildroot);
+find(\&keep_wanted, $buildroot);
 
 system(
     "strip",
@@ -38,7 +38,7 @@ sub expensive_test {
 # Check if a file is an elf binary, shared library, or static library,
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
-sub testfile() {
+sub keep_wanted() {
     # skip symlinks
     return if -l $_;
     # skip directories
