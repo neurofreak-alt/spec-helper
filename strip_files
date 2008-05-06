@@ -23,20 +23,11 @@ $exclude_pattern = qr/$exclude_pattern/;
 my (@shared_libs, @executables, @static_libs);
 find(\&testfile, $buildroot);
 
-# Note that all calls to strip on shared libs *must* include the
-# --strip-unneeded.
 system(
     "strip",
     "--remove-section=.comment",
     "--remove-section=.note",
-    "--strip-unneeded",
-    $_) foreach @shared_libs;
-
-system(
-    "strip",
-    "--remove-section=.comment",
-    "--remove-section=.note",
-    $_) foreach @executables;
+    $_) foreach @shared_libs, @executables;
 
 # TODO: we should write a binding for libfile...
 sub expensive_test {
@@ -59,7 +50,7 @@ sub testfile() {
     if (m/\.so/) {
         # Ok, do the expensive test.
         if (expensive_test($_) =~ m/ELF.*shared/) {
-            push @executables, $File::Find::name;
+            push @shared_libs, $File::Find::name;
             return;
         }
     }
