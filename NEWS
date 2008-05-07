@@ -1,3 +1,4 @@
+2008-05-07 Pascal "Pixel" Rigaux <pixel@mandriva.com> 0.29
 	* replace strip_files with strip_and_check_elf_files which checks for
 	overlinking (cf http://wiki.mandriva.com/en/Overlinking) and "missing
 	linking" (need checking if there are too many false positives)
