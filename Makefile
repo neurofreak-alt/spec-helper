@@ -2,7 +2,7 @@ PACKAGE = spec-helper
 VERSION = 0.29
 SVNPATH = svn+ssh://svn.mandriva.com/svn/soft/rpm/$(PACKAGE)
 
-SCRIPT_FILES = clean_files clean_perl compress_files strip_files \
+SCRIPT_FILES = clean_files clean_perl compress_files strip_and_check_elf_files \
 	       lib_symlinks gprintify.py fix_mo translate_menu \
                fix_pamd gprintify remove_info_dir relink_symlinks fix_eol
 BIN_FILES    = macroszification
