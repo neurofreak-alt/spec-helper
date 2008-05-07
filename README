@@ -12,10 +12,11 @@ compress man and info pages.
 Set DONT_COMPRESS to disable, or EXCLUDE_FROM_COMPRESS to give a
 space-separated list of regexps matching files to exclude.
 
-strip_files
-Strip binary files.
+strip_and_check_elf_files
+Strip elf files and check for overlinking/underlinking.
 Set DONT_STRIP to disable, or EXCLUDE_FROM_STRIP to give a space-separated list
 of regexps matching files to exclude.
+See http://wiki.mandriva.com/en/Overlinking for more info about overlinking
 
 relink_symlinks
 Relativize absolute symlinks.
