@@ -12,22 +12,40 @@ die "Invalid build root" unless -d $buildroot;
 # normalize build root
 $buildroot =~ s|/$||;
 
-my $exclude_pattern = join('|',
-    map { '(:?' . quotemeta($_) . ')' }
-    $ENV{EXCLUDE_FROM_STRIP} ?
-        split(' ', $ENV{EXCLUDE_FROM_STRIP}) : (),
-    '/usr/lib/debug'
-);
-$exclude_pattern = qr/$exclude_pattern/;
-
 my (@shared_libs, @executables, @static_libs);
 find(\&keep_wanted, $buildroot);
 
-system(
-    "strip",
-    "--remove-section=.comment",
-    "--remove-section=.note",
-    $_) foreach @shared_libs, @executables;
+strip_files() if !$ENV{DONT_STRIP};
+check_missing_or_unused_libs();
+
+sub strip_files {
+    my $exclude_pattern = join('|',
+        map { '(:?' . quotemeta($_) . ')' }
+	  $ENV{EXCLUDE_FROM_STRIP} ? split(' ', $ENV{EXCLUDE_FROM_STRIP}) : (),
+	  '/usr/lib/debug'
+    );
+    my @to_strip = grep { !/$exclude_pattern/ } @shared_libs, @executables;
+
+    system(
+	"strip",
+	"--remove-section=.comment",
+	"--remove-section=.note",
+	$_) foreach @to_strip;
+}
+
+sub check_missing_or_unused_libs {
+    foreach my $f (@shared_libs, @executables) {
+	my (undef, undef, @l) = `ldd -u -r $f 2>/dev/null`;
+	@l or next;
+	my $f_ = substr($f, length($buildroot));
+	print STDERR "Warning: unused libraries in $f_: ", join(' ', map { basename($_) } @l), "\n";
+    }
+    foreach my $f (@shared_libs) {
+	my @l = `ldd -r $f 2>&1 >/dev/null` or next;
+	my $f_ = substr($f, length($buildroot));
+	print STDERR "Warning: undefined symbols in $f_: ", join(' ', map { /undefined symbol: (\S+)/ ? $1 : () } @l), "\n";
+    }
+}
 
 # TODO: we should write a binding for libfile...
 sub expensive_test {
@@ -43,8 +61,6 @@ sub keep_wanted() {
     return if -l $_;
     # skip directories
     return if -d $_;
-    # skip excluded files
-    return if $File::Find::name =~ $exclude_pattern;
 
     # Does its filename look like a shared library?
     if (m/\.so/) {
@@ -71,3 +87,5 @@ sub keep_wanted() {
         return;
     }
 }
+
+sub basename { local $_ = shift; s|/*\s*$||; s|.*/||; $_ }

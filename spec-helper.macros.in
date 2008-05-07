@@ -5,7 +5,6 @@
 %__spec_helper_post \
     %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]       || %_spec_helper_dir/clean_files} \
     %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || %_spec_helper_dir/compress_files %{?_extension}%{?!_extension:.gz}} \
-    %{?!dont_strip:          [ -n "$DONT_STRIP" ]         || %_spec_helper_dir/strip_files} \
     %{?!dont_relink:         [ -n "$DONT_RELINK" ]        || %_spec_helper_dir/relink_symlinks} \
     %{?!dont_cleanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
     %{?!dont_symlinks_libs:  [ -n "$DONT_SYMLINK_LIBS" ]  || %_spec_helper_dir/lib_symlinks} \
@@ -15,5 +14,6 @@
     %{?!dont_fix_pamd:       [ -n "$DONT_FIX_PAMD_CONFIGS" ] || %_spec_helper_dir/fix_pamd} \
     %{?!dont_remove_info_dir: [ -n "$DONT_REMOVE_INFO_DIR" ] || %_spec_helper_dir/remove_info_dir} \
     %{?!dont_fix_eol:         [ -n "$DONT_FIX_EOL" ]        || %_spec_helper_dir/fix_eol} \
+    %{?dont_strip: DONT_STRIP=1} %_spec_helper_dir/strip_and_check_elf_files \
 %nil
 

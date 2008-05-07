@@ -1,3 +1,7 @@
+	* replace strip_files with strip_and_check_elf_files which checks for
+	overlinking (cf http://wiki.mandriva.com/en/Overlinking) and "missing
+	linking" (need checking if there are too many false positives)
+
 2008-02-10 Guillaume Rousse <guillomovitch@mandriva.org> 0.28.1
 	* more perl code clean up
 	* better script name consistency
