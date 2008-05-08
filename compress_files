@@ -49,49 +49,27 @@ foreach my $sofile (@sofiles) {
 }
 
 my @files;
+my $function = sub {
+    # skip symlinks
+    return if -l $_;
+    # skip directories
+    return if -d $_;
+    # skip excluded files
+    return if $File::Find::name =~ $exclude_pattern;
+    # skip compressed files
+    return if $_ =~ /\.(?:gz|bz2|lzma)$/;
+    # skip particular files
+    return if $_ eq 'dir' || $_ eq 'whatis';
+
+    push @files, $File::Find::name;
+};
 foreach my $dir (@mandirs) {
-    find(\&find_uncompressed_man, $dir) if -e $dir;
+    find($function, $dir) if -e $dir;
 }
 
-if ($ext ne '.gz') {
-    my @gz_files;
-    my $gz_function = get_find_compressed_man_function(\@gz_files, 'gz');
-    foreach my $dir (@mandirs) {
-        find($gz_function, $dir) if -e $dir;
-    }
-    if (@gz_files) {
-        xargs(\@gz_files, "gzip", "-d");
-        die "Something wrong with the decompression of the gzip man/info file"
-            if $?;
-        push(@files, map { substr($_, 0, -3) } @gz_files);
-    }
-}
-if ($ext ne '.bz2') {
-    my @bz_files;
-    my $bz_function = get_find_compressed_man_function(\@bz_files, 'bz2');
-    foreach my $dir (@mandirs) {
-        find($bz_function, $dir) if -e $dir;
-    }
-    if (@bz_files) {
-        xargs(\@bz_files, "bzip2", "-d");
-        die "Something wrong with the decompression of the bzip2 man/info file"
-            if $?;
-        push(@files, map { substr($_, 0, -4) } @bz_files);
-    }
-}
-if ($ext ne '.lzma') {
-    my @lzma_files;
-    my $lzma_function = get_find_compressed_man_function(\@lzma_files, 'lzma');
-    foreach my $dir (@mandirs) {
-        find($lzma_function, $dir) if -e $dir;
-    }
-    if (@lzma_files) { 
-        xargs(\@lzma_files, "lzmash", "-d");
-        die "Something wrong with the decompression of the lzma man/info file"
-            if $?;
-        push(@files, map { substr($_, 0, -5) } @lzma_files);
-    }
-}
+uncompress_files('.gz', 'gzip') if $ext ne '.gz';
+uncompress_files('.bz2', 'bzip2') if $ext ne '.bz2';
+uncompress_files('.lzma', 'lzmash') if $ext ne '.lzma';
 
 # Look for files with hard links. If we are going to compress both,
 # we can preserve the hard link across the compression and save
@@ -218,23 +196,11 @@ sub find_so_man() {
     }
 }
 
-sub find_uncompressed_man {
-    # skip symlinks
-    return if -l $_;
-    # skip directories
-    return if -d $_;
-    # skip excluded files
-    return if $File::Find::name =~ $exclude_pattern;
-    # skip compressed files
-    return if $_ =~ /\.(?:gz|bz2|lzma)$/;
-    # skip particular files
-    return if $_ eq 'dir' || $_ eq 'whatis';
 
-    push @files, $File::Find::name;
-}
+sub uncompress_files {
+    my ($extension, $command) = @_;
 
-sub get_find_compressed_man_function {
-    my ($array, $extension) = @_;
+    my @compressed_files;
 
     my $function = sub {
         # skip symlinks
@@ -244,10 +210,20 @@ sub get_find_compressed_man_function {
         # skip excluded files
         return if $File::Find::name =~ $exclude_pattern;
         # skip everything but files with wanted extension
-        return if $_ !~ /\.$extension$/;
+        return if $_ !~ /$extension$/;
 
-        push @$array, $File::Find::name;
+        push @compressed_files, $File::Find::name;
     };
 
-    return $function;
+    foreach my $dir (@mandirs) {
+        find($function, $dir) if -e $dir;
+    }
+
+    if (@compressed_files) {
+        xargs(\@compressed_files, $command, "-d");
+        die "Something wrong with the decompression of the $extension man/info file"
+            if $?;
+        my $length = length($extension);
+        push(@files, map { substr($_, 0, -$length) } @compressed_files);
+    }
 }
