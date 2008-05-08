@@ -44,8 +44,8 @@ foreach my $dir (@sodirs) {
 }
 foreach my $sofile (@sofiles) {
     my $sodest = shift(@sodests);
-    system "rm", "-f",$sofile;
-    system "ln", "-sf",$sodest,$sofile;
+    unlink $sofile;
+    symlink $sodest, $sofile;
 }
 
 my @files;
@@ -108,9 +108,9 @@ if (@f) {
 # they are again.
 foreach (keys %hardlinks) {
     # Remove old file.
-    system("rm", "-f", $_);
+    unlink $_;
     # Make new hardlink.
-    system("ln", "$hardlinks{$_}$ext", "$_$ext");
+    link "$hardlinks{$_}$ext", "$_$ext";
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
@@ -122,11 +122,11 @@ while (<$FIND>) {
     my ($directory) = m!(.*)/!;
     my $linkval = readlink($_);
     if (! -e "$directory/$linkval" && -e "$directory/$linkval$ext") {
-        system("rm", "-f", $_);
-        system("ln", "-sf", "$linkval$ext", "$_$ext");
+        unlink $_;
+        symlink "$linkval$ext", "$_$ext";
     } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval$ext" && $directory =~ m|man/|)  {
         #Bad link go on nowhere (any better idea) ?
-        unlink($_);
+        unlink $_;
     }
 
 }
