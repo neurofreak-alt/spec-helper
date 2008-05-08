@@ -39,8 +39,37 @@ my @mandirs = qw{
 
 # Now the .so conversion.
 my (@sofiles, @sodests);
+my $so_function = sub {
+    # skip symlinks
+    return if -l $_;
+    # skip directories
+    return if -d $_;
+    # The -s test is becuase a .so file tends to be small. We don't want
+    # to open every man page. 1024 is arbitrary.
+    return if -s $_ > 1024;
+    # skip excluded files
+    return if $File::Find::name =~ $exclude_pattern;
+
+    # Test first line of file for the .so thing.
+    my $SOTEST;
+    open($SOTEST, $_);
+    my $l = <$SOTEST>;
+    close $SOTEST;
+    if ($l =~ m/\.so\s+(.*)/) {
+        my $solink=$1;
+        # This test is here to prevent links like ... man8/../man8/foo.8
+        if (basename($File::Find::dir) eq dirname($solink)) {
+            $solink = basename($solink);
+        } else {
+            $solink = "../$solink";
+        }
+
+        push @sofiles, $File::Find::name;
+        push @sodests, $solink;
+    }
+};
 foreach my $dir (@sodirs) {
-    find(\&find_so_man, $dir) if -e $dir;
+    find($so_function, $dir) if -e $dir;
 }
 foreach my $sofile (@sofiles) {
     my $sodest = shift(@sodests);
@@ -48,6 +77,7 @@ foreach my $sofile (@sofiles) {
     symlink $sodest, $sofile;
 }
 
+# find non-compressed info/man pages
 my @files;
 my $function = sub {
     # skip symlinks
@@ -67,6 +97,7 @@ foreach my $dir (@mandirs) {
     find($function, $dir) if -e $dir;
 }
 
+# uncompress info/man pages using another format
 uncompress_files('.gz', 'gzip') if $ext ne '.gz';
 uncompress_files('.bz2', 'bzip2') if $ext ne '.bz2';
 uncompress_files('.lzma', 'lzmash') if $ext ne '.lzma';
@@ -165,38 +196,7 @@ sub xargs {
     system(@_,@collect) if $#collect > -1;
 }
 
-# Check if a file is a .so man page, for use by File::Find.
-sub find_so_man() {
-    # skip symlinks
-    return if -l $_;
-    # skip directories
-    return if -d $_;
-    # The -s test is becuase a .so file tends to be small. We don't want
-    # to open every man page. 1024 is arbitrary.
-    return if -s $_ > 1024;
-    # skip excluded files
-    return if $File::Find::name =~ $exclude_pattern;
-
-    # Test first line of file for the .so thing.
-    my $SOTEST;
-    open($SOTEST, $_);
-    my $l = <$SOTEST>;
-    close $SOTEST;
-    if ($l =~ m/\.so\s+(.*)/) {
-        my $solink=$1;
-        # This test is here to prevent links like ... man8/../man8/foo.8
-        if (basename($File::Find::dir) eq dirname($solink)) {
-            $solink = basename($solink);
-        } else {
-            $solink = "../$solink";
-        }
-
-        push @sofiles, $File::Find::name;
-        push @sodests, $solink;
-    }
-}
-
-
+# uncompress info/man pages with a given extension
 sub uncompress_files {
     my ($extension, $command) = @_;
 
