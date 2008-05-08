@@ -145,22 +145,22 @@ foreach (keys %hardlinks) {
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
-my $FIND;
-open($FIND, "find $buildroot -type l |");
-while (<$FIND>) {
-    local $_ = $_;
-    chomp;
-    my ($directory) = m!(.*)/!;
+my $link_function = sub {
+    # skip everything but symlinks
+    return unless -l $_;
+    # skip non-dangling symlinks
     my $linkval = readlink($_);
-    if (! -e "$directory/$linkval" && -e "$directory/$linkval$ext") {
+    return if -e "$File::Find::dir/$linkval";
+
+    if (-e "$File::Find::dir/$linkval$ext") {
         unlink $_;
         symlink "$linkval$ext", "$_$ext";
-    } elsif (! -e "$directory/$linkval" && ! -e "$directory/$linkval$ext" && $directory =~ m|man/|)  {
-        #Bad link go on nowhere (any better idea) ?
+    } elsif ($File::Find::dir =~ m|man/|)  {
+        # Bad link go on nowhere (any better idea) ?
         unlink $_;
     }
-
-}
+};
+find($link_function, $buildroot);
 
 # Run a command that may have a huge number of arguments, like xargs does.
 # Pass in a reference to an array containing the arguments, and then other
