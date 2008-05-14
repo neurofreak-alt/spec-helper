@@ -57,10 +57,8 @@ sub expensive_test {
 # for use by File::Find. It'll fill the following 3 arrays with anything
 # it finds:
 sub keep_wanted() {
-    # skip symlinks
-    return if -l $_;
-    # skip directories
-    return if -d $_;
+    # skip everything but files
+    return unless -f $_;
 
     # Does its filename look like a shared library?
     if (m/\.so/) {

@@ -23,10 +23,8 @@ $exclude_pattern = qr/$exclude_pattern/;
 find(\&convert, $buildroot);
 
 sub convert {
-    # skip symlinks
-    return if -l $_;
-    # skip directories
-    return if -d $_;
+    # skip everything but files
+    return unless -f $_;
     # skip binary files
     return unless -T $_;
     # skip excluded files
