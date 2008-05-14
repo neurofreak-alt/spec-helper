@@ -59,6 +59,8 @@ sub expensive_test {
 sub keep_wanted() {
     # skip everything but files
     return unless -f $_;
+    # skip symlinks
+    return if -l $_;
 
     # Does its filename look like a shared library?
     if (m/\.so/) {

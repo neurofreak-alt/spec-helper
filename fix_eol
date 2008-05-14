@@ -25,6 +25,8 @@ find(\&convert, $buildroot);
 sub convert {
     # skip everything but files
     return unless -f $_;
+    # skip symlinks
+    return if -l $_;
     # skip binary files
     return unless -T $_;
     # skip excluded files
