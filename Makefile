@@ -1,5 +1,5 @@
 PACKAGE = spec-helper
-VERSION = 0.29.2
+VERSION = 0.29.3
 SVNPATH = svn+ssh://svn.mandriva.com/svn/soft/rpm/$(PACKAGE)
 
 SCRIPT_FILES = clean_files clean_perl compress_files strip_and_check_elf_files \

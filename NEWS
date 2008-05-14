@@ -1,5 +1,10 @@
+2008-05-14 Guillaume Rousse <guillomovitch@mandriva.org> 0.29.3
+	* fix regression related to symlinks introduced in previous release
+	  (spotted by Anssi)
+
 2008-05-14 Guillaume Rousse <guillomovitch@mandriva.org> 0.29.2
 	* fix blocking issue with special files in fix_eol
+	  (spotted by Pixel)
 
 2008-05-08 Guillaume Rousse <guillomovitch@mandriva.org> 0.29.1
 	* large compress_file cleanup, replacing external commands
