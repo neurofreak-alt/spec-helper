@@ -19,12 +19,13 @@ strip_files() if !$ENV{DONT_STRIP};
 check_missing_or_unused_libs();
 
 sub strip_files {
-    my $exclude_pattern = join('|',
-        map { '(:?' . quotemeta($_) . ')' }
-	  $ENV{EXCLUDE_FROM_STRIP} ? split(' ', $ENV{EXCLUDE_FROM_STRIP}) : (),
-	  '/usr/lib/debug'
-    );
-    my @to_strip = grep { !/$exclude_pattern/ } @shared_libs, @executables;
+    my @to_strip = (@shared_libs, @executables);
+
+    if ($ENV{EXCLUDE_FROM_STRIP}) {
+	my $exclude_pattern = join('|',
+            map { '(:?' . quotemeta($_) . ')' } split(' ', $ENV{EXCLUDE_FROM_STRIP}));
+	@to_strip = grep { !/$exclude_pattern/ } @to_strip;
+    }
 
     system(
 	"strip",
@@ -61,6 +62,7 @@ sub keep_wanted() {
     return unless -f $_;
     # skip symlinks
     return if -l $_;
+    return if $File::Find::dir =~ m!/usr/lib/debug($|/)!;
 
     # Does its filename look like a shared library?
     if (m/\.so/) {
