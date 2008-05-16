@@ -1,3 +1,4 @@
+2008-05-16 Pascal "Pixel" Rigaux <pixel@mandriva.com> 0.29.4
 	* strip_and_check_elf_files: skip check on /usr/lib/debug (#40847)
 
 2008-05-14 Guillaume Rousse <guillomovitch@mandriva.org> 0.29.3
