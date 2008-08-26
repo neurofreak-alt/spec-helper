@@ -1,3 +1,6 @@
+2008-08-26 Pascal "Pixel" Rigaux <pixel@mandriva.com> 0.29.5
+	* fix regression related to DONT_STRIP when not exported
+
 2008-05-16 Pascal "Pixel" Rigaux <pixel@mandriva.com> 0.29.4
 	* strip_and_check_elf_files: skip check on /usr/lib/debug (#40847)
 
