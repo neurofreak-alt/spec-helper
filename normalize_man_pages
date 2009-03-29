@@ -18,8 +18,8 @@ chomp $mandir;
 
 my $exclude_string = join('|',
     map { '(:?' . quotemeta($_) . ')' }
-    $ENV{EXCLUDE_FROM_MAN_PAGE_NORMALIZATION} ?
-        split(' ', $ENV{EXCLUDE_FROM_MAN_PAGE_NORMALIZATION}) : ()
+    $ENV{EXCLUDE_FROM_NORMALIZATION} ?
+        split(' ', $ENV{EXCLUDE_FROM_NORMALIZATION}) : ()
 );
 my $exclude_pattern = qr/$exclude_string/;
 
