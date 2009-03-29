@@ -16,7 +16,7 @@ import re
 
 echo_regex=re.compile('^(.*)echo +(-[en]+)?')
 string_regex=re.compile('^([^"]*?)\$?"([^"]*[^\\\\])"([^>\|\[\]]*|.*\|\|.*)$')
-var_regex=re.compile('(\$[a-zA-Z0-9_{}]+(?:\[\$[a-zA-Z0-9_{}]+\])?}?)')
+var_regex=re.compile('(?<!\\\)(\$[a-zA-Z0-9_{}]+(?:\[\$[a-zA-Z0-9_{}]+\])?}?)')
 init_func_regex=re.compile('(.*(action|success|failure|passed)\s*.*)')
 
 def process_start(start):
