@@ -4,6 +4,7 @@
 
 %__spec_helper_post \
     %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]       || %_spec_helper_dir/clean_files} \
+    %{?!dont_normalize:      [ -n "$DONT_NORMALIZE" ]     || %_spec_helper_dir/normalize_man_pages} \
     %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || %_spec_helper_dir/compress_files %{?_extension}%{?!_extension:.gz}} \
     %{?!dont_relink:         [ -n "$DONT_RELINK" ]        || %_spec_helper_dir/relink_symlinks} \
     %{?!dont_cleanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
