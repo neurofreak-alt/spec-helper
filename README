@@ -7,6 +7,11 @@ clean_files
 remove backup files.
 Set DONT_CLEANUP to disable.
 
+normalize_man_pages
+ensure all man page first line is a comment, so as to be recognized by file(1)
+Set DONT_NORMALIZE to disable, or EXCLUDE_FROM_NORMALIZATION to give a
+space-separated list of regexps matching files to exclude.
+
 compress_files
 compress man and info pages.
 Set DONT_COMPRESS to disable, or EXCLUDE_FROM_COMPRESS to give a
