@@ -10,7 +10,7 @@ use File::Basename;
 use Fcntl ':mode';
 
 my $ext = $ARGV[0] ||= '.gz';
-die "Unknown extension $ext" unless $ext =~ /^\.(?:gz|bz2|lzma)$/;
+die "Unknown extension $ext" unless $ext =~ /^\.(?:gz|bz2|lzma|xz)$/;
 
 my $buildroot = $ENV{RPM_BUILD_ROOT};
 die "No build root defined" unless $buildroot;
@@ -88,7 +88,7 @@ my $function = sub {
     # skip excluded files
     return if $File::Find::name =~ $exclude_pattern;
     # skip compressed files
-    return if $_ =~ /\.(?:gz|bz2|lzma)$/;
+    return if $_ =~ /\.(?:gz|bz2|lzma|xz)$/;
     # skip particular files
     return if $_ eq 'dir' || $_ eq 'whatis';
 
@@ -101,7 +101,8 @@ foreach my $dir (@mandirs) {
 # uncompress info/man pages using another format
 uncompress_files('.gz', 'gzip') if $ext ne '.gz';
 uncompress_files('.bz2', 'bzip2') if $ext ne '.bz2';
-uncompress_files('.lzma', 'lzmash') if $ext ne '.lzma';
+uncompress_files('.lzma', 'lzma') if $ext ne '.lzma';
+uncompress_files('.xz', 'xz') if $ext ne '.xz';
 
 # Look for files with hard links. If we are going to compress both,
 # we can preserve the hard link across the compression and save
@@ -133,6 +134,8 @@ if (@f) {
     my @command = $ext eq '.gz'   ? qw/gzip -9f/
                 : $ext eq '.bz2'  ? qw/bzip2 -9f/
                 : $ext eq '.lzma' ? qw/lzma -9f --text/
+                :                   qw//
+                : $ext eq '.xz'   ? qw/xz -9f --text/
                 :                   qw//
                 ;
     xargs(\@f, @command);
