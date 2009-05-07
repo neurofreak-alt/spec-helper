@@ -1,3 +1,12 @@
+2009-05-07 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.0
+	* normalize man pages, to make file command able to identify them 
+	  correctly (mdv bug #42725)
+	* fix escaped patterns parsing in gprintify (mdv bug #49277)
+	* fix fix_eol, it was previously skipping all files...
+	* replace deprecated 'lzmash' command with 'lzma' in compress_files
+	  (Per Oyvind)
+	* add support for xz in compress_files (Per Oyvind)
+
 2008-08-26 Pascal "Pixel" Rigaux <pixel@mandriva.com> 0.29.5
 	* fix regression related to DONT_STRIP when not exported
 
