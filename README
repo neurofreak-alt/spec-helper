@@ -7,20 +7,15 @@ clean_files
 remove backup files.
 Set DONT_CLEANUP to disable.
 
-normalize_man_pages
-ensure all man page first line is a comment, so as to be recognized by file(1)
-Set DONT_NORMALIZE to disable, or EXCLUDE_FROM_NORMALIZATION to give a
-space-separated list of regexps matching files to exclude.
-
 compress_files
 compress man and info pages.
 Set DONT_COMPRESS to disable, or EXCLUDE_FROM_COMPRESS to give a
-space-separated list of regexps matching files to exclude.
+regexps matching files to exclude.
 
 strip_and_check_elf_files
 Strip elf files and check for overlinking/underlinking.
-Set DONT_STRIP to disable, or EXCLUDE_FROM_STRIP to give a space-separated list
-of regexps matching files to exclude.
+Set DONT_STRIP to disable, or EXCLUDE_FROM_STRIP to give a regexp matching
+files to exclude.
 See http://wiki.mandriva.com/en/Overlinking for more info about overlinking
 
 relink_symlinks
@@ -59,4 +54,4 @@ Set DONT_REMOVE_INFO_DIR to disable.
 fix-eol
 Convert end of line patterns from DOS to UNIX.
 Set DONT_FIX_EOL to disable, or EXCLUDE_FROM_EOL_CONVERSION to give a
-space-separated list of of regexps matching files to exclude.
+regexp matching files to exclude.
