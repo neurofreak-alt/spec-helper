@@ -158,13 +158,13 @@ sub xargs {
         if (length($arg) + 1 + $static_length > $command_max) {
             error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
         }
-        $length += length($_) + 1;
+        $length += length($arg) + 1;
         if ($length < $command_max) {
-            push @collect, $_;
+            push @collect, $arg;
         } else {
             system(@_, @collect) if $#collect > -1;
-            @collect = $_;
-            $length = $static_length + length($_) + 1;
+            @collect = $arg;
+            $length = $static_length + length($arg) + 1;
         }
     }
     system(@_, @collect) if $#collect > -1;
