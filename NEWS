@@ -1,3 +1,12 @@
+2009-05-09 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.2
+	* drop man page normalization, broken, and uneeded anymore
+	* drop hardlink handling in man page compression
+	* fix exception handling, all scripts now use a single
+	  regexp
+
+2009-05-08 Götz Waschk <waschk@mandriva.org> 0.30.1
+	* fix syntax error in compress_files
+
 2009-05-07 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.0
 	* normalize man pages, to make file command able to identify them 
 	  correctly (mdv bug #42725)
