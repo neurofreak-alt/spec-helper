@@ -22,9 +22,8 @@ sub strip_files {
     my @to_strip = (@shared_libs, @executables);
 
     if ($ENV{EXCLUDE_FROM_STRIP}) {
-	my $exclude_pattern = join('|',
-            map { '(:?' . quotemeta($_) . ')' } split(' ', $ENV{EXCLUDE_FROM_STRIP}));
-	@to_strip = grep { !/$exclude_pattern/ } @to_strip;
+        my $exclude_pattern = qr/$ENV{EXCLUDE_FROM_STRIP}/;
+        @to_strip = grep { !/$exclude_pattern/ } @to_strip;
     }
 
     system(

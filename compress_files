@@ -15,21 +15,18 @@ die "Unknown extension $ext" unless $ext =~ /^\.(?:gz|bz2|lzma|xz)$/;
 my $buildroot = $ENV{RPM_BUILD_ROOT};
 die "No build root defined" unless $buildroot;
 die "Invalid build root" unless -d $buildroot;
-chdir($buildroot) or die "Can't cd to $buildroot: $!";
+# normalize build root
+$buildroot =~ s|/$||;
 
-my $exclude_pattern = join('|',
-    map { '(:?' . quotemeta($_) . ')' }
-    $ENV{EXCLUDE_FROM_COMPRESS} ?
-        split(' ', $ENV{EXCLUDE_FROM_COMPRESS}) : ()
-);
-$exclude_pattern = qr/$exclude_pattern/;
+my $exclude_pattern = $ENV{EXCLUDE_FROM_COMPRESS} ?
+    qr/$ENV{EXCLUDE_FROM_COMPRESS}/ : undef;
 
-my @sodirs = qw{
+my @sodirs = map { "$buildroot/$_" } qw{
     usr/man
     usr/X11R6/man
     usr/lib/perl5/man
 };
-my @mandirs = qw{
+my @mandirs = map { "$buildroot/$_" } qw{
     usr/info
     usr/share/info
     usr/man
@@ -49,7 +46,7 @@ my $so_function = sub {
     # to open every man page. 1024 is arbitrary.
     return if -s $_ > 1024;
     # skip excluded files
-    return if $File::Find::name =~ $exclude_pattern;
+    return if $exclude_pattern && $File::Find::name =~ $exclude_pattern;
 
     # Test first line of file for the .so thing.
     my $SOTEST;
@@ -86,7 +83,7 @@ my $function = sub {
     # skip directories
     return if -d $_;
     # skip excluded files
-    return if $File::Find::name =~ $exclude_pattern;
+    return if $exclude_pattern && $File::Find::name =~ $exclude_pattern;
     # skip compressed files
     return if $_ =~ /\.(?:gz|bz2|lzma|xz)$/;
     # skip particular files
