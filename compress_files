@@ -35,7 +35,8 @@ my @mandirs = map { "$buildroot/$_" } qw{
     usr/lib/perl5/man
 };
 
-# Now the .so conversion.
+# Convert man pages from old locations just consisting
+# of a single include directive to a symlink
 my (@sofiles, @sodests);
 my $so_function = sub {
     # skip symlinks
@@ -49,12 +50,11 @@ my $so_function = sub {
     return if $exclude_pattern && $File::Find::name =~ $exclude_pattern;
 
     # Test first line of file for the .so thing.
-    my $SOTEST;
-    open($SOTEST, $_);
-    my $l = <$SOTEST>;
-    close $SOTEST;
-    if ($l =~ m/\.so\s+(.*)/) {
-        my $solink=$1;
+    open(my $in, $_);
+    my $line = <$in>;
+    close ($in);
+    if ($line =~ m/\.so\s+(.*)/) {
+        my $solink = $1;
         # This test is here to prevent links like ... man8/../man8/foo.8
         if (basename($File::Find::dir) eq dirname($solink)) {
             $solink = basename($solink);
@@ -149,25 +149,25 @@ sub xargs {
     # Figure out length of static portion of command.
     my $static_length = 0;
     foreach (@_) {
-        $static_length += length($_)+1;
+        $static_length += length($_) + 1;
     }
 
     my @collect;
     my $length = $static_length;
-    foreach (@$args) {
-        if (length($_) + 1 + $static_length > $command_max) {
+    foreach my $arg (@$args) {
+        if (length($arg) + 1 + $static_length > $command_max) {
             error(qq(This command is greater than the maximum command size allowed by the kernel, and cannot be split up further. What on earth are you doing? "@_ $_"));
         }
-        $length+=length($_) + 1;
+        $length += length($_) + 1;
         if ($length < $command_max) {
             push @collect, $_;
         } else {
-            system(@_,@collect) if $#collect > -1;
+            system(@_, @collect) if $#collect > -1;
             @collect = $_;
             $length = $static_length + length($_) + 1;
         }
     }
-    system(@_,@collect) if $#collect > -1;
+    system(@_, @collect) if $#collect > -1;
 }
 
 # uncompress info/man pages with a given extension
