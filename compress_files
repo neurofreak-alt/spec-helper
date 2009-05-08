@@ -134,7 +134,6 @@ if (@f) {
     my @command = $ext eq '.gz'   ? qw/gzip -9f/
                 : $ext eq '.bz2'  ? qw/bzip2 -9f/
                 : $ext eq '.lzma' ? qw/lzma -9f --text/
-                :                   qw//
                 : $ext eq '.xz'   ? qw/xz -9f --text/
                 :                   qw//
                 ;
