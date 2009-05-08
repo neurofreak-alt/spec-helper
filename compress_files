@@ -101,32 +101,13 @@ uncompress_files('.bz2', 'bzip2') if $ext ne '.bz2';
 uncompress_files('.lzma', 'lzma') if $ext ne '.lzma';
 uncompress_files('.xz', 'xz') if $ext ne '.xz';
 
-# Look for files with hard links. If we are going to compress both,
-# we can preserve the hard link across the compression and save
-# space in the end.
-my @f;
-my (%hardlinks, %seen);
-foreach (@files) {
-    my ($dev, $inode, undef, $nlink) = stat($_);
-    if ($nlink > 1) {
-        if (! $seen{"$inode.$dev"}) {
-            $seen{"$inode.$dev"} = $_;
-            push @f, $_;
-        } else {
-            # This is a hardlink.
-            $hardlinks{$_} = $seen{"$inode.$dev"};
-        }
-    } else {
-        push @f, $_;
-    }
+# drop executable bits
+foreach my $file (@files) {
+    my $mode = (stat($file))[2];
+    chmod $mode & ~S_IXUSR & ~S_IXGRP & ~S_IXOTH, $file;
 }
 
-if (@f) {
-    # drop executable bits
-    foreach my $file (@f) {
-        my $mode = (stat($file))[2];
-        chmod $mode & ~S_IXUSR & ~S_IXGRP & ~S_IXOTH, $file;
-    }
+if (@files) {
 
     my @command = $ext eq '.gz'   ? qw/gzip -9f/
                 : $ext eq '.bz2'  ? qw/bzip2 -9f/
@@ -134,17 +115,7 @@ if (@f) {
                 : $ext eq '.xz'   ? qw/xz -9f --text/
                 :                   qw//
                 ;
-    xargs(\@f, @command);
-}
-
-
-# Now change over any files we can that used to be hard links so
-# they are again.
-foreach (keys %hardlinks) {
-    # Remove old file.
-    unlink $_;
-    # Make new hardlink.
-    link "$hardlinks{$_}$ext", "$_$ext";
+    xargs(\@files, @command);
 }
 
 # Fix up symlinks that were pointing to the uncompressed files.
@@ -211,7 +182,7 @@ sub uncompress_files {
         # skip directories
         return if -d $_;
         # skip excluded files
-        return if $File::Find::name =~ $exclude_pattern;
+        return if $exclude_pattern && $File::Find::name =~ $exclude_pattern;
         # skip everything but files with wanted extension
         return if $_ !~ /$extension$/;
 
