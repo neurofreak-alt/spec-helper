@@ -1,3 +1,11 @@
+2009-05-14 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.4
+	* skip PDF files when fixing end of lines (mdv bug #51128)
+	* initial test suite
+	* make all helper abort for missing or incorrect build root
+
+2009-05-14 Michael Scherer <misc@mandriva.org> 0.30.3
+	* fix missing compression on manpages (mdv bug #50803)
+
 2009-05-09 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.2
 	* drop man page normalization, broken, and uneeded anymore
 	* drop hardlink handling in man page compression
