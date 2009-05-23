@@ -6,7 +6,7 @@ test -n "$RPM_BUILD_ROOT" || exit 0
 
 dir="$RPM_BUILD_ROOT/$INFODIR"
 
-if test -z "$DONT_REMOVE_INFO_DIR" -a -f $dir -a ! -L $dir; then
+if [ -f $dir -a ! -L $dir ]; then
     rm -f $dir 
 fi
 
