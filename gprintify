@@ -13,8 +13,12 @@ fi
 
 scripts=
 for f in `ls $RPM_BUILD_ROOT/etc/rc.d/init.d/* $RPM_BUILD_ROOT/etc/init.d/* 2> /dev/null`; do
-	test -f $f && egrep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f && scripts="$scripts $f"
+    test -f $f || continue
+    egrep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f || continue
+    scripts="$scripts $f"
 done
 if [ -n "$scripts" ]; then
-	echo -n "Gprintifying init scripts..." && /usr/share/spec-helper/gprintify.py $scripts && echo "done"
+    echo -n "Gprintifying init scripts..."
+    /usr/share/spec-helper/gprintify.py $scripts
+    echo "done"
 fi
