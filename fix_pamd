@@ -1,5 +1,15 @@
 #!/bin/sh
 
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
 configs=`find $RPM_BUILD_ROOT/etc/pam.d/ -type f ! -type l 2> /dev/null`
 if [ -n "$configs" ]; then
     echo -n "Fixing pam.d config files..."

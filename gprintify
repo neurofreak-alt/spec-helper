@@ -1,6 +1,15 @@
 #!/bin/sh
-
 # $Id$
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
 
 if test -z "$DONT_GPRINTIFY"; then
     scripts=

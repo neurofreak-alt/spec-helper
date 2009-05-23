@@ -1,8 +1,16 @@
 #!/bin/sh
 
-INFODIR=`rpm --eval %{_infodir}/dir`
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
 
-test -n "$RPM_BUILD_ROOT" || exit 0
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+INFODIR=`rpm --eval %{_infodir}/dir`
 
 dir="$RPM_BUILD_ROOT/$INFODIR"
 
