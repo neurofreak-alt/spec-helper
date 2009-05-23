@@ -7,7 +7,7 @@ SCRIPT_FILES = clean_files clean_perl compress_files strip_and_check_elf_files \
                fix_pamd gprintify remove_info_dir relink_symlinks fix_eol
 BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
-FILES        = AUTHORS Makefile NEWS README \
+FILES        = AUTHORS Makefile NEWS README test.pl \
 	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in)
 
 bindir       = /usr/bin
@@ -30,6 +30,9 @@ spec-helper.macros: spec-helper.macros.in
 
 clean:
 	rm -f *~
+
+test:
+	perl test.pl
 
 # rules to build a local distribution
 
