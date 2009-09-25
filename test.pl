@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use IPC::Run qw/run/;
-use Test::More tests => 48;
+use Test::More tests => 54;
 use FindBin;
 use File::Temp qw/tempdir/;
 
@@ -23,6 +23,7 @@ foreach my $prog qw/
     remove_info_dir
     fix_pamd
     fix_eol
+    strip_and_check_elf_files
     / {
 
     ($out, $err) = run_prog($prog);
