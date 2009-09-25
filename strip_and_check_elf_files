@@ -5,6 +5,7 @@
 use strict;
 use warnings;
 use File::Find;
+use File::Basename;
 
 my $buildroot = $ENV{RPM_BUILD_ROOT};
 die "No build root defined" unless $buildroot;
@@ -97,10 +98,4 @@ sub keep_wanted() {
         push @static_libs, $File::Find::name;
         return;
     }
-}
-
-sub basename {
-    local $_ = shift;
-    s|/*\s*$||; s|.*/||;
-    $_
 }
