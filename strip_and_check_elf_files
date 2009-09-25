@@ -12,6 +12,11 @@ die "Invalid build root" unless -d $buildroot;
 # normalize build root
 $buildroot =~ s|/$||;
 
+# set LIBRARY_PATH to check libraries in build root
+my $lib = `rpm --eval %_lib`;
+chomp $lib;
+$ENV{LD_LIBRARY_PATH}="$buildroot/$lib:$buildroot/usr/$lib";
+
 my (@shared_libs, @executables, @static_libs);
 find(\&keep_wanted, $buildroot);
 
