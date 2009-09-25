@@ -41,19 +41,21 @@ sub strip_files {
 }
 
 sub check_missing_or_unused_libs {
-    foreach my $f (@shared_libs, @executables) {
-        my (undef, undef, @l) = `ldd -u -r $f 2>/dev/null`;
-        @l or next;
-        my $f_ = substr($f, length($buildroot));
+    my $shift = length($buildroot);
+    foreach my $file (@shared_libs, @executables) {
+        my (undef, undef, @l) = `ldd -u -r $file 2>/dev/null`;
+        next unless @l;
+        my $file_ = substr($file, $shift);
         print STDERR
-            "Warning: unused libraries in $f_: ",
+            "Warning: unused libraries in $file_: ",
             join(' ', map { basename($_) } @l), "\n";
     }
-    foreach my $f (@shared_libs) {
-        my @l = `ldd -r $f 2>&1 >/dev/null` or next;
-        my $f_ = substr($f, length($buildroot));
+    foreach my $file (@shared_libs) {
+        my @l = `ldd -r $file 2>&1 >/dev/null`;
+        next unless @l;
+        my $file_ = substr($file, $shift);
         print STDERR
-            "Warning: undefined symbols in $f_: ",
+            "Warning: undefined symbols in $file_: ",
             join(' ', map { /undefined symbol: (\S+)/ ? $1 : () } @l), "\n";
     }
 }
