@@ -1,3 +1,7 @@
+2009-11-21 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.6
+	* set LD_LIBRARY_PATH before calling ldd to check for 
+	  missing or unused libs strip_and_check_elf_files (mdv bug #41522)
+
 2009-06-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.30.5
 	* fix EXCLUDE_FROM_STRIP issue dealing with more than just one pattern,
 	  which would result in files being stripped even when they should've been
