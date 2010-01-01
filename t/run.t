@@ -6,10 +6,8 @@ use warnings;
 
 use IPC::Run qw/run/;
 use Test::More tests => 54;
-use FindBin;
+use FindBin qw/$Bin/;
 use File::Temp qw/tempdir/;
-
-my $path = "$FindBin::Bin/";
 
 my ($out, $err);
 delete $ENV{RPM_BUILD_ROOT};
@@ -50,6 +48,6 @@ foreach my $prog qw/
 sub run_prog {
     my ($prog, @args) = @_;
 
-    run (["$FindBin::Bin/$prog", @args], \my($in, $out, $err));
+    run (["$Bin/../$prog", @args], \my($in, $out, $err));
     return ($out, $err);
 }
