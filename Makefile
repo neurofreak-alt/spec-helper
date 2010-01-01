@@ -9,7 +9,8 @@ BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
 TEST_FILES   = t/*.t
 FILES        = Makefile NEWS README \
-	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in) $(TEST_FILES)
+	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in) \
+	       $(TEST_FILES) t/Utils.pm
 
 TEST_VERBOSE = 0
 
@@ -35,7 +36,7 @@ clean:
 	rm -f *~
 
 test:
-	perl -MExtUtils::Command::MM -e "test_harness($(TEST_VERBOSE))" $(TEST_FILES)
+	perl -I t -MExtUtils::Command::MM -e "test_harness($(TEST_VERBOSE))" $(TEST_FILES)
 
 # rules to build a local distribution
 
