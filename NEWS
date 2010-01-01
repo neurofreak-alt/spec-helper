@@ -1,11 +1,16 @@
+2010-01-01 Guillaume Rousse <guillomovitch@mandriva.org> 0.31.0
+	* replace gprintify python + shell implementation with a pure perl one
+	* fix ${foo##*/} recognition in gprintify (mdv bug #56342)
+	* enhance test suite with actual scripts usage
+
 2009-11-21 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.6
 	* set LD_LIBRARY_PATH before calling ldd to check for 
 	  missing or unused libs strip_and_check_elf_files (mdv bug #41522)
 
 2009-06-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.30.5
 	* fix EXCLUDE_FROM_STRIP issue dealing with more than just one pattern,
-	  which would result in files being stripped even when they should've been
-	  excluded (cause of mdv bug #51374)
+	  which would result in files being stripped even when they should've
+	  been excluded (cause of mdv bug #51374)
 
 2009-05-14 Guillaume Rousse <guillomovitch@mandriva.org> 0.30.4
 	* skip PDF files when fixing end of lines (mdv bug #51128)
