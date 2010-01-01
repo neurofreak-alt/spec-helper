@@ -3,12 +3,12 @@
 
 use strict;
 use warnings;
+use Utils qw/run get_md5/;
 use Test::More;
 use File::Temp qw/tempdir/;
 use File::Path qw/make_path/;
 use FindBin qw/$Bin/;
 use lib "$Bin/../lib";
-use Digest::MD5;
 
 my @string_results = (
     [ 'result: $foo', 'result: %s', ' "$foo"' ],
@@ -70,15 +70,15 @@ foreach my $result (@line_results) {
 }
 
 # test the script itself
-my ($buildroot, $script, $before, $after);
+my ($buildroot, $test, $before, $after);
 
-($buildroot, $script) = setup(<<'EOF');
+($buildroot, $test) = setup(<<'EOF');
 echo "Usage: $0 {start|stop|status}"
 EOF
 
-$before = get_md5($script);
-run($buildroot);
-$after = get_md5($script);
+$before = get_md5($test);
+run($buildroot, 'gprintify');
+$after = get_md5($test);
 
 is(
     $before,
@@ -86,14 +86,14 @@ is(
     'service not sourcing /etc/init.d/functions should not be modified'
 );
 
-($buildroot, $script) = setup(<<'EOF');
+($buildroot, $test) = setup(<<'EOF');
 . /etc/init.d/functions
 echo "Usage: $0 {start|stop|status}"
 EOF
 
-$before = get_md5($script);
-run($buildroot);
-$after = get_md5($script);
+$before = get_md5($test);
+run($buildroot, 'gprintify');
+$after = get_md5($test);
 
 isnt(
     $before,
@@ -101,15 +101,15 @@ isnt(
     'service sourcing /etc/init.d/functions should be modified'
 );
 
-($buildroot, $script) = setup(<<'EOF');
+($buildroot, $test) = setup(<<'EOF');
 . /etc/init.d/functions
 echo "Usage: $0 {start|stop|status}"
 EOF
 
-$before = get_md5($script);
+$before = get_md5($test);
 $ENV{EXCLUDE_FROM_GPRINTIFICATION} = 'test';
-run($buildroot);
-$after = get_md5($script);
+run($buildroot, 'gprintify');
+$after = get_md5($test);
 
 is(
     $before,
@@ -123,29 +123,12 @@ sub setup {
     my $buildroot = tempdir(CLEANUP => ($ENV{TEST_DEBUG} ? 0 : 1));
 
     my $initrddir = $buildroot . '/etc/rc.d/init.d';
-    my $script = $initrddir . '/test';
+    my $test = $initrddir . '/test';
 
     make_path($initrddir);
-    open(my $out, '>', $script) or die "can't write to $script: $!";
+    open(my $out, '>', $test) or die "can't write to $test: $!";
     print $out $content;
     close($out);
 
-    return ($buildroot, $script);
-}
-
-sub run {
-    my ($buildroot) = @_;
-
-    $ENV{RPM_BUILD_ROOT} = $buildroot;
-    system("$Bin/../gprintify");
-}
-
-sub get_md5 {
-    my ($file) = @_;
-    open(my $in, '<', $file) or die "can't read $file: $!";
-    binmode($in);
-    my $md5 = Digest::MD5->new();
-    $md5->addfile($in);
-    close($in);
-    return $md5->hexdigest();
+    return ($buildroot, $test);
 }

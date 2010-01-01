@@ -3,12 +3,10 @@
 
 use strict;
 use warnings;
+use Utils qw/run get_md5/;
 use Test::More;
 use File::Temp qw/tempdir/;
 use File::Path qw/make_path/;
-use FindBin qw/$Bin/;
-use lib "$Bin/../lib";
-use Digest::MD5;
 
 plan tests => 2;
 
@@ -19,7 +17,7 @@ my ($buildroot, $test, $before, $after);
 foo\r
 EOF
 $before = get_md5($test);
-run($buildroot);
+run($buildroot, 'fix_eol');
 $after = get_md5($test);
 
 isnt(
@@ -33,7 +31,7 @@ foo\r
 EOF
 $before = get_md5($test);
 $ENV{EXCLUDE_FROM_EOL_CONVERSION} = 'test';
-run($buildroot);
+run($buildroot, 'fix_eol');
 $after = get_md5($test);
 
 is(
@@ -57,21 +55,4 @@ sub setup {
     close($out);
 
     return ($buildroot, $test);
-}
-
-sub run {
-    my ($buildroot) = @_;
-
-    $ENV{RPM_BUILD_ROOT} = $buildroot;
-    system("$Bin/../fix_eol");
-}
-
-sub get_md5 {
-    my ($file) = @_;
-    open(my $in, '<', $file) or die "can't read $file: $!";
-    binmode($in);
-    my $md5 = Digest::MD5->new();
-    $md5->addfile($in);
-    close($in);
-    return $md5->hexdigest();
 }

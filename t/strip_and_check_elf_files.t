@@ -3,41 +3,39 @@
 
 use strict;
 use warnings;
+use Utils qw/run get_md5/;
 use Test::More;
 use File::Temp qw/tempdir/;
 use File::Path qw/make_path/;
-use FindBin qw/$Bin/;
-use lib "$Bin/../lib";
-use Digest::MD5;
 
 plan tests => 2;
 
 # test the script itself
-my ($buildroot, $binary, $before, $after);
+my ($buildroot, $test, $before, $after);
 
-($buildroot, $binary) = setup();
+($buildroot, $test) = setup();
 
-$before = get_md5($binary);
-run($buildroot);
-$after = get_md5($binary);
+$before = get_md5($test);
+run($buildroot, 'strip_and_check_elf_files');
+$after = get_md5($test);
 
 isnt(
     $before,
     $after,
-    'binary should be modified'
+    'test should be modified'
 );
 
-($buildroot, $binary) = setup();
+($buildroot, $test) = setup();
 
-$before = get_md5($binary);
+$before = get_md5($test);
 $ENV{EXCLUDE_FROM_STRIP} = 'test';
-run($buildroot);
-$after = get_md5($binary);
+run($buildroot, 'strip_and_check_elf_files');
+$after = get_md5($test);
 
 is(
     $before,
     $after,
-    'EXCLUDE_FROM_STRIP should prevent binary stripping'
+    'EXCLUDE_FROM_STRIP should prevent test stripping'
 );
 
 sub setup {
@@ -56,27 +54,10 @@ EOF
 
     my $buildroot = tempdir(CLEANUP => ($ENV{TEST_DEBUG} ? 0 : 1));
     my $bindir = $buildroot . '/usr/bin';
-    my $binary = $bindir . '/test';
+    my $test = $bindir . '/test';
     make_path($bindir);
 
-    system('gcc', '-o', $binary, $source);
+    system('gcc', '-o', $test, $source);
 
-    return ($buildroot, $binary);
-}
-
-sub run {
-    my ($buildroot) = @_;
-
-    $ENV{RPM_BUILD_ROOT} = $buildroot;
-    system("$Bin/../strip_and_check_elf_files");
-}
-
-sub get_md5 {
-    my ($file) = @_;
-    open(my $in, '<', $file) or die "can't read $file: $!";
-    binmode($in);
-    my $md5 = Digest::MD5->new();
-    $md5->addfile($in);
-    close($in);
-    return $md5->hexdigest();
+    return ($buildroot, $test);
 }
