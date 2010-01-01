@@ -1,24 +1,161 @@
-#!/bin/sh
+#!/usr/bin/perl
 # $Id$
+# convert end of line patterns from DOS to UNIX
 
-if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
-    exit 1
-fi
+use strict;
+use warnings;
+use File::Find;
+use File::Temp;
+use File::Slurp;
+use List::MoreUtils qw(none);
 
-if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
-    exit 1
-fi
+my $string_pattern = qr/
+    ^
+    ([^"]*)
+    \$?
+    "
+    (
+        (?:
+            \\.    # an escaped character
+            |      # or
+            [^\\"] # anything but a backslash or a quote
+        )*
+    )
+    "
+    ([^>|\[\]]*|.*\|\|.*)
+    $
+    /x;
+my $echo_pattern = qr/
+    ^
+    (.*)
+    echo
+    \s+
+    (-[en]+)?
+    /x;
+my $initfunc_pattern = qr/
+    (
+        .*
+        (?:action|success|failure|passed)
+        \s*
+        .*
+    )
+    /x;
 
-scripts=
-for f in `ls $RPM_BUILD_ROOT/etc/rc.d/init.d/* $RPM_BUILD_ROOT/etc/init.d/* 2> /dev/null`; do
-    test -f $f || continue
-    egrep -q '[[:space:]]*\.[[:space:]]+.*/functions' $f || continue
-    scripts="$scripts $f"
-done
-if [ -n "$scripts" ]; then
-    echo -n "Gprintifying init scripts..."
-    /usr/share/spec-helper/gprintify.py $scripts
-    echo "done"
-fi
+my $var_pattern = qr/
+    (?<!\\)                            # don't catch escaped variables
+    (
+        (?:
+            \$[a-zA-Z0-9_]+            # simple variable name
+            |
+            \${                        # protected variable name
+                [a-zA-Z0-9_]+
+                (?:[#%]{1,2}[^}]+)?    # with optional expansion pattern
+            }
+        )
+    )
+    /x;
+
+main(@ARGV) unless caller();
+
+sub main {
+    my $buildroot = $ENV{RPM_BUILD_ROOT};
+    die "No build root defined" unless $buildroot;
+    die "Invalid build root" unless -d $buildroot;
+    # normalize build root
+    $buildroot =~ s|/$||;
+
+    my $exclude_pattern = $ENV{EXCLUDE_FROM_GPRINTIFICATION} ?
+        qr/$ENV{EXCLUDE_FROM_GPRINTIFICATION}/ : undef;
+
+    my $initrddir1 = "$buildroot/etc/rc.d/init.d";
+    my $initrddir2 = "$buildroot/etc/init.d";
+
+    foreach my $file (<$initrddir1/*>, <$initrddir2/*>) {
+        # skip everything but files
+        next unless -f $file;
+
+        # skip excluded files
+        next if $exclude_pattern && $file =~ $exclude_pattern;
+
+        my @lines = read_file($file);
+
+        # skip scripts not sourcing /etc/init.d/functions
+        next if none { m{\s* \. \s+ /etc/(rc.d/)?init.d/functions}x } @lines;
+
+        # convert lines
+        @lines = map { process_line($_) } @lines;
+
+        # rewrite script
+        open(my $out, '>', $file) or die "Unable to open file $file: $!";
+        print $out @lines;
+        close($out);
+    }
+}
+
+sub process_line {
+    my ($line) = @_;
+
+    if ($line =~ /$string_pattern/) {
+        my $start  = $1;
+        my $string = $2;
+        my $end    = $3;
+
+        my ($new_start, $string_end) = process_start($start);
+        return $line if !$new_start;
+
+        my ($new_string, $variables) = process_string($string);
+        chomp $end;
+        my $final = $new_start .  $new_string .  $string_end .  $variables;
+
+        if ($end =~ /$string_pattern/) {
+            my $start2  = $1;
+            my $string2 = $2;
+            my $end2    = $2;
+            my ($new_start2, $string_end2) = process_start($start2);
+            return $final . $end . "\n"
+                if !$new_start2;
+
+            my ($new_string2, $variables2) = process_string($string2);
+            my $final2 = $new_start2 .  $new_string2 .  $string_end2 .  $variables2;
+            return $final . $final2 . "\n";
+        } else {
+            return $final . $end . "\n";
+        }
+
+    } else {
+        return $line;
+    }
+        
+}
+
+sub process_start {
+    my ($start) = @_;
+
+    if ($start =~ /$echo_pattern/) {
+        my $before = $1;
+        my $option = $2;
+        my $new_start = $before . 'gprintf "';
+        my $string_end = ($option && $option eq '-n') ? '"' : '\\n"';
+        return ($new_start, $string_end);
+    }
+
+    if ($start =~ /$initfunc_pattern/) {
+        return ($1 . '"', '"');
+    }
+
+    return ();
+}
+
+sub process_string {
+    my ($string) = @_;
+
+    my $variables = '';
+    while ($string =~ m/$var_pattern/g) {
+        $variables .= ' "' . $1 . '"';
+    }
+    $string =~ s/$var_pattern/\%s/g;
+
+    return ($string, $variables);
+}
+
+1;
