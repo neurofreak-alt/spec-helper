@@ -7,8 +7,11 @@ SCRIPT_FILES = clean_files clean_perl compress_files strip_and_check_elf_files \
                fix_pamd gprintify remove_info_dir relink_symlinks fix_eol
 BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
-FILES        = Makefile NEWS README test.pl \
-	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in)
+TEST_FILES   = t/*.t
+FILES        = Makefile NEWS README \
+	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in) $(TEST_FILES)
+
+TEST_VERBOSE = 0
 
 bindir       = /usr/bin
 pkgdatadir   = /usr/share/$(PACKAGE)
@@ -32,7 +35,7 @@ clean:
 	rm -f *~
 
 test:
-	perl test.pl
+	perl -MExtUtils::Command::MM -e "test_harness($(TEST_VERBOSE))" $(TEST_FILES)
 
 # rules to build a local distribution
 
