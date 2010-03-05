@@ -1,3 +1,6 @@
+2010-03-05 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.2
+	* fix typo in macros file.. :/
+
 2010-03-05 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.1
 	* don't duplicate stripping already done in rpm's find-debuginfo.sh
 	* rename strip_and_check_elf_files to check_elf_files
