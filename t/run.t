@@ -21,7 +21,7 @@ foreach my $prog qw/
     remove_info_dir
     fix_pamd
     fix_eol
-    strip_and_check_elf_files
+    check_elf_files
     / {
 
     ($out, $err) = run_prog($prog);
