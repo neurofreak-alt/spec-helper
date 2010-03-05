@@ -21,24 +21,7 @@ $ENV{LD_LIBRARY_PATH}="$buildroot/$lib:$buildroot/usr/$lib";
 my (@shared_libs, @executables, @static_libs);
 find(\&keep_wanted, $buildroot);
 
-strip_files() if !$ENV{DONT_STRIP};
 check_missing_or_unused_libs();
-
-sub strip_files {
-    my @to_strip = (@shared_libs, @executables);
-
-    if ($ENV{EXCLUDE_FROM_STRIP}) {
-        my $exclude_pattern = join('|', split(/\s+/, $ENV{EXCLUDE_FROM_STRIP}));
-        my $compiled_pattern = qr/($exclude_pattern)/;
-        @to_strip = grep { !/$compiled_pattern/ } @to_strip;
-    }
-
-    system(
-        "strip",
-        "--remove-section=.comment",
-        "--remove-section=.note",
-        $_) foreach @to_strip;
-}
 
 sub check_missing_or_unused_libs {
     my $shift = length($buildroot);
