@@ -43,17 +43,17 @@ test:
 localdist: cleandist dir localcopy tar
 
 cleandist: clean
-	rm -rf $(PACKAGE)-$(VERSION) $(PACKAGE)-$(VERSION).tar.bz2
+	rm -rf $(PACKAGE)-$(VERSION) $(PACKAGE)-$(VERSION).tar.xz
 
 dir:
-	mkdir $(PACKAGE)-$(VERSION)
+	mkdir -p $(PACKAGE)-$(VERSION)
 
 localcopy: dir
 	tar cf - $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar xf -)
 
 tar: dir localcopy
 	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
-	bzip2 -9vf $(PACKAGE)-$(VERSION).tar
+	xz -vf $(PACKAGE)-$(VERSION).tar
 	rm -rf $(PACKAGE)-$(VERSION)
 
 # rules to build a public distribution
