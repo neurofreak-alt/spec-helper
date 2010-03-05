@@ -1,3 +1,7 @@
+2010-03-05 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.1
+	* don't duplicate stripping already done in rpm's find-debuginfo.sh
+	* rename strip_and_check_elf_files to check_elf_files
+	  
 2010-01-01 Guillaume Rousse <guillomovitch@mandriva.org> 0.31.0
 	* replace gprintify python + shell implementation with a pure perl one
 	* fix ${foo##*/} recognition in gprintify (mdv bug #56342)
