@@ -15,5 +15,6 @@
     %{?!dont_remove_info_dir: [ -n "$DONT_REMOVE_INFO_DIR" ] || %_spec_helper_dir/remove_info_dir} \
     %{?!dont_fix_eol:         [ -n "$DONT_FIX_EOL" ]        || %_spec_helper_dir/fix_eol} \
     %{?!dont_check_elf_files: [ -n "$DONT_CHECK_ELF_FILES" ] || %_spec_helper_dir/check_elf_files} \
+    %{?!__debug_package:      [ -n "%{?dont_strip:1}%{?!dont_strip:$DONT_STRIP}" ] || export DISABLE_DEBUG=1 && %__debug_install_post} \
 %nil
 
