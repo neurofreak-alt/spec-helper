@@ -1,3 +1,6 @@
+2010-11-22 Funda Wang <fwang@mandriva.org> 0.31.4
+	* xz 5.0 do not support '--text' option now.
+
 2010-03-09 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.3
         * be sure to still strip files even if we're not building -debug
 	  packages (fixing regression from 0.31.1)
