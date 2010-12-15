@@ -1,3 +1,6 @@
+2010 12-15 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.5
+	* reenable xz --text (support were dropped by accident for xz 5.0)
+
 2010-11-22 Funda Wang <fwang@mandriva.org> 0.31.4
 	* xz 5.0 do not support '--text' option now.
 
