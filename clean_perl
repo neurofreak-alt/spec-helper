@@ -16,3 +16,5 @@ for i in $(find $d -name "*.bs"); do
 	rm -f $i
     fi
 done
+
+find $d -depth -type d -exec rmdir {} 2>/dev/null \;

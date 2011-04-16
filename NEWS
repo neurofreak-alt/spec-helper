@@ -1,3 +1,6 @@
+2011-04-16 Funda Wang <fwang@mandriva.org> 0.31.6
+	* remove empty dirs for perl modules
+
 2010 12-15 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.5
 	* reenable xz --text (support were dropped by accident for xz 5.0)
 
