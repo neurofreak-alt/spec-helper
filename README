@@ -49,6 +49,10 @@ remove_info_dir
 Remove info directories.
 Set DONT_REMOVE_INFO_DIR to disable.
 
+remove_libtool_files
+Remove libtool linker scripts.
+Set DONT_REMOVE_LIBTOOL_FILES to disable.
+
 fix-eol
 Convert end of line patterns from DOS to UNIX.
 Set DONT_FIX_EOL to disable, or EXCLUDE_FROM_EOL_CONVERSION to give a

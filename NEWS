@@ -1,3 +1,6 @@
+2011-12-06 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.7
+	* remove libtool .la files
+
 2011-04-16 Funda Wang <fwang@mandriva.org> 0.31.6
 	* remove empty dirs for perl modules
 
