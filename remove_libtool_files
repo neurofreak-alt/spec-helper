@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id$
+# $Id:$
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2
@@ -12,7 +12,7 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
 fi
 
 SEARCH_DIRS="$(for i in `gcc -print-search-dirs|grep "libraries: ="| cut -d= -f2|sed -e 's#:# #g'`; do [ -d "$i" ] && (cd $i; echo $PWD); done|sort -u)"
-PKG_CONFIG="$(find "$RPM_BUILD_ROOT"/usr/lib*/pkgconfig -name \*.pc)"
+PKG_CONFIG="$(find "$RPM_BUILD_ROOT"/usr/lib*/pkgconfig -name \*.pc 2> /dev/null)"
 
 find "$RPM_BUILD_ROOT" -type f -name \*.la -print0 |
 xargs  --no-run-if-empty -0 file -N |

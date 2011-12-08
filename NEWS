@@ -1,3 +1,6 @@
+2011-12-08 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.8
+	* fix error message printed when there's no pkgconfig dir
+
 2011-12-06 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.7
 	* remove libtool .la files
 
