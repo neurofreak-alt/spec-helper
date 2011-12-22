@@ -31,6 +31,9 @@ while read path; do
 	    # TODO: other special cases?
 	fi
     done
+    if grep -q 'shouldnotlink=yes' $path; then
+	    KEEP=1
+    fi
     if [ $KEEP -eq 0 ]; then
 	rm -f "$path"
     fi
