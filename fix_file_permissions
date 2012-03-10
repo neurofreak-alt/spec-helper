@@ -1,0 +1,27 @@
+#!/bin/sh
+# $Id: remove_libtool_files 273538 2011-12-23 02:47:19Z peroyvind $
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+find "$RPM_BUILD_ROOT" \
+    ! -path "${RPM_BUILD_ROOT}/usr/lib/debug/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/doc/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/doc/*" \
+    -type f \( -name \*.exe -o -name \*.dll -o -name \*.so\* \) -print0 |
+xargs  --no-run-if-empty -0 file -N -F ' //magic:' |
+grep -e "Mono/.Net assembly" -e "ELF.*shared object" |
+sed -e 's# //magic:.*##g' |
+while read path; do
+    PERMS=$(stat -c '%a' "$path")
+    if [ $PERMS -lt 700 ];
+	chmod +x "$path"
+    fi
+done

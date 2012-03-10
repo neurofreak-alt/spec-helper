@@ -1,3 +1,7 @@
+2012-03-10 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.11
+	* make sure that shared libraries & mono libraries/executables have
+	  executable permissions set
+
 2011-12-23 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.10
 	* support multiple libtool files with multiple pkgconfig files
 
@@ -14,7 +18,7 @@
 2011-04-16 Funda Wang <fwang@mandriva.org> 0.31.6
 	* remove empty dirs for perl modules
 
-2010 12-15 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.5
+2010-12-15 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.5
 	* reenable xz --text (support were dropped by accident for xz 5.0)
 
 2010-11-22 Funda Wang <fwang@mandriva.org> 0.31.4
