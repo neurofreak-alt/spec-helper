@@ -3,7 +3,7 @@ VERSION = 0.31.11
 SVNPATH = svn+ssh://svn.mandriva.com/svn/soft/rpm/$(PACKAGE)
 
 SCRIPT_FILES = clean_files clean_perl compress_files check_elf_files \
-               lib_symlinks fix_mo translate_menu \
+               lib_symlinks fix_file_permissions fix_mo translate_menu \
                fix_pamd gprintify remove_info_dir remove_libtool_files relink_symlinks fix_eol
 BIN_FILES    = macroszification
 MACROS_FILES = spec-helper.macros
