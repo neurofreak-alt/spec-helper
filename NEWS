@@ -1,3 +1,6 @@
+2012-03-16 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.12
+	* remove all .la files
+
 2012-03-10 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.11
 	* make sure that shared libraries & mono libraries/executables have
 	  executable permissions set

@@ -11,40 +11,10 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-SEARCH_DIRS="$(for i in `gcc -print-search-dirs|grep "libraries: ="| cut -d= -f2|sed -e 's#:# #g'`; do [ -d "$i" ] && (cd $i; echo $PWD); done|sort -u)"
-PKG_CONFIG="$(find "$RPM_BUILD_ROOT"/usr/lib*/pkgconfig -name \*.pc 2> /dev/null)"
-
 find "$RPM_BUILD_ROOT" -type f -name \*.la -print0 |
 xargs  --no-run-if-empty -0 file -N |
 grep "libtool library file" |
 sed -e 's#: libtool library file.*##g' |
 while read path; do
-    statlib="${path/%.la/.a}"
-    lib=$(basename ${path/%.la/})
-    KEEP=0
-    PKGCONF_MATCH=0
-    for i in $PKG_CONFIG; do
-	libs=$(pkg-config $i --libs | sed -e 's#-l#lib#')
-	for l in $libs; do
-	    if [ "$l" == "$lib" ]; then
-		PKGCONF_MATCH=1
-	    fi
-	done
-    done
-    # only .la files required by static libraries found in library search path may be allowed to exist
-    for dir in $SEARCH_DIRS; do
-	if [ "`dirname $path`" == "${RPM_BUILD_ROOT}${dir}" ]; then
-	    # if package has a static library without any pkg-config file, we keep .la file
-	    if [[ $PKGCONF_MATCH -eq 0 && -f "$statlib" ]]; then
-		KEEP=1
-	    fi
-	fi
-    done
-    # most likely required for loading with libltdl..?
-    if grep -q 'shouldnotlink=yes' "$path"; then
-	KEEP=1
-    fi
-    if [ $KEEP -eq 0 ]; then
-	rm -f "$path"
-    fi
+    rm -f "$path"
 done
