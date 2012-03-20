@@ -1,3 +1,7 @@
+2012-03-20 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.13
+	* don't remove /usr/share/info/dir if /sbin/install-info is found in
+	  buildroot
+
 2012-03-16 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.12
 	* remove all .la files
 
