@@ -1,4 +1,9 @@
+2012-06-04 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.14
+
+	* /sbin/install-info has been moved to /usr/sbin/install-info
+	
 2012-03-20 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.13
+
 	* don't remove /usr/share/info/dir if /sbin/install-info is found in
 	  buildroot
 
