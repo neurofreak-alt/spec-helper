@@ -15,7 +15,7 @@ INFODIR=`rpm --eval %{_infodir}/dir`
 
 dir="$RPM_BUILD_ROOT/$INFODIR"
 
-if [ -f $dir -a ! -f "$RPM_BUILD_ROOT/usr/sbin/install-info" ]; then
+if [ -f $dir -a ! -f "$RPM_BUILD_ROOT/sbin/install-info" -a ! -f "$RPM_BUILD_ROOT/usr/sbin/install-info" ]; then
     rm -f $dir 
 fi
 
