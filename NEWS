@@ -1,3 +1,7 @@
+2012-09-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.16
+
+	* Rewrite relink_symlinks perl script in shell
+
 2012-06-06 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.15
 
 	* handle both /sbin/install-info & /usr/sbin/install-info

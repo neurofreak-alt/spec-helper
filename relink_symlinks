@@ -1,29 +1,29 @@
-#!/usr/bin/perl
-# relativize absolute symlinks
+#!/bin/sh
+# $Id: remove_info_dir 274470 2012-06-06 12:33:15Z peroyvind $
 
-use strict;
-use warnings;
-use File::Find;
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
 
-my $buildroot = $ENV{RPM_BUILD_ROOT};
-die "No build root defined" unless $buildroot;
-die "Invalid build root" unless -d $buildroot;
-# normalize build root
-$buildroot =~ s|/$||;
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
 
-sub relativize {
-    return unless -l $_;
-
-    my $link = readlink($_);
-    return unless $link =~ m{^/};
-
-    $link =~ s{^/}{};
-    my $dirname = $File::Find::dir;
-    $dirname =~ s/^\Q$buildroot\E//;
-    $dirname =~ s{/[^/]+}{../}g;
-
-    unlink $_;
-    symlink $dirname . $link, $_;
-}
-
-find(\&relativize, $buildroot);
+find "$RPM_BUILD_ROOT" \
+    -type l -print0 | xargs --no-run-if-empty -0 ls 2>/dev/null |
+while read symlink; do
+    path="`readlink -f \"$symlink\"`"
+    if stat -L "$path" &> /dev/null; then
+	rm -f "$symlink"
+	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
+	if stat -L "$symlink" &> /dev/null; then
+	    echo "ok: $symlink"
+	else
+	    echo "symlink relativization failed:" >&2
+	    echo "$output" >&2
+	    ls --color -l "$symlink" >&2
+	fi
+    fi
+done
