@@ -11,10 +11,11 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-find "$RPM_BUILD_ROOT" -type f -name \*.la -print0 |
-xargs  --no-run-if-empty -0 file -N |
+find "$RPM_BUILD_ROOT" \( -type f -o -type l \) -name \*.la  -print0 |
+xargs  --no-run-if-empty -0 file -N -L |
 grep "libtool library file" |
 sed -e 's#: libtool library file.*##g' |
 while read path; do
-    rm -f "$path"
+	echo "removing: $path"
+    #rm -f "$path"
 done

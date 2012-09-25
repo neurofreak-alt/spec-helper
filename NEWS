@@ -1,5 +1,6 @@
 2012-09-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.16
 
+	* get rid of .la symlinks as well
 	* don't relativize symlinks to /dev, /proc & /sys (inspired by similar change
 	  by colin in Mageia)
 	* drop dead 'translate_menu' script
