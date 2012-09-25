@@ -15,6 +15,9 @@ find "$RPM_BUILD_ROOT" \
     -type l -print0 | xargs --no-run-if-empty -0 ls 2>/dev/null |
 while read symlink; do
     path="`readlink -f \"$symlink\"`"
+
+    echo $path | grep -q -E '^(/dev|/sys|/proc)' && continue
+
     if stat -L "$path" &> /dev/null; then
 	rm -f "$symlink"
 	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
