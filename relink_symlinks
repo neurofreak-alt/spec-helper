@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: remove_info_dir 274470 2012-06-06 12:33:15Z peroyvind $
+# $Id: remove_symlinks 274470 2012-06-06 12:33:15Z peroyvind $
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2
@@ -21,9 +21,7 @@ while read symlink; do
     if stat -L "$path" &> /dev/null; then
 	rm -f "$symlink"
 	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
-	if stat -L "$symlink" &> /dev/null; then
-	    echo "ok: $symlink"
-	else
+	if ! stat -L "$symlink" &> /dev/null; then
 	    echo "symlink relativization failed:" >&2
 	    echo "$output" >&2
 	    ls --color -l "$symlink" >&2
