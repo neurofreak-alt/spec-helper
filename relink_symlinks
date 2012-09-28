@@ -17,10 +17,12 @@ while read symlink; do
     path="`readlink -f \"$symlink\"`"
 
     echo $path | grep -q -E '^(/dev|/sys|/proc)' && continue
+    # absolute path needs to be made into an absolute path relative to buildroot
+    echo $path | grep -q -E '^/' && path="$RPM_BUILD_ROOT$path"
 
     if stat -L "$path" &> /dev/null; then
 	rm "$symlink"
-	output="`ln -svLrf \"$RPM_BUILD_ROOT$path\" \"$symlink\" 2>&1`"
+	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
 	if ! stat -L "$symlink" &> /dev/null; then
 	    echo "symlink relativization failed:" >&2
 	    echo "$output" >&2
