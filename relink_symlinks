@@ -19,7 +19,7 @@ while read symlink; do
     echo $path | grep -q -E '^(/dev|/sys|/proc)' && continue
 
     if stat -L "$path" &> /dev/null; then
-	rm -f "$symlink"
+	rm "$symlink"
 	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
 	if ! stat -L "$symlink" &> /dev/null; then
 	    echo "symlink relativization failed:" >&2
