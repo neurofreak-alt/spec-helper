@@ -37,10 +37,6 @@ fix-mo
 Fix bad translations.
 Set DONT_FIX_MO to disable.
 
-translate_menu
-Change the menu sections.
-Set DONT_TRANSLATE_MENU to disable.
-
 fixpamd
 Fix pam.d config files.
 Set DONT_FIX_PAMD_CONFIGS to disable.

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use IPC::Run qw/run/;
-use Test::More tests => 54;
+use Test::More tests => 48;
 use FindBin qw/$Bin/;
 use File::Temp qw/tempdir/;
 
@@ -17,7 +17,6 @@ foreach my $prog qw/
     compress_files
     relink_symlinks
     gprintify
-    translate_menu
     remove_info_dir
     fix_pamd
     fix_eol
