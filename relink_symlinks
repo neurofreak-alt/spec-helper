@@ -20,7 +20,7 @@ while read symlink; do
 
     if stat -L "$path" &> /dev/null; then
 	rm "$symlink"
-	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
+	output="`ln -svLrf \"$RPM_BUILD_ROOT$path\" \"$symlink\" 2>&1`"
 	if ! stat -L "$symlink" &> /dev/null; then
 	    echo "symlink relativization failed:" >&2
 	    echo "$output" >&2
