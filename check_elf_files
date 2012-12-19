@@ -34,7 +34,6 @@ if echo $match | grep -q -e ': ELF'; then
     fi
 fi
 done
-echo
 
 find "$RPM_BUILD_ROOT" -type f -name \*.so\*  -a \
 	\( ! -path $RPM_BUILD_ROOT/usr/lib/debug/\* -a \
@@ -51,4 +50,3 @@ if [ -n "$undefined_symbols" ]; then
     echo "Warning: undefined symbols in $syspath:$undefined_symbols" >&2
 fi
 done
-echo
