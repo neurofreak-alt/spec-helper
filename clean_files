@@ -1,38 +1,32 @@
-#!/usr/bin/perl
+#!/bin/sh
 # remove backup files
 # $Id$
 
-use strict;
-use warnings;
-use File::Find;
-use File::Path;
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
 
-my $buildroot = $ENV{RPM_BUILD_ROOT};
-die "No build root defined" unless $buildroot;
-die "Invalid build root" unless -d $buildroot;
-# normalize build root
-$buildroot =~ s|/$||;
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
 
-sub clean {
-    if (-f $_) {
-        unlink $_ if $_ =~ /^(?:
-            #.*#        |
-            .\*~        |
-            DEADJOE     |
-            \.cvsignore |
-            .*\.orig    |
-            .*\.rej     |
-            .*\.bak     |
-            .*\.SUMS    |
-            TAGS        |
-            core        |
-            )$/x;
-        unlink $_ if $File::Find::name =~ /\/\.deps\// && $_ =~ /\.P$/;
-    }
 
-    if (-d $_) {
-        rmtree($_) if $_ =~ /^CVS$/;
-    }
-}
+find "$RPM_BUILD_ROOT" \( -type f -o -type l \) \( \
+	-name '#*#' -o \
+	-name \*.orig -o \
+	-name \*~ -o \
+	-name DEADJOE -o \
+	-name .cvsignore -o \
+	-name \*.orig -o \
+	-name \*.rej -o \
+	-name \*.bak -o \
+	-name \*.SUMS -o \
+	-name TAGS -o \
+	-name .deps -o \
+	-name .P -o \
+	-name core \) \
+	-delete
 
-finddepth(\&clean, $buildroot);
+find "$RPM_BUILD_ROOT" -type d -name CVS | xargs rm -rf
