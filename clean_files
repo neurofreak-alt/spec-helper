@@ -12,7 +12,6 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-
 find "$RPM_BUILD_ROOT" \( -type f -o -type l \) \( \
 	-name '#*#' -o \
 	-name \*.orig -o \
