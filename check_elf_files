@@ -1,86 +1,45 @@
-#!/usr/bin/perl
+#!/bin/sh
 # $Id$
-# Strip files
+# Check elf files
 
-use strict;
-use warnings;
-use File::Find;
-use File::Basename;
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
 
-my $buildroot = $ENV{RPM_BUILD_ROOT};
-die "No build root defined" unless $buildroot;
-die "Invalid build root" unless -d $buildroot;
-# normalize build root
-$buildroot =~ s|/$||;
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
 
-# set LIBRARY_PATH to check libraries in build root
-my $lib = `rpm --eval %_lib`;
-chomp $lib;
-$ENV{LD_LIBRARY_PATH}="$buildroot/$lib:$buildroot/usr/$lib";
+LIB="`rpm --eval %{_lib}`"
+LD_LIBRARY_PATH="$RPM_BUILD_ROOT/$LIB:$RPM_BUILD_ROOT/usr/$LIB"
 
-my (@shared_libs, @executables, @static_libs);
-find(\&keep_wanted, $buildroot);
+find "$RPM_BUILD_ROOT" -type f \
+	\( -executable -o -name \*.so\* -o -name \*.a \) -a \
+	\( ! -path $RPM_BUILD_ROOT/usr/lib/debug/\* -a \
+	   ! -path $RPM_BUILD_ROOT/usr/src/debug/\* \) \
+	-print0 |
+xargs  --no-run-if-empty -0 file -N -L |
+grep -e '\.so.*: ELF.*shared' -e ': ELF.*executable' -e '.a: current ar archive' |
+while read match; do
+path=`echo $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#' -e 's#: ELF.*executable.*##' -e 's#\(\.a\): current ar archive#\1#'`
+syspath="`echo $path | sed -e \"s#^$RPM_BUILD_ROOT##\"`"
+if echo $match | grep -q -e ': ELF'; then
+    # FIXME: should print all unused libraries first, then all undefine symbols
+    # not immediately
+    unused_libs="`ldd -u -r $path 2> /dev/null | grep /`"
+    if [ -n "$unused_libs" ]; then
+    	echo "Warning: unused libraries in $syspath: " >&2
+	echo "$unused_libs" >&2
+    fi
+    if echo $match | grep -q -e ': ELF.*shared'; then
+	undefined_symbols="`ldd -r $path 2>&1 | grep '^undefined symbol: '| sed -e 's#^undefined symbol:##g' -e \"s#($path).*##g\" | tr -d '\n' | tr -d '\t'`"
+	if [ -n "$undefined_symbols" ]; then
+	    echo "Warning: undefined symbols in $syspath:$undefined_symbols" >&2
+	fi
+    fi
+fi
+done
 
-check_missing_or_unused_libs();
-
-sub check_missing_or_unused_libs {
-    my $shift = length($buildroot);
-    foreach my $file (@shared_libs, @executables) {
-        my (undef, undef, @l) = `ldd -u -r $file 2>/dev/null`;
-        next unless @l;
-        my $file_ = substr($file, $shift);
-        print STDERR
-            "Warning: unused libraries in $file_: ",
-            join(' ', map { basename($_) } @l), "\n";
-    }
-    foreach my $file (@shared_libs) {
-        my @l = `ldd -r $file 2>&1 >/dev/null`;
-        next unless @l;
-        my $file_ = substr($file, $shift);
-        print STDERR
-            "Warning: undefined symbols in $file_: ",
-            join(' ', map { /undefined symbol: (\S+)/ ? $1 : () } @l), "\n";
-    }
-}
-
-# TODO: we should write a binding for libfile...
-sub expensive_test {
-    my ($file) = @_;
-    my $type = `file -- $file`;
-}
-
-# Check if a file is an elf binary, shared library, or static library,
-# for use by File::Find. It'll fill the following 3 arrays with anything
-# it finds:
-sub keep_wanted() {
-    # skip everything but files
-    return unless -f $_;
-    # skip symlinks
-    return if -l $_;
-    return if $File::Find::dir =~ m!/usr/lib/debug($|/)!;
-
-    # Does its filename look like a shared library?
-    if (m/\.so/) {
-        # Ok, do the expensive test.
-        if (expensive_test($_) =~ m/ELF.*shared/) {
-            push @shared_libs, $File::Find::name;
-            return;
-        }
-    }
-    
-    # Is it executable? -x isn't good enough, so we need to use stat.
-    my (undef, undef, $mode, undef) = stat(_);
-    if ($mode & 0111) {
-        # Ok, expensive test.
-        if (expensive_test($_) =~ m/ELF.*executable/) {
-            push @executables, $File::Find::name;
-            return;
-        }
-    }
-    
-    # Is it a static library, and not a debug library?
-    if (m/lib.*\.a/ && ! m/_g\.a/) {
-        push @static_libs, $File::Find::name;
-        return;
-    }
-}
+exit 0

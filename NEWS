@@ -1,5 +1,6 @@
 2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.19
 
+	* rewrite check_elf_files in shell script
 	* skip symlinks for fix_eol
 
 2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.18
