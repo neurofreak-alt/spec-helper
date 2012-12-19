@@ -18,3 +18,5 @@ for f in `find "$RPM_BUILD_ROOT" \( -type f -o -type l \)`; do
     fi
     grep -q -Ilsr $'\r$' "$f" && sed -e 's/\r$//' -i "$f"
 done
+
+exit 0
