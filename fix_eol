@@ -12,7 +12,7 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-for f in `find "$RPM_BUILD_ROOT" \( -type f \)`; do
+for f in `find "$RPM_BUILD_ROOT" -type f`; do
     if [ -n "$EXCLUDE_FROM_EOL_CONVERSION" ]; then
 	basename "$f" | grep -q -P "$EXCLUDE_FROM_EOL_CONVERSION" && continue
     fi
