@@ -1,57 +1,17 @@
-#!/usr/bin/perl
+#!/bin/sh
 # $Id$
 # convert end of line patterns from DOS to UNIX
 
-use strict;
-use warnings;
-use File::Find;
-use File::Temp;
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
 
-my $buildroot = $ENV{RPM_BUILD_ROOT};
-die "No build root defined" unless $buildroot;
-die "Invalid build root" unless -d $buildroot;
-# normalize build root
-$buildroot =~ s|/$||;
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
 
-my $exclude_pattern = $ENV{EXCLUDE_FROM_EOL_CONVERSION} ?
-    qr/$ENV{EXCLUDE_FROM_EOL_CONVERSION}/ : undef;
-
-find(\&convert, $buildroot);
-
-sub convert {
-    # skip everything but files
-    return unless -f $_;
-    # skip symlinks
-    return if -l $_;
-    # skip binary files
-    return unless -T $_;
-    # skip excluded files
-    return if $exclude_pattern && $File::Find::name =~ $exclude_pattern;
-
-    # check if first line has less than 80 characters and ends with \r\n
-    open(my $in, '<', $_) or die "Unable to open file $_: $!";
-    my $line =  <$in>;
-    if (
-        defined $line        &&
-        length($line) <= 80  &&
-        $line !~ /^%PDF/     &&
-        $line =~ s/\r\n$/\n/
-    ) {
-        # process all file
-        my $out = File::Temp->new(DIR => '.', UNLINK => 0);
-        print $out $line;
-        while (defined ($line = <$in>)) {
-            $line =~ s/\r\n$/\n/;
-            print $out $line;
-        }
-        my $tmp = $out->filename;
-        $out = undef;
-
-        # rename file, taking care to keep original permissions
-        my $perms = (stat $_)[2] & 07777;
-        rename($tmp, $_) or die "Unable to rename $tmp to $_: $!";
-        chmod($perms, $_);
-    }
-
-    close($in);
-}
+for f in `find "$RPM_BUILD_ROOT" \( -type f -o -type l \)`; do
+    grep -q -Ilsr $'\r$' "$f" && sed -e 's/\r$//' -i "$f"
+done

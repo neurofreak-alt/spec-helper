@@ -1,5 +1,6 @@
 2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.17
 
+	* rewrite fix_eol in shell script
 	* rewrite clean_files script in shell script
 	* free gprintify from dependency on perl(List::MoreUtils)
 
