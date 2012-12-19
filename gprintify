@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# $Id$
+# $Id: gprintify 264358 2010-01-01 22:06:32Z guillomovitch $
 # convert end of line patterns from DOS to UNIX
 
 use strict;
@@ -7,7 +7,6 @@ use warnings;
 use File::Find;
 use File::Temp;
 use File::Slurp;
-use List::MoreUtils qw(none);
 
 my $string_pattern = qr/
     ^
@@ -56,6 +55,14 @@ my $var_pattern = qr/
     /x;
 
 main(@ARGV) unless caller();
+
+sub none (&@) {
+    my $f = shift;
+    foreach ( @_ ) {
+        return 0 if $f->();
+    }
+    return 1;
+}
 
 sub main {
     my $buildroot = $ENV{RPM_BUILD_ROOT};
