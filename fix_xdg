@@ -1,0 +1,21 @@
+#!/bin/sh
+# Fix .desktop files to be compliant with XDG specification
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+# Find .desktop files
+find "$RPM_BUILD_ROOT" -name "*.desktop" -print | while read f
+do
+    # Add trailing semicolons to lines starting with 'Actions=' or 'MimeType='
+    # if these lines do not end with '='
+    sed -i 's/^\(Actions=.*\|MimeType=.*\)\([[:alnum:]]\)[[:space:]]*$/\1\2;/' "$f"
+done
+
