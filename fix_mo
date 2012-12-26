@@ -9,6 +9,16 @@
 # Purpose         : Fix bad translations
 #---------------------------------------------------------------
 
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
 # HP people wants to have 'Gnome' in ascii;
 # so "±×³ð" is converted to 'GNOME'
 
