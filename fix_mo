@@ -22,16 +22,16 @@ fi
 # HP people wants to have 'Gnome' in ascii;
 # so "±×³ð" is converted to 'GNOME'
 
-KO_MESSAGES=$RPM_BUILD_ROOT/usr/share/locale/ko/LC_MESSAGES
+KO_MESSAGES="$RPM_BUILD_ROOT"/usr/share/locale/ko/LC_MESSAGES
 
-TMP=$KO_MESSAGES/tmpfile
-TMP2=$KO_MESSAGES/tmpfile2
+TMP="$KO_MESSAGES/tmpfile"
+TMP2="$KO_MESSAGES/tmpfile2"
 
 ret=0
 
 [ -f "$KO_MESSAGES/*.mo" ] || exit 0
 
-for i in $KO_MESSAGES/*.mo ; do
+for i in "$KO_MESSAGES"/*.mo ; do
     msgunfmt -o $TMP $i
     if grep -qi '^"Content-Type: text/plain; charset=euc-kr.n"$' $TMP; then
 	sed 's:±×³ð:GNOME:g' < $TMP > $TMP2 && msgfmt -o $i $TMP2
