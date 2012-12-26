@@ -10,7 +10,7 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-d=$RPM_BUILD_ROOT/usr/lib/perl5
+d="$RPM_BUILD_ROOT/usr/lib/perl5"
 
 [ -d $d ] || exit 0
 
