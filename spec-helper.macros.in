@@ -4,7 +4,7 @@
 
 %__spec_helper_post \
     %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]       || %_spec_helper_dir/clean_files} \
-    %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || %_spec_helper_dir/compress_files %{?_extension}%{?!_extension:.gz}} \
+    %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || COMPRESS="%{?_compress}%{?!_compress:gzip -9 -n}" COMPRESS_EXT="%{?_extension}%{?!_extension:.gz}" %{_usrlibrpm}/brp-compress} \
     %{?!dont_relink:         [ -n "$DONT_RELINK" ]        || %_spec_helper_dir/relink_symlinks} \
     %{?!dont_cleanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
     %{?!dont_symlinks_libs:  [ -n "$DONT_SYMLINK_LIBS" ]  || %_spec_helper_dir/lib_symlinks} \
