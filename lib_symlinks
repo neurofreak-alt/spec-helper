@@ -14,10 +14,16 @@
 #---------------------------------------------------------------
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    exit 0
+    echo "No build root defined" >&2
+    exit 1
 fi
 
-libs=`find $RPM_BUILD_ROOT -type d \
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+libs=`find "$RPM_BUILD_ROOT" -type d \
    -a "(" -name lib -o -name lib64 ")" \
    -a ! "(" -path '*/usr/src/debug*' -o -path '*/usr/lib/debug*' ")" \
    `

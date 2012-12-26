@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use IPC::Run qw/run/;
-use Test::More tests => 48;
+use Test::More tests => 78;
 use FindBin qw/$Bin/;
 use File::Temp qw/tempdir/;
 
@@ -13,14 +13,19 @@ my ($out, $err);
 delete $ENV{RPM_BUILD_ROOT};
 
 foreach my $prog qw/
-    clean_files
-    compress_files
-    relink_symlinks
-    gprintify
-    remove_info_dir
-    fix_pamd
-    fix_eol
     check_elf_files
+    clean_files
+    clean_perl
+    fix_eol
+    fix_file_permissions
+    fix_mo
+    fix_pamd
+    fix_xdg
+    gprintify
+    lib_symlinks
+    relink_symlinks
+    remove_info_dir
+    remove_libtool_files
     / {
 
     ($out, $err) = run_prog($prog);
