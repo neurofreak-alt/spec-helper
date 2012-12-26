@@ -1,5 +1,15 @@
 #!/bin/sh
 
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
 d=$RPM_BUILD_ROOT/usr/lib/perl5
 
 [ -d $d ] || exit 0
