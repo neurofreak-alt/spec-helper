@@ -1,3 +1,7 @@
+2013-01-06 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.22
+	* don't run fix_eol together with other helpers after %install,
+	  as it'll be run after %doc in stead
+
 2012-12-26 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.21
 
 	* drop compress-files in favour of upstream brp-compress
