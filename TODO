@@ -1,0 +1,3 @@
+fix_file_permissions:
+- fix permissions of other file types:
+	o .h headers = 644
