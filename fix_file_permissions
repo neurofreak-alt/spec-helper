@@ -21,7 +21,7 @@ grep -e "Mono/.Net assembly" -e "ELF.*shared object" |
 sed -e 's# //magic:.*##g' |
 while read path; do
     PERMS=$(stat -c '%a' "$path")
-    if [ $PERMS -lt 700 ]; then
-	chmod +x "$path"
+    if [ $PERMS -lt 755 ]; then
+	chmod 755 "$path"
     fi
 done
