@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 # convert end of line patterns from DOS to UNIX
 
 if [ -z "$RPM_BUILD_ROOT" ]; then

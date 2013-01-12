@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id: remove_libtool_files 273538 2011-12-23 02:47:19Z peroyvind $
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2

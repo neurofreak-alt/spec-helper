@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id: remove_symlinks 274470 2012-06-06 12:33:15Z peroyvind $
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2

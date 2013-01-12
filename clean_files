@@ -1,6 +1,5 @@
 #!/bin/sh
 # remove backup files
-# $Id$
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2

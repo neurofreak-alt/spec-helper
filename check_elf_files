@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 # Check elf files
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
