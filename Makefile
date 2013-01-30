@@ -1,6 +1,6 @@
 PACKAGE = spec-helper
-VERSION = 0.31.23
-SVNPATH = svn+ssh://svn.mandriva.com/svn/soft/rpm/$(PACKAGE)
+VERSION = 0.31.24
+SVNPATH = https://abf.rosalinux.ru/proyvind/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pamd gprintify \
@@ -52,13 +52,14 @@ localcopy: dir
 	tar cf - $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar xf -)
 
 tar: dir localcopy
+	git archive --format tar --prefix $(PACKAGE)-$(VERSION)/ master
 	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
 	xz -vf $(PACKAGE)-$(VERSION).tar
-	rm -rf $(PACKAGE)-$(VERSION)
 
 # rules to build a public distribution
 
 dist: tar
 
-svntag:
-	svn cp -m 'version $(VERSION)' $(SVNPATH)/trunk $(SVNPATH)/tags/v$(VERSION)
+gittag:
+	git tag v$(VERSION)
+	git push origin refs/tags/v$(VERSION)
