@@ -24,3 +24,8 @@ while read path; do
 	chmod 755 "$path"
     fi
 done
+
+find "${RPM_BUILD_ROOT}/usr/share/info/" \
+    "${RPM_BUILD_ROOT}/usr/share/man/*" \
+    -type f -print0 |
+xargs  --no-run-if-empty -0 chmod 644

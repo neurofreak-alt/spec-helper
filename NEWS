@@ -1,7 +1,13 @@
+2013-01-31 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.25
+
+	* fix_file_permissions now fixes permissions of man & info pages
+
 2013-01-12 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.23
+
 	* fix_file_permissions should fix library file permissions to be 755
 
 2013-01-06 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.22
+
 	* don't run fix_eol together with other helpers after %install,
 	  as it'll be run after %doc in stead
 
