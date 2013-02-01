@@ -1,5 +1,3 @@
-# $Id$
-
 %_spec_helper_dir @pkgdatadir@
 
 %__spec_helper_post \
@@ -16,6 +14,7 @@
     %{?!dont_remove_info_dir: [ -n "$DONT_REMOVE_INFO_DIR" ] || %_spec_helper_dir/remove_info_dir} \
     %{?!dont_remove_libtool_files: [ -n "$DONT_REMOVE_LIBTOOL_FILES" ] || %_spec_helper_dir/remove_libtool_files} \
     %{?!dont_check_elf_files: [ -n "$DONT_CHECK_ELF_FILES" ] || %_spec_helper_dir/check_elf_files} \
+    %{?!dont_remove_rpath:    [ -n "$DONT_REMOVE_RPATH" ] || %_spec_helper_dir/remove_rpath} \
     %{?!__debug_package:      [ -n "%{?dont_strip:1}%{?!dont_strip:$DONT_STRIP}" ] || export DISABLE_DEBUG=1 && %__debug_install_post} \
 %nil
 

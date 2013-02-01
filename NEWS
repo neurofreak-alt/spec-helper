@@ -1,5 +1,6 @@
-2013-01-31 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.25
+2013-02-01 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.25
 
+	* remove rpaths that has standard library search dirs from binaries
 	* fix_file_permissions now fixes permissions of man & info pages
 
 2013-01-12 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.23
