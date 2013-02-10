@@ -1,3 +1,7 @@
+2013-02-08 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.26
+
+	* fix the actual regression in fix_file_permissions
+
 2013-02-01 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.25
 
 	* remove rpaths that has standard library search dirs from binaries
