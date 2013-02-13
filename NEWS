@@ -1,3 +1,7 @@
+2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.28
+	* add support for passing specific directory to search within buildroot
+	  as argument to fix_eol
+
 2013-02-13 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.27
 
 	* fix issue with 'ln' trying to follow destination of source, if it
