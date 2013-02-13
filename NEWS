@@ -1,3 +1,8 @@
+2013-02-13 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.27
+
+	* fix issue with 'ln' trying to follow destination of source, if it
+	  exists as a symlink
+
 2013-02-08 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.26
 
 	* fix the actual regression in fix_file_permissions

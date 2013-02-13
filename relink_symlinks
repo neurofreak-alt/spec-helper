@@ -19,10 +19,14 @@ while read symlink; do
     # absolute path needs to be made into an absolute path relative to buildroot
     echo $path | grep -q -E '^/' && path="$RPM_BUILD_ROOT$path"
 
-    if stat -L "$path" &> /dev/null; then
+    if stat "$path" &> /dev/null; then
 	rm "$symlink"
-	output="`ln -svLrf \"$path\" \"$symlink\" 2>&1`"
-	if ! stat -L "$symlink" &> /dev/null; then
+	# ln will try follow symlink if source exists as symlink, so let's move
+	# it out of the way first, then back afterwards
+	stat "$path" &> /dev/null && mv "$path" "$path.origlink"
+	output="`ln -svr \"$path\" \"$symlink\" 2>&1`"
+	stat "$path.origlink" &> /dev/null && mv "$path.origlink" "$path"
+	if ! stat "$symlink" &> /dev/null; then
 	    echo "symlink relativization failed:" >&2
 	    echo "$output" >&2
 	    ls --color -l "$symlink" >&2
