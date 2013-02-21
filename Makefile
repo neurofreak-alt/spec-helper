@@ -1,5 +1,5 @@
 PACKAGE = spec-helper
-VERSION = 0.31.29
+VERSION = 0.31.30
 SVNPATH = https://abf.rosalinux.ru/proyvind/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
