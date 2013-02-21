@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+find "$RPM_BUILD_ROOT" \
+    ! -path "${RPM_BUILD_ROOT}/usr/lib/debug/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/doc/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/doc/*" \
+    -type f  -print0 |
+xargs  --no-run-if-empty -0 file -N -F ' //magic:' |
+grep -e "ELF" |
+sed -e 's# //magic:.*##g' |
+while read path; do
+    RPATH=$(chrpath -l "$path" | grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
+    [ -z "$RPATH" ] && continue
+    NEWRPATH=
+    for i in `seq 1 50`; do
+        RDIR=$(echo $RPATH | cut -d: -f${i})
+        [ -z "$RDIR" ] && break
+        if [ "$RDIR" = "/lib" -o "$RDIR" = "/lib64" -o "$RDIR" = "/lib32" -o "$RDIR" = "/usr/lib" -o "$RDIR" = "/usr/lib64" -o "$RDIR" = "/usr/lib32" ]; then
+            continue
+        fi
+        if [ -n "$NEWRPATH" ]; then
+            NEWRPATH="$NEWRPATH:$RDIR"
+        else
+            NEWRPATH="$RDIR"
+        fi
+    done
+
+    if [ -z "$NEWRPATH" ]; then
+        chrpath -d "$path"
+        echo "Removing rpath ($RPATH) from $path"
+    else
+        chrpath -r "$NEWRPATH" "$path"
+        echo "Removed parts of rpath ($RPATH) from $path, new rpath is $NEWRPATH"
+    fi
+done
