@@ -1,3 +1,6 @@
+2013-02-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.31
+	* make fix_eol strip away buildroot from second argument if specified
+
 2013-02-21 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.30
 	* only try removing rpath from dynamically linked ELF binaries
 

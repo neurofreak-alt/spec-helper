@@ -12,9 +12,8 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
 fi
 
 if [ -n "$1" ]; then
-    if [ -d "$RPM_BUILD_ROOT$1" ]; then
-	DIRECTORY="$1"
-    else
+    DIRECTORY=$(echo $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
+    if [ ! -d "$RPM_BUILD_ROOT$DIRECTORY" ]; then
 	exit 0
     fi
 fi
