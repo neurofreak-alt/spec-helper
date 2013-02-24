@@ -11,7 +11,14 @@ if [ ! -d "$RPM_BUILD_ROOT" ]; then
     exit 1
 fi
 
-find "$RPM_BUILD_ROOT" \( -type f -o -type l \) \( \
+if [ -n "$1" ]; then
+    DIRECTORY=$(echo $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
+    if [ ! -d "$RPM_BUILD_ROOT$DIRECTORY" ]; then
+	exit 0
+    fi
+fi
+
+find "$RPM_BUILD_ROOT$DIRECTORY" \( -type f -o -type l \) \( \
 	-name '#*#' -o \
 	-name \*.orig -o \
 	-name \*~ -o \
@@ -27,4 +34,4 @@ find "$RPM_BUILD_ROOT" \( -type f -o -type l \) \( \
 	-name core \) \
 	-delete
 
-find "$RPM_BUILD_ROOT" -type d -name CVS | xargs rm -rf
+find "$RPM_BUILD_ROOT$DIRECTORY" -type d -name CVS | xargs rm -rf

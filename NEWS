@@ -1,4 +1,6 @@
 2013-02-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.31
+	* add support for passing specific directory to search within buildroot
+	  as argument to clean_perl
 	* make fix_eol strip away buildroot from second argument if specified
 
 2013-02-21 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.30
