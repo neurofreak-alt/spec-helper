@@ -16,5 +16,10 @@
     %{?!dont_check_elf_files: [ -n "$DONT_CHECK_ELF_FILES" ] || %_spec_helper_dir/check_elf_files} \
     %{?!dont_remove_rpath:    [ -n "$DONT_REMOVE_RPATH" ] || %_spec_helper_dir/remove_rpath} \
     %{?!__debug_package:      [ -n "%{?dont_strip:1}%{?!dont_strip:$DONT_STRIP}" ] || export DISABLE_DEBUG=1 && %__debug_install_post} \
-%nil
+%{nil}
 
+# $DONT_FIX_EOL prolly' won't be of any use as it won' be set in the same shell...
+%__spec_helper_stringbuf_post \
+    %{?!dont_fix_eol:        [ -n "$DONT_FIX_EOL" ]        || %{_spec_helper_dir}/fix_eol "$DOCDIR"} \
+    %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]        || %{_spec_helper_dir}/clean_files "$DOCDIR"} \
+%{nil}
