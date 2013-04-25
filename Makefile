@@ -1,4 +1,4 @@
-ACKAGE = spec-helper
+NAME = spec-helper
 VERSION = 0.31.32
 SVNPATH = https://abf.rosalinux.ru/moondrake/spec-helper.git
 
@@ -15,7 +15,7 @@ FILES        = Makefile NEWS README \
 TEST_VERBOSE = 0
 
 bindir       = /usr/bin
-pkgdatadir   = /usr/share/$(PACKAGE)
+pkgdatadir   = /usr/share/$(NAME)
 rpmmacrosdir = /etc/rpm/macros.d
 
 all:
@@ -43,22 +43,25 @@ test:
 localdist: cleandist dir localcopy tar
 
 cleandist: clean
-	rm -rf $(PACKAGE)-$(VERSION) $(PACKAGE)-$(VERSION).tar.xz
+	rm -rf $(NAME)-$(VERSION) $(NAME)-$(VERSION).tar.xz
 
 dir:
-	mkdir -p $(PACKAGE)-$(VERSION)
+	mkdir -p $(NAME)-$(VERSION)
 
 localcopy: dir
-	tar cf - $(FILES) | (cd $(PACKAGE)-$(VERSION) ; tar xf -)
+	tar cf - $(FILES) | (cd $(NAME)-$(VERSION) ; tar xf -)
 
 tar: dir localcopy
-	git archive --format tar --prefix $(PACKAGE)-$(VERSION)/ master
-	tar cvf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION)
-	xz -vf $(PACKAGE)-$(VERSION).tar
+	git archive --format tar --prefix $(NAME)-$(VERSION)/ master
+	tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION)
+	xz -vf $(NAME)-$(VERSION).tar
 
 # rules to build a public distribution
 
-dist: tar
+dist: dist-git
+
+dist-git: 
+	git archive --prefix=$(NAME)-$(VERSION)/ HEAD | xz -v > $(NAME)-$(VERSION).tar.xz
 
 gittag:
 	git tag v$(VERSION)
