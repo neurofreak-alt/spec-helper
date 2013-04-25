@@ -19,7 +19,7 @@ xargs  --no-run-if-empty -0 file -N -F ' //magic:' |
 grep -e "ELF" |
 sed -e 's# //magic:.*##g' |
 while read path; do
-    RPATH=$(chrpath -l "$path" | grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
+    RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
     [ -z "$RPATH" ] && continue
     NEWRPATH=
     for i in `seq 1 50`; do

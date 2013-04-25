@@ -1,6 +1,6 @@
-PACKAGE = spec-helper
-VERSION = 0.31.31
-SVNPATH = https://abf.rosalinux.ru/proyvind/spec-helper.git
+ACKAGE = spec-helper
+VERSION = 0.31.32
+SVNPATH = https://abf.rosalinux.ru/moondrake/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pamd gprintify \

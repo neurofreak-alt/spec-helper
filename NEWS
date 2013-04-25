@@ -1,4 +1,9 @@
+2013-04-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.32
+
+	* remove_rpath: redirect errors from chrpath to /dev/null
+
 2013-02-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.31
+
 	* define macro to be used with __os_stringbuf_post in macros shipped
 	  with spec-helper
 	* add support for passing specific directory to search within buildroot
@@ -6,13 +11,16 @@
 	* make fix_eol strip away buildroot from second argument if specified
 
 2013-02-21 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.30
+
 	* only try removing rpath from dynamically linked ELF binaries
 
 2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.29
+
 	* fix check for existence of directory specified to fix_eol, exit
 	  without error if not existing
 
 2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.28
+
 	* add support for passing specific directory to search within buildroot
 	  as argument to fix_eol
 
