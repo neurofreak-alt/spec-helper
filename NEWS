@@ -1,5 +1,7 @@
 2013-05-21 Per Øyvind Karlsne <proyvind@moondrakenet> 0.13.33
 
+	* revert change making fix_eol only run for %doc dirs and not
+	  in %install as it's not something exclusively affecting docs	  
 	* fix fix_xdg to not try to use sed on directories (bero)
 
 2013-04-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.32
