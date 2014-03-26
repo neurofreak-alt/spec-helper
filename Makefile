@@ -5,7 +5,7 @@ SVNPATH = https://abf.rosalinux.ru/moondrake/spec-helper.git
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pamd gprintify \
 		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol
-BIN_FILES    = macroszification
+BIN_FILES    = rediff_patch spec-cleaner
 MACROS_FILES = spec-helper.macros
 TEST_FILES   = t/*.t
 FILES        = Makefile NEWS README \
