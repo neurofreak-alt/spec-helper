@@ -8,6 +8,8 @@
 $spec = $ARGV[0];
 $newspec = $ARGV[1];
 
+use Env qw(SPEC_LEAVE_CHANGELOG);
+
 $pkgname = $spec;
 $pkgname =~ s/\.spec$//;
 
@@ -120,7 +122,7 @@ my @vars = (
 'py3_platlibdir',
 'py3_incdir',
 'py_incdir',
-'py_paltsitedir',
+'py_platsitedir',
 'py_platlibdir',
 'py_dyndir',
 'py_puresitedir',
@@ -177,6 +179,12 @@ while(<F>) {
 
     if( /^%changelog/i ) {
         $changelog = 1;
+        # By default, we drop changelogs from specs
+        # nowadays changelogs are generated from Git
+        # and most spec files contains only ancient changelog entries
+        if( !$SPEC_LEAVE_CHANGELOG ) {
+            last;
+        }
     }
 
     if( $changelog or /\s*#/) {
