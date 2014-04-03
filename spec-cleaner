@@ -25,6 +25,11 @@ $changelog = 0;
 
 # List of macros known to be variables, so they should be embraced with '{}'
 my @vars = (
+'name',
+'version',
+'release',
+'eposh',
+'EVRD',
 'py_ver',
 'buildroot',
 'optflags',
@@ -203,7 +208,7 @@ while(<F>) {
         next;
     }
 
-    $line =~ s/\%mkrel //;
+    $line =~ s/\%mkrel\s+//;
 
     # Cleanup old grep usage
     $line =~ s/fgrep/grep -F/g;
