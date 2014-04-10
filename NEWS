@@ -1,3 +1,7 @@
+2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.13.36
+
+	* spec-cleaner - add support for perl_* variables
+
 2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.13.35
 
 	* spec-cleaner - handle name, version, release and EVRD vars

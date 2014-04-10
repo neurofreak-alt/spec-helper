@@ -134,7 +134,14 @@ my @vars = (
 'py_purelibdir',
 'py3_puresitedir',
 'py3_purelibdir',
-    
+'perl_archlib',
+'perl_privlib',
+'perl_sitearch',
+'perl_sitelib',
+'perl_vendorarch',
+'perl_vendorlib',
+'perl_version',
+
 );
 
 my @macros = (
