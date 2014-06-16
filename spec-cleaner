@@ -181,8 +181,8 @@ while(<F>) {
             print STDERR "Won't capitalize summary - it starts with project name\n";
         }
 
+        chomp $line;
         if( $line =~ /\.\s*$/ ) {
-            chomp $line;
             $line =~ s/\.\s*$//;
         }
         print G $line."\n";
