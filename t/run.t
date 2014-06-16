@@ -12,22 +12,23 @@ use File::Temp qw/tempdir/;
 my ($out, $err);
 delete $ENV{RPM_BUILD_ROOT};
 
-foreach my $prog qw/
-    check_elf_files
-    clean_files
-    clean_perl
-    fix_eol
-    fix_file_permissions
-    fix_mo
-    fix_pamd
-    fix_xdg
-    gprintify
-    lib_symlinks
-    relink_symlinks
-    remove_info_dir
-    remove_libtool_files
-    / {
+my @progs = (
+    "check_elf_files",
+    "clean_files",
+    "clean_perl",
+    "fix_eol",
+    "fix_file_permissions",
+    "fix_mo",
+    "fix_pamd",
+    "fix_xdg",
+    "gprintify",
+    "lib_symlinks",
+    "relink_symlinks",
+    "remove_info_dir",
+    "remove_libtool_files"
+);
 
+foreach my $prog (@progs) {
     ($out, $err) = run_prog($prog);
     is(  $out, '',                         "$prog stdin without buildroot" );
     like($err, qr/^No build root defined/, "$prog stderr without buildroot");
