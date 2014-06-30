@@ -76,7 +76,7 @@ else
     # drop name from the beginning of the patch name,
     # since one can use %name or %{name} in patch name in spec
     project=`basename "$PWD"`
-    patch_num=`grep "^Patch.*${target_patch/$project/}" *spec | sed 's/^Patch\([[:digit:]]\)*.*$/\1/'`
+    patch_num=`grep "^Patch.*${target_patch/$project/}" *spec | sed 's/^Patch\([[:digit:]]*\).*$/\1/'`
 
     # now grep for necessary %patch command
     patch_cmd=`grep "\%patch${patch_num}[[:space:]]\|\%patch${patch_num}\$" *spec | cut -f1,2 -d- | sed 's/^\%patch[[:digit:]]*/patch --force /'`
