@@ -1,3 +1,11 @@
+2014-10-15 Denis Silakov  <denis.silakov@rosalab.ru> 0.13.39
+
+        * Fix /lib64 removal from rpath
+
+2014-06-19 Per Øyvind Karlsen <proyvind@moondrake.org> 0.13.37
+
+	* remove_rpath: make it actually work quite reliably
+
 2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.13.36
 
 	* spec-cleaner - add support for perl_* variables
@@ -11,7 +19,7 @@
 	* added rediff_patch script
 	* replaced old macroszification with more powerful spec-cleaner
 
-2013-05-21 Per Øyvind Karlsne <proyvind@moondrakenet> 0.13.33
+2013-05-21 Per Øyvind Karlsne <proyvind@moondrake.org> 0.13.33
 
 	* revert change making fix_eol only run for %doc dirs and not
 	  in %install as it's not something exclusively affecting docs

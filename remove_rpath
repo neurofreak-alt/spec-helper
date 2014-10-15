@@ -22,20 +22,22 @@ while read path; do
     RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
     [ -z "$RPATH" ] && continue
     NEWRPATH=
-    for i in `seq 1 50`; do
-        RDIR=$(echo $RPATH | cut -d: -f${i})
-        [ -z "$RDIR" ] && break
-        if [ "$RDIR" = "/lib" -o "$RDIR" = "/lib64" -o "$RDIR" = "/lib32" -o "$RDIR" = "/usr/lib" -o "$RDIR" = "/usr/lib64" -o "$RDIR" = "/usr/lib32" ]; then
-            continue
-        fi
-        if [ -n "$NEWRPATH" ]; then
-            NEWRPATH="$NEWRPATH:$RDIR"
-        else
-            NEWRPATH="$RDIR"
-        fi
+    for RDIR in $(echo $RPATH|cut -d: --output-delimiter=" " -f1-); do
+	    case $RDIR in
+		/lib|/lib32|/libx32|/lib64/) 			echo removing $RDIR from rpath;;
+		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	echo removing $RDIR from rpath;;
+    *)      if [ -z "$NEWRPATH" ]; then
+		NEWRPATH="$RDIR"
+	    else
+		NEWRPATH="$NEWRPATH:$RDIR"
+	    fi
+	    ;;
+	esac
     done
 
-    if [ -z "$NEWRPATH" ]; then
+    if [ "$NEWRPATH" = "$RPATH" ]; then
+	    continue
+    elif [ -z "$NEWRPATH" ]; then
         chrpath -d "$path"
         echo "Removing rpath ($RPATH) from $path"
     else

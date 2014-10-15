@@ -1,6 +1,6 @@
 NAME = spec-helper
-VERSION = 0.31.33
-SVNPATH = https://abf.rosalinux.ru/moondrake/spec-helper.git
+VERSION = 0.31.37
+SVNPATH = https://abf.rosalinux.ru/software/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pamd gprintify \
