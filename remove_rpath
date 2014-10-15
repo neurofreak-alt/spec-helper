@@ -24,7 +24,7 @@ while read path; do
     NEWRPATH=
     for RDIR in $(echo $RPATH|cut -d: --output-delimiter=" " -f1-); do
 	    case $RDIR in
-		/lib|/lib32|/libx32|/lib64/) 			echo removing $RDIR from rpath;;
+		/lib|/lib32|/libx32|/lib64) 			echo removing $RDIR from rpath;;
 		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	echo removing $RDIR from rpath;;
     *)      if [ -z "$NEWRPATH" ]; then
 		NEWRPATH="$RDIR"
