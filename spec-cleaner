@@ -152,6 +152,27 @@ my @macros = (
 
 );
 
+my @macros_to_unroll = (
+'__mkdir_p',
+'__mkdir',
+'__ln_s',
+'__ln',
+'__mv',
+'__perl',
+'__python',
+'__python3',
+'__rm',
+'__rmdir',
+'__ruby',
+'__cp',
+'__grep',
+'__cat',
+'__chmod',
+'__chown',
+'__install',
+
+);
+
 # Indicates that we are inside post- or pre- script
 $in_script=0;
 
@@ -240,6 +261,13 @@ while(<F>) {
     foreach $macro (@macros) {
         $line =~ s/\%\{$macro\}/\%$macro/g;
         $line =~ s/\%\{__$macro\}/\%$macro/g;
+    }
+
+    foreach $macro (@macros_to_unroll) {
+        my $repl = $macro;
+        $repl =~ s/^__//;
+        $repl =~ s/_/ -/;
+        $line =~ s/\%\{?$macro\}?/$repl/g;
     }
 
     foreach my $cmd ('mv', 'cp', 'python', 'rm') {
