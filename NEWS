@@ -1,4 +1,19 @@
-2014-10-15 Denis Silakov  <denis.silakov@rosalab.ru> 0.13.39
+2015-11-17 Denis Silakov <denis.silakov@rosalab.ru> 0.13.42
+
+	* fix_xdg - add trailing semicolon to Categories and OnlyShowIn
+
+2015-10-27 Per Øyvind Karlsen <proyvind@moondrake.org> 0.13.41
+
+	* implement fix_pkgconfig to strip multiple slashes from path
+	  variable in pkg-config files, preventing ie. pkg-config --libs
+	  wrongly returning -L/usr/lib64 if path variable has a trailing
+	  slash (ie. libdir=/usr/lib64/ rather than libdir=/usr/lib64)
+
+2014-12-02 Denis Silakov <denis.silakov@rosalab.ru> 0.13.40
+
+	* spec-cleaner - replace some macros with shell commands
+
+2014-10-15 Denis Silakov <denis.silakov@rosalab.ru> 0.13.39
 
         * Fix /lib64 removal from rpath
 
@@ -19,7 +34,7 @@
 	* added rediff_patch script
 	* replaced old macroszification with more powerful spec-cleaner
 
-2013-05-21 Per Øyvind Karlsne <proyvind@moondrake.org> 0.13.33
+2013-05-21 Per Øyvind Karlsne <proyvind@moondrakenet> 0.13.33
 
 	* revert change making fix_eol only run for %doc dirs and not
 	  in %install as it's not something exclusively affecting docs

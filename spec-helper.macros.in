@@ -1,26 +1,27 @@
 %_spec_helper_dir @pkgdatadir@
 
 %__spec_helper_post \
-    %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]       || %_spec_helper_dir/clean_files} \
-    %{?!dont_compress:       [ -n "$DONT_COMPRESS" ]      || COMPRESS="%{?_compress}%{?!_compress:gzip -9 -n}" COMPRESS_EXT="%{?_extension}%{?!_extension:.gz}" %{_usrlibrpm}/brp-compress} \
-    %{?!dont_relink:         [ -n "$DONT_RELINK" ]        || %_spec_helper_dir/relink_symlinks} \
-    %{?!dont_cleanup_perl:   [ -n "$DONT_CLEAN_PERL" ]    || %_spec_helper_dir/clean_perl} \
-    %{?!dont_symlinks_libs:  [ -n "$DONT_SYMLINK_LIBS" ]  || %_spec_helper_dir/lib_symlinks} \
-    %{?!dont_gprintify:      [ -n "$DONT_GPRINTIFY" ]     || %_spec_helper_dir/gprintify} \
-    %{?!dont_fix_mo:         [ -n "$DONT_FIX_MO" ]        || %_spec_helper_dir/fix_mo} \
-    %{?!dont_fix_xdg:        [ -n "$DONT_FIX_XDG" ]       || %_spec_helper_dir/fix_xdg} \
-    %{?!dont_fix_file_permissions: [ -n "$DONT_FIX_FILE_PERMISSIONS" ] || %_spec_helper_dir/fix_file_permissions} \
-    %{?!dont_fix_pamd:       [ -n "$DONT_FIX_PAMD_CONFIGS" ] || %_spec_helper_dir/fix_pamd} \
-    %{?!dont_remove_info_dir: [ -n "$DONT_REMOVE_INFO_DIR" ] || %_spec_helper_dir/remove_info_dir} \
-    %{?!dont_remove_libtool_files: [ -n "$DONT_REMOVE_LIBTOOL_FILES" ] || %_spec_helper_dir/remove_libtool_files} \
-    %{?!dont_fix_eol:         [ -n "$DONT_FIX_EOL" ]        || %_spec_helper_dir/fix_eol} \
-    %{?!dont_check_elf_files: [ -n "$DONT_CHECK_ELF_FILES" ] || %_spec_helper_dir/check_elf_files} \
-    %{?!dont_remove_rpath:    [ -n "$DONT_REMOVE_RPATH" ] || %_spec_helper_dir/remove_rpath} \
-    %{?!__debug_package:      [ -n "%{?dont_strip:1}%{?!dont_strip:$DONT_STRIP}" ] || export DISABLE_DEBUG=1 && %__debug_install_post} \
+    %{?!dont_clean_files:		[ -n "$DONT_CLEANUP" ]       	|| %_spec_helper_dir/clean_files} \
+    %{?!dont_compress:			[ -n "$DONT_COMPRESS" ]      	|| COMPRESS="%{?_compress}%{?!_compress:gzip -9 -n}" COMPRESS_EXT="%{?_extension}%{?!_extension:.gz}" %{_usrlibrpm}/brp-compress} \
+    %{?!dont_relink:			[ -n "$DONT_RELINK" ]        	|| %_spec_helper_dir/relink_symlinks} \
+    %{?!dont_cleanup_perl:		[ -n "$DONT_CLEAN_PERL" ]    	|| %_spec_helper_dir/clean_perl} \
+    %{?!dont_symlinks_libs:		[ -n "$DONT_SYMLINK_LIBS" ]  	|| %_spec_helper_dir/lib_symlinks} \
+    %{?!dont_gprintify:			[ -n "$DONT_GPRINTIFY" ]     	|| %_spec_helper_dir/gprintify} \
+    %{?!dont_fix_mo:			[ -n "$DONT_FIX_MO" ]        	|| %_spec_helper_dir/fix_mo} \
+    %{?!dont_fix_xdg:			[ -n "$DONT_FIX_XDG" ]       	|| %_spec_helper_dir/fix_xdg} \
+    %{?!dont_fix_file_permissions: 	[ -n "$DONT_FIX_FILE_PERMISSIONS" ] || %_spec_helper_dir/fix_file_permissions} \
+    %{?!dont_fix_pamd:			[ -n "$DONT_FIX_PAMD_CONFIGS" ] || %_spec_helper_dir/fix_pamd} \
+    %{?!dont_fix_pkgconfig:		[ -n "$DONT_FIX_PKGCONFIG" ]    || %_spec_helper_dir/fix_pkgconfig} \
+    %{?!dont_remove_info_dir:		[ -n "$DONT_REMOVE_INFO_DIR" ]	|| %_spec_helper_dir/remove_info_dir} \
+    %{?!dont_remove_libtool_files:	[ -n "$DONT_REMOVE_LIBTOOL_FILES" ] || %_spec_helper_dir/remove_libtool_files} \
+    %{?!dont_fix_eol:			[ -n "$DONT_FIX_EOL" ]		|| %_spec_helper_dir/fix_eol} \
+    %{?!dont_check_elf_files:		[ -n "$DONT_CHECK_ELF_FILES" ]	|| %_spec_helper_dir/check_elf_files} \
+    %{?!dont_remove_rpath:		[ -n "$DONT_REMOVE_RPATH" ]	|| %_spec_helper_dir/remove_rpath} \
+    %{?!__debug_package:		[ -n "%{?dont_strip:1}%{?!dont_strip:$DONT_STRIP}" ] || export DISABLE_DEBUG=1 && %__debug_install_post} \
 %{nil}
 
 # $DONT_FIX_EOL prolly' won't be of any use as it won' be set in the same shell...
 %__spec_helper_stringbuf_post \
-    %{?!dont_fix_eol:        [ -n "$DONT_FIX_EOL" ]        || %{_spec_helper_dir}/fix_eol "$DOCDIR"} \
-    %{?!dont_clean_files:    [ -n "$DONT_CLEANUP" ]        || %{_spec_helper_dir}/clean_files "$DOCDIR"} \
+    %{?!dont_fix_eol:			[ -n "$DONT_FIX_EOL" ]		|| %{_spec_helper_dir}/fix_eol "$DOCDIR"} \
+    %{?!dont_clean_files:		[ -n "$DONT_CLEANUP" ]		|| %{_spec_helper_dir}/clean_files "$DOCDIR"} \
 %{nil}

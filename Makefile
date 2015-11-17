@@ -1,9 +1,9 @@
 NAME = spec-helper
-VERSION = 0.31.37
-SVNPATH = https://abf.rosalinux.ru/software/spec-helper.git
+VERSION = 0.31.42
+SVNPATH = git@abf.io/software/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
-		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pamd gprintify \
+		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pkgconfig fix_pamd gprintify \
 		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol
 BIN_FILES    = rediff_patch spec-cleaner
 MACROS_FILES = spec-helper.macros
