@@ -1,50 +1,55 @@
-2015-11-17 Denis Silakov <denis.silakov@rosalab.ru> 0.13.42
+2015-11-19 Denis Silakov <denis.silakov@rosalab.ru> 0.31.43
+
+	* Apply ROSA patch for fix_pkgconfig to avoid calling sed
+	  with empty regexp
+
+2015-11-17 Denis Silakov <denis.silakov@rosalab.ru> 0.31.42
 
 	* fix_xdg - add trailing semicolon to Categories and OnlyShowIn
 
-2015-10-27 Per Øyvind Karlsen <proyvind@moondrake.org> 0.13.41
+2015-10-27 Per Øyvind Karlsen <proyvind@moondrake.org> 0.31.41
 
 	* implement fix_pkgconfig to strip multiple slashes from path
 	  variable in pkg-config files, preventing ie. pkg-config --libs
 	  wrongly returning -L/usr/lib64 if path variable has a trailing
 	  slash (ie. libdir=/usr/lib64/ rather than libdir=/usr/lib64)
 
-2014-12-02 Denis Silakov <denis.silakov@rosalab.ru> 0.13.40
+2014-12-02 Denis Silakov <denis.silakov@rosalab.ru> 0.31.40
 
 	* spec-cleaner - replace some macros with shell commands
 
-2014-10-15 Denis Silakov <denis.silakov@rosalab.ru> 0.13.39
+2014-10-15 Denis Silakov <denis.silakov@rosalab.ru> 0.31.39
 
         * Fix /lib64 removal from rpath
 
-2014-06-19 Per Øyvind Karlsen <proyvind@moondrake.org> 0.13.37
+2014-06-19 Per Øyvind Karlsen <proyvind@moondrake.org> 0.31.37
 
 	* remove_rpath: make it actually work quite reliably
 
-2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.13.36
+2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.31.36
 
 	* spec-cleaner - add support for perl_* variables
 
-2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.13.35
+2014-04-03 Denis Silakov <denis.silakov@rosalab.ru> 0.31.35
 
 	* spec-cleaner - handle name, version, release and EVRD vars
 
-2014-03-26 Denis Silakov <denis.silakov@rosalab.ru> 0.13.34
+2014-03-26 Denis Silakov <denis.silakov@rosalab.ru> 0.31.34
 
 	* added rediff_patch script
 	* replaced old macroszification with more powerful spec-cleaner
 
-2013-05-21 Per Øyvind Karlsne <proyvind@moondrakenet> 0.13.33
+2013-05-21 Per Øyvind Karlsne <proyvind@moondrakenet> 0.31.33
 
 	* revert change making fix_eol only run for %doc dirs and not
 	  in %install as it's not something exclusively affecting docs
 	* fix fix_xdg to not try to use sed on directories (bero)
 
-2013-04-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.32
+2013-04-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.32
 
 	* remove_rpath: redirect errors from chrpath to /dev/null
 
-2013-02-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.31
+2013-02-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.31
 
 	* define macro to be used with __os_stringbuf_post in macros shipped
 	  with spec-helper
@@ -52,68 +57,68 @@
 	  as argument to clean_perl
 	* make fix_eol strip away buildroot from second argument if specified
 
-2013-02-21 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.30
+2013-02-21 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.30
 
 	* only try removing rpath from dynamically linked ELF binaries
 
-2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.29
+2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.29
 
 	* fix check for existence of directory specified to fix_eol, exit
 	  without error if not existing
 
-2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.28
+2013-02-14 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.28
 
 	* add support for passing specific directory to search within buildroot
 	  as argument to fix_eol
 
-2013-02-13 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.27
+2013-02-13 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.27
 
 	* fix issue with 'ln' trying to follow destination of source, if it
 	  exists as a symlink
 
-2013-02-08 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.26
+2013-02-08 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.26
 
 	* fix the actual regression in fix_file_permissions
 
-2013-02-01 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.25
+2013-02-01 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.25
 
 	* remove rpaths that has standard library search dirs from binaries
 	* fix_file_permissions now fixes permissions of man & info pages
 
-2013-01-12 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.23
+2013-01-12 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.23
 
 	* fix_file_permissions should fix library file permissions to be 755
 
-2013-01-06 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.22
+2013-01-06 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.22
 
 	* don't run fix_eol together with other helpers after %install,
 	  as it'll be run after %doc in stead
 
-2012-12-26 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.21
+2012-12-26 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.21
 
 	* drop compress-files in favour of upstream brp-compress
 
-2012-12-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.20
+2012-12-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.20
 
 	* add missing trailing semicolons to XDG *.desktop files
 	  (from Denis Silakov)
 
-2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.19
+2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.19
 
 	* rewrite check_elf_files in shell script
 	* skip symlinks for fix_eol
 
-2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.18
+2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.18
 
 	* make sure fix_eol doesn't exit with error code
 
-2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.17
+2012-12-19 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.17
 
 	* rewrite fix_eol in shell script
 	* rewrite clean_files script in shell script
 	* free gprintify from dependency on perl(List::MoreUtils)
 
-2012-09-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.13.16
+2012-09-25 Per Øyvind Karlsen <peroyvind@mandriva.org> 0.31.16
 
 	* get rid of .la symlinks as well
 	* don't relativize symlinks to /dev, /proc & /sys (inspired by similar change
@@ -121,20 +126,20 @@
 	* drop dead 'translate_menu' script
 	* rewrite 'relink_symlinks' perl script in shell
 
-2012-06-06 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.15
+2012-06-06 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.15
 
 	* handle both /sbin/install-info & /usr/sbin/install-info
 
-2012-06-04 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.14
+2012-06-04 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.14
 
 	* /sbin/install-info has been moved to /usr/sbin/install-info
 	
-2012-03-20 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.13
+2012-03-20 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.13
 
 	* don't remove /usr/share/info/dir if /sbin/install-info is found in
 	  buildroot
 
-2012-03-16 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.13.12
+2012-03-16 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.12
 	* remove all .la files
 
 2012-03-10 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.31.11
