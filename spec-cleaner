@@ -225,18 +225,20 @@ while(<F>) {
         next;
     }
 
-    if( $line =~ /^\%defattr\(-,root,root\)\s*$/ ) {
+    if( $line =~ /^\%defattr\(-,root,root(,-)?\)\s*$/ ) {
         next;
     }
 
-    $line =~ s/\$RPM_BUILD_ROOT/\%\{buildroot\}/g;
-    $line =~ s/\$RPM_OPT_FLAGS/\%\{optflags\}/g;
+    $line =~ s/\$\{?RPM_BUILD_ROOT\}?/\%\{buildroot\}/g;
+    $line =~ s/\$\{?RPM_OPT_FLAGS\}?/\%\{optflags\}/g;
 
     if( $line =~/^\s*(\%\{?__rm\}?|rm) -rf \%\{?buildroot\}?\s*$/ )  {
         next;
     }
 
     $line =~ s/\%mkrel\s+//;
+    $line =~ s/\%\{\?dist\}//;
+    $line =~ s/make \%\{\?_smp_mflags\}/\%make/;
 
     # Cleanup old grep usage
     $line =~ s/fgrep/grep -F/g;

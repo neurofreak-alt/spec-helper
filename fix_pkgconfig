@@ -4,6 +4,7 @@
 # libdir=/usr/lib64 will make pkg-config --libs return -L/usr/lib64
 #
 # (c) Per Øyvind Karlsen <proyvind@moondrake.org> 2015
+# (c) Andrey Bondrov <andrey.bondrov@rosalab.ru> 2016
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
     echo "No build root defined" >&2
@@ -21,12 +22,14 @@ for pc in $(find "$RPM_BUILD_ROOT" -name \*.pc); do
 	pcmodule="$(echo $pcfile|cut -d. -f1)"
 	for variable in $(pkg-config --print-variables "$pcmodule"); do
 		dir=$(pkg-config --variable="$variable" "$pcmodule")
-		if [ "$dir" != "`realpath $dir`" ]; then
-			parentdir=$(dirname ${dir})
-			subdir=$(basename ${dir})
-			regexp="-e s|\(${variable}=.*/${subdir}\)/.*\$|\1|g" 
-			sed $regexp $pc |tr -s // / > $pc.new
-			mv -f $pc.new $pc
-		fi 
+		if [[ "$dir" == "/"* && -d "$dir" ]]; then
+			if [ "$dir" != "`realpath $dir`" ]; then
+				parentdir=$(dirname ${dir})
+				subdir=$(basename ${dir})
+				regexp="-e s|\(${variable}=.*/${subdir}\)/.*\$|\1|g" 
+				sed $regexp $pc |tr -s // / > $pc.new
+				mv -f $pc.new $pc
+			fi
+		fi
 	done
 done
