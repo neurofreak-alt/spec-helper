@@ -1,7 +1,15 @@
-2015-11-19 Denis Silakov <denis.silakov@rosalab.ru> 0.31.43
+2015-11-19 Denis Silakov <denis.silakov@rosalab.ru> 0.31.44
 
 	* Apply ROSA patch for fix_pkgconfig to avoid calling sed
 	  with empty regexp
+
+2016-07-18 Denis Silakov <denis.silakov@rosalab.ru> 0.31.43
+
+	* More ROSA patches:
+	** relink_symlinks shouldn't consider files outside buildroot
+	** fix_pkgconfig helper: check if a variable is a full path that
+	   exists before doing anything with it
+	** minor spec-cleaner improvements
 
 2015-11-17 Denis Silakov <denis.silakov@rosalab.ru> 0.31.42
 
