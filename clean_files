@@ -24,6 +24,7 @@ find "$RPM_BUILD_ROOT$DIRECTORY" \( -type f -o -type l \) \( \
 	-name \*~ -o \
 	-name DEADJOE -o \
 	-name .cvsignore -o \
+	-name .gitignore -o \
 	-name \*.orig -o \
 	-name \*.rej -o \
 	-name \*.bak -o \
