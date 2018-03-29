@@ -1,3 +1,6 @@
+2018-03-29 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.45
+	* Add gprintify fix for newer perl versions from Mageia
+
 2015-11-19 Denis Silakov <denis.silakov@rosalab.ru> 0.31.44
 
 	* Apply ROSA patch for fix_pkgconfig to avoid calling sed

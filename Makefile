@@ -1,6 +1,6 @@
 NAME = spec-helper
-VERSION = 0.31.44
-SVNPATH = git@abf.io/software/spec-helper.git
+VERSION = 0.31.45
+SVNPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pkgconfig fix_pamd gprintify \
