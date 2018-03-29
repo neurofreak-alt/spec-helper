@@ -7,6 +7,7 @@ use warnings;
 use File::Find;
 use File::Temp;
 use File::Slurp;
+use List::MoreUtils qw(none);
 
 my $string_pattern = qr/
     ^
@@ -46,23 +47,15 @@ my $var_pattern = qr/
         (?:
             \$[a-zA-Z0-9_]+            # simple variable name
             |
-            \${                        # protected variable name
+            \$\{                        # protected variable name
                 [a-zA-Z0-9_]+
-                (?:[#%]{1,2}[^}]+)?    # with optional expansion pattern
-            }
+                (?:[#%]{1,2}[^\}]+)?    # with optional expansion pattern
+            \}
         )
     )
     /x;
 
 main(@ARGV) unless caller();
-
-sub none (&@) {
-    my $f = shift;
-    foreach ( @_ ) {
-        return 0 if $f->();
-    }
-    return 1;
-}
 
 sub main {
     my $buildroot = $ENV{RPM_BUILD_ROOT};
