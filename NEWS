@@ -1,3 +1,6 @@
+2018-03-29 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.46
+	* Make clean_perl actually do something useful
+
 2018-03-29 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.45
 	* Add gprintify fix for newer perl versions from Mageia
 
