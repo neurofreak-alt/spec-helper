@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use IPC::Run qw/run/;
-use Test::More tests => 78;
+use Test::More tests => 72;
 use FindBin qw/$Bin/;
 use File::Temp qw/tempdir/;
 
