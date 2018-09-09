@@ -21,7 +21,6 @@ my @progs = (
     "fix_mo",
     "fix_pamd",
     "fix_xdg",
-    "gprintify",
     "lib_symlinks",
     "relink_symlinks",
     "remove_info_dir",

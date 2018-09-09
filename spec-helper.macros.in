@@ -6,7 +6,6 @@
     %{?!dont_relink:			[ -n "$DONT_RELINK" ]        	|| %_spec_helper_dir/relink_symlinks} \
     %{?!dont_cleanup_perl:		[ -n "$DONT_CLEAN_PERL" ]    	|| %_spec_helper_dir/clean_perl} \
     %{?!dont_symlinks_libs:		[ -n "$DONT_SYMLINK_LIBS" ]  	|| %_spec_helper_dir/lib_symlinks} \
-    %{?!dont_gprintify:			[ -n "$DONT_GPRINTIFY" ]     	|| %_spec_helper_dir/gprintify} \
     %{?!dont_fix_mo:			[ -n "$DONT_FIX_MO" ]        	|| %_spec_helper_dir/fix_mo} \
     %{?!dont_fix_xdg:			[ -n "$DONT_FIX_XDG" ]       	|| %_spec_helper_dir/fix_xdg} \
     %{?!dont_fix_file_permissions: 	[ -n "$DONT_FIX_FILE_PERMISSIONS" ] || %_spec_helper_dir/fix_file_permissions} \
