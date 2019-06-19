@@ -295,15 +295,15 @@ while(<F>) {
     # replace macros with their values
     # (manual definition of these macros is obsolete and not needed, they are get defined
     # automatically on the basis of Name, Version and Release tags)
-    if( /^Name:(\s+)\%{?name}?$/ ) {
+    if( /^Name:(\s+)\%\{?name\}?$/ ) {
         print G "Name:$1$name\n";
         next;
     }
-    if( /^Version:(\s+)\%{?version}?$/ ) {
+    if( /^Version:(\s+)\%\{?version\}?$/ ) {
         print G "Version:$1$version\n";
         next;
     }
-    if( /^Release:(\s+)\%{?release}?$/ ) {
+    if( /^Release:(\s+)\%\{?release\}?$/ ) {
 	print G "Release:$1$release\n";
         next;
     }
