@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if [ -z "$RPM_BUILD_ROOT" ]; then
+    echo "No build root defined" >&2
+    exit 1
+fi
+
+if [ ! -d "$RPM_BUILD_ROOT" ]; then
+    echo "Invalid build root" >&2
+    exit 1
+fi
+
+set -efu
+# We fork a subshell, so working with a variable is not possible,
+# otherwise we will have to switch to bashisms and require /dev/fd/*
+tmpfile="$(mktemp)"
+trap 'rm -f "$tmpfile"' EXIT
+echo 0 > "$tmpfile"
+
+for dir in /bin /usr/bin /sbin /usr/sbin /usr/libexec
+do
+    if [ ! -d "${RPM_BUILD_ROOT}/${dir}" ]; then
+	continue
+    fi
+    find "${RPM_BUILD_ROOT}/${dir}" -type f -print | \
+    while read -r file
+    do
+    # Prohibit shebangs like:
+    # #!/usr/bin/python
+    # #! /usr/bin/python
+    # #!/usr/bin/env python
+    # #! /usr/bin/env python
+    # Note that a space may be in the end of the shebang line
+	if head -n 1 "$file" | grep -qE '^#!([[:blank:]])*.*(/python|[[:blank:]]python)([[:blank:]])*$' ; then
+	    echo "Unversioned Python shebangs are not allowed. Specify python3 or python2 explicitly in $file"
+	    # Do not fail on the 1st error, print all errors at one time
+	    echo 1 > "$tmpfile"
+	fi
+    done
+done
+
+if [ "$(head -n 1 "$tmpfile")" != 0 ]; then
+    exit 1
+fi
