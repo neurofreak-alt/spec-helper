@@ -26,13 +26,18 @@ while read path; do
 	    case $RDIR in
 		/lib|/lib32|/libx32|/lib64) 			echo removing $RDIR from rpath;;
 		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	echo removing $RDIR from rpath;;
-    *)      if [ -z "$NEWRPATH" ]; then
-		NEWRPATH="$RDIR"
-	    else
-		NEWRPATH="$NEWRPATH:$RDIR"
-	    fi
-	    ;;
-	esac
+		# often RPM %buildroot is in RPATH, delete it
+		*/BUILD/*)					echo removing $RDIR from rpath;;
+		# often for a directory /.libs/ inside %buildroot
+		*/.libs/*|*/.libs)				echo removing $RDIR from rpath;;
+		*)
+		    if [ -z "$NEWRPATH" ]; then
+			NEWRPATH="$RDIR"
+		    else
+			NEWRPATH="$NEWRPATH:$RDIR"
+		    fi
+		;;
+	    esac
     done
 
     if [ "$NEWRPATH" = "$RPATH" ]; then
