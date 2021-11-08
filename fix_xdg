@@ -2,12 +2,12 @@
 # Fix .desktop files to be compliant with XDG specification
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
@@ -18,4 +18,3 @@ do
     # if these lines do not end with '='
     sed -i 's/^\(Actions=.*\|MimeType=.*\|OnlyShowIn=.*\|Categories=.*\)\([[:alnum:]]\)[[:space:]]*$/\1\2;/' "$f"
 done
-

@@ -7,23 +7,23 @@
 # (c) Andrey Bondrov <andrey.bondrov@rosalab.ru> 2016
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
-for pc in $(find "$RPM_BUILD_ROOT" -name \*.pc); do
+for pc in $(find "$RPM_BUILD_ROOT" -name \*.pc -type f); do
 	export PKG_CONFIG_PATH="$(dirname $pc)"
 	pcfile="$(basename $pc)"
-	pcmodule="$(echo $pcfile|cut -d. -f1)"
+	pcmodule="$(printf '%s\n' $pcfile|cut -d. -f1)"
 	for variable in $(pkg-config --print-variables "$pcmodule"); do
 		dir=$(pkg-config --variable="$variable" "$pcmodule")
 		if [[ "$dir" == "/"* && -d "$dir" ]]; then
-			if [ "$dir" != "`realpath $dir`" ]; then
+			if [ "$dir" != "$(realpath $dir)" ]; then
 				parentdir=$(dirname ${dir})
 				subdir=$(basename ${dir})
 				regexp="-e s|\(${variable}=.*/${subdir}\)/.*\$|\1|g" 

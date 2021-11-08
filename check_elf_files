@@ -2,16 +2,16 @@
 # Check elf files
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
-LIB="`rpm --eval %{_lib}`"
+LIB="$(rpm --eval %{_lib})"
 export LD_LIBRARY_PATH="$RPM_BUILD_ROOT/$LIB:$RPM_BUILD_ROOT/usr/$LIB"
 
 
@@ -23,13 +23,13 @@ find "$RPM_BUILD_ROOT" -type f \( -executable -o -name \*.so\* \) -a \
 xargs  --no-run-if-empty -0 file -N -L |
 grep -e '\.so.*: ELF.*shared' -e ': ELF.*executable' |
 while read match; do
-path="`echo $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#' -e 's#: ELF.*executable.*##'`"
-syspath="`echo $path | sed -e \"s#^$RPM_BUILD_ROOT##\"`"
-if echo $match | grep -q -e ': ELF'; then
-    unused_libs="`ldd -u -r $path 2> /dev/null | grep /`"
+path="$(printf '%s\n' $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#' -e 's#: ELF.*executable.*##')"
+syspath="$(printf '%s\n' $path | sed -e \"s#^$RPM_BUILD_ROOT##\")"
+if printf '%s\n' $match | grep -q -e ': ELF'; then
+    unused_libs="$(ldd -u -r $path 2> /dev/null | grep /)"
     if [ -n "$unused_libs" ]; then
-    	echo "Warning: unused libraries in $syspath: " >&2
-	echo "$unused_libs" >&2
+	printf '%s\n' "Warning: unused libraries in $syspath: " >&2
+	printf '%s\n' "$unused_libs" >&2
     fi
 fi
 done
@@ -41,11 +41,11 @@ find "$RPM_BUILD_ROOT" -type f -name \*.so\*  -a \
 xargs  --no-run-if-empty -0 file -N -L |
 grep -e '\.so.*: ELF.*shared' |
 while read match; do
-path="`echo $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#'`"
-syspath="`echo $path | sed -e \"s#^$RPM_BUILD_ROOT##\"`"
-unused_libs="`ldd -u -r $path 2> /dev/null | grep /`"
-undefined_symbols="`ldd -r $path 2>&1 | grep '^undefined symbol: '| sed -e 's#^undefined symbol:##g' -e \"s#($path).*##g\" | tr -d '\n' | tr -d '\t'`"
+path="$(printf '%s\n' $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#')"
+syspath="$(printf '%s\n' $path | sed -e \"s#^$RPM_BUILD_ROOT##\")"
+unused_libs="$(ldd -u -r $path 2> /dev/null | grep /)"
+undefined_symbols="$(ldd -r $path 2>&1 | grep '^undefined symbol: '| sed -e 's#^undefined symbol:##g' -e \"s#($path).*##g\" | tr -d '\n' | tr -d '\t')"
 if [ -n "$undefined_symbols" ]; then
-    echo "Warning: undefined symbols in $syspath:$undefined_symbols" >&2
+    printf '%s\n' "Warning: undefined symbols in $syspath:$undefined_symbols" >&2
 fi
 done

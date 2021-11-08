@@ -2,17 +2,17 @@
 # convert end of line patterns from DOS to UNIX
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
 if [ -n "$1" ]; then
-    DIRECTORY=$(echo $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
+    DIRECTORY=$(printf '%s\n' $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
     if [ ! -d "$RPM_BUILD_ROOT$DIRECTORY" ]; then
 	exit 0
     fi

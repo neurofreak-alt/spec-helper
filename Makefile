@@ -1,13 +1,13 @@
 NAME = spec-helper
-VERSION = 0.31.49
-SVNPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
+VERSION = 0.31.50
+GITPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_mo fix_xdg fix_pkgconfig fix_pamd \
-		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol \
-		python_shebangs
+		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol
+
 BIN_FILES    = rediff_patch spec-cleaner
-MACROS_FILES = spec-helper.macros
+MACROS_FILES = macros.spec-helper
 TEST_FILES   = t/*.t
 FILES        = Makefile NEWS README \
 	       $(SCRIPT_FILES) $(BIN_FILES) $(MACROS_FILES:=.in) \
@@ -17,20 +17,20 @@ TEST_VERBOSE = 0
 
 bindir       = /usr/bin
 pkgdatadir   = /usr/share/$(NAME)
-rpmmacrosdir = /etc/rpm/macros.d
+rpmmacrodir  = /usr/lib/rpm/macros.d
 
 all:
 	@echo "use make install or make dist"
 
 install: $(MACROS_FILES)
 	install -d -m 755 $(DESTDIR)$(bindir)
-	install -m 755 $(BIN_FILES) $(DESTDIR)$(bindir)
+	install -p -m 755 $(BIN_FILES) $(DESTDIR)$(bindir)
 	install -d -m 755 $(DESTDIR)$(pkgdatadir)
-	install -m 755 $(SCRIPT_FILES) $(DESTDIR)$(pkgdatadir)
-	install -d -m 755 $(DESTDIR)/$(rpmmacrosdir)
-	install -m 644 $(MACROS_FILES) $(DESTDIR)/$(rpmmacrosdir)
+	install -p -m 755 $(SCRIPT_FILES) $(DESTDIR)$(pkgdatadir)
+	install -d -m 755 $(DESTDIR)$(rpmmacrodir)
+	install -p -m 644 $(MACROS_FILES) $(DESTDIR)$(rpmmacrodir)
 
-spec-helper.macros: spec-helper.macros.in
+macros.spec-helper: macros.spec-helper.in
 	sed -e 's:@pkgdatadir@:$(pkgdatadir):' < $< > $@
 
 clean:

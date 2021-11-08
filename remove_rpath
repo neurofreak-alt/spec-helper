@@ -1,12 +1,12 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
@@ -14,6 +14,14 @@ find "$RPM_BUILD_ROOT" \
     ! -path "${RPM_BUILD_ROOT}/usr/lib/debug/*" \
     ! -path "${RPM_BUILD_ROOT}/usr/doc/*" \
     ! -path "${RPM_BUILD_ROOT}/usr/share/doc/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/man/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/mime/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/icons/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/pixmaps/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/zoneinfo/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/share/locale/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/src/*" \
+    ! -path "${RPM_BUILD_ROOT}/usr/include/*" \
     -type f  -print0 |
 xargs  --no-run-if-empty -0 file -N -F ' //magic:' |
 grep -e "ELF" |
@@ -22,14 +30,14 @@ while read path; do
     RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
     [ -z "$RPATH" ] && continue
     NEWRPATH=
-    for RDIR in $(echo $RPATH|cut -d: --output-delimiter=" " -f1-); do
+    for RDIR in $(print '%s\n' $RPATH|cut -d: --output-delimiter=" " -f1-); do
 	    case $RDIR in
-		/lib|/lib32|/libx32|/lib64) 			echo removing $RDIR from rpath;;
-		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	echo removing $RDIR from rpath;;
+		/lib|/lib32|/libx32|/lib64) 			print '%s\n' removing $RDIR from rpath;;
+		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	print '%s\n' removing $RDIR from rpath;;
 		# often RPM %buildroot is in RPATH, delete it
-		*/BUILD/*)					echo removing $RDIR from rpath;;
+		*/BUILD/*)					print '%s\n' removing $RDIR from rpath;;
 		# often for a directory /.libs/ inside %buildroot
-		*/.libs/*|*/.libs)				echo removing $RDIR from rpath;;
+		*/.libs/*|*/.libs)				print '%s\n' removing $RDIR from rpath;;
 		*)
 		    if [ -z "$NEWRPATH" ]; then
 			NEWRPATH="$RDIR"
@@ -43,10 +51,10 @@ while read path; do
     if [ "$NEWRPATH" = "$RPATH" ]; then
 	    continue
     elif [ -z "$NEWRPATH" ]; then
-        chrpath -d "$path"
-        echo "Removing rpath ($RPATH) from $path"
+	chrpath -d "$path"
+	printf '%s\n' "Removing rpath ($RPATH) from $path"
     else
-        chrpath -r "$NEWRPATH" "$path"
-        echo "Removed parts of rpath ($RPATH) from $path, new rpath is $NEWRPATH"
+	chrpath -r "$NEWRPATH" "$path"
+	printf '%s\n' "Removed parts of rpath ($RPATH) from $path, new rpath is $NEWRPATH"
     fi
 done

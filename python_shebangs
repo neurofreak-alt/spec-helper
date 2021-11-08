@@ -1,12 +1,12 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
@@ -15,7 +15,7 @@ set -efu
 # otherwise we will have to switch to bashisms and require /dev/fd/*
 tmpfile="$(mktemp)"
 trap 'rm -f "$tmpfile"' EXIT
-echo 0 > "$tmpfile"
+printf '%s\n' "0" > "$tmpfile"
 
 for dir in /bin /usr/bin /sbin /usr/sbin /usr/libexec
 do
@@ -32,9 +32,9 @@ do
     # #! /usr/bin/env python
     # Note that a space may be in the end of the shebang line
 	if head -n 1 "$file" | grep -qE '^#!([[:blank:]])*.*(/python|[[:blank:]]python)([[:blank:]])*$' ; then
-	    echo "Unversioned Python shebangs are not allowed. Specify python3 or python2 explicitly in $file"
+	    printf '%s\n' "Unversioned Python shebangs are not allowed. Specify python3 or python2 explicitly in $file"
 	    # Do not fail on the 1st error, print all errors at one time
-	    echo 1 > "$tmpfile"
+	    printf '%s\n' "1" > "$tmpfile"
 	fi
     done
 done

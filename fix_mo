@@ -10,12 +10,12 @@
 #---------------------------------------------------------------
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    echo "No build root defined" >&2
+    printf '%s\n' "No build root defined" >&2
     exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    echo "Invalid build root" >&2
+    printf '%s\n' "Invalid build root" >&2
     exit 1
 fi
 
@@ -40,7 +40,7 @@ for i in "$KO_MESSAGES"/*.mo ; do
 	sed 's:그놈:GNOME:g' < $TMP > $TMP2 && msgfmt -o $i $TMP2
 	ret=$?
     else
-	echo "Unsupported encoding" 1>&2
+	printf '%s\n' "Unsupported encoding" 1>&2
     fi
 done
 
