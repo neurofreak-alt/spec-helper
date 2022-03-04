@@ -23,8 +23,8 @@ find "$RPM_BUILD_ROOT" -type f \( -executable -o -name \*.so\* \) -a \
 xargs  --no-run-if-empty -0 file -N -L |
 grep -e '\.so.*: ELF.*shared' -e ': ELF.*executable' |
 while read match; do
-path="$(printf '%s\n' $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#' -e 's#: ELF.*executable.*##')"
-syspath="$(printf '%s\n' $path | sed -e \"s#^$RPM_BUILD_ROOT##\")"
+path="$(echo $match | cut -d':' -f1)"
+syspath="$(echo $path | sed -e "s#^$RPM_BUILD_ROOT##")"
 if printf '%s\n' $match | grep -q -e ': ELF'; then
     unused_libs="$(ldd -u -r $path 2> /dev/null | grep /)"
     if [ -n "$unused_libs" ]; then
@@ -41,10 +41,10 @@ find "$RPM_BUILD_ROOT" -type f -name \*.so\*  -a \
 xargs  --no-run-if-empty -0 file -N -L |
 grep -e '\.so.*: ELF.*shared' |
 while read match; do
-path="$(printf '%s\n' $match | sed -e 's#\(\.so.*\): ELF.*shared.*#\1#')"
-syspath="$(printf '%s\n' $path | sed -e \"s#^$RPM_BUILD_ROOT##\")"
+path="$(echo $match | cut -d':' -f1)"
+syspath="$(echo $path | sed -e "s#^$RPM_BUILD_ROOT##")"
 unused_libs="$(ldd -u -r $path 2> /dev/null | grep /)"
-undefined_symbols="$(ldd -r $path 2>&1 | grep '^undefined symbol: '| sed -e 's#^undefined symbol:##g' -e \"s#($path).*##g\" | tr -d '\n' | tr -d '\t')"
+undefined_symbols="$(ldd -r $path 2>&1 | grep '^undefined symbol: '| sed -e 's#^undefined symbol:##g' -e "s#($path).*##g" | tr -d '\n' | tr -d '\t')"
 if [ -n "$undefined_symbols" ]; then
     printf '%s\n' "Warning: undefined symbols in $syspath:$undefined_symbols" >&2
 fi
