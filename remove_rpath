@@ -30,14 +30,14 @@ while read path; do
 	RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
 	[ -z "$RPATH" ] && continue
 	NEWRPATH=
-	for RDIR in $(print '%s\n' $RPATH|cut -d: --output-delimiter=" " -f1-); do
+	for RDIR in $(echo $RPATH|cut -d: --output-delimiter=" " -f1-); do
 		case $RDIR in
-		/lib|/lib32|/libx32|/lib64) 			print '%s\n' removing $RDIR from rpath;;
-		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	print '%s\n' removing $RDIR from rpath;;
+		/lib|/lib32|/libx32|/lib64) 			printf 'removing %s from rpath\n' $RDIR;;
+		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	printf 'removing %s from rpath\n' $RDIR;;
 		# often RPM %buildroot is in RPATH, delete it
-		*/BUILD/*)					print '%s\n' removing $RDIR from rpath;;
+		*/BUILD/*)					printf 'removing %s from rpath\n' $RDIR;;
 		# often for a directory /.libs/ inside %buildroot
-		*/.libs/*|*/.libs)				print '%s\n' removing $RDIR from rpath;;
+		*/.libs/*|*/.libs)				printf 'removing %s from rpath\n' $RDIR;;
 		*)
 			if [ -z "$NEWRPATH" ]; then
 			NEWRPATH="$RDIR"
