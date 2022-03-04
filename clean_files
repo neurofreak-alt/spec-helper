@@ -2,20 +2,20 @@
 # remove backup files
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 if [ -n "$1" ]; then
-    DIRECTORY=$(printf '%s\n' $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
-    if [ ! -d "$RPM_BUILD_ROOT$DIRECTORY" ]; then
-	exit 0
-    fi
+	DIRECTORY=$(printf '%s\n' $1 | sed -e "s#^$RPM_BUILD_ROOT##g")
+	if [ ! -d "$RPM_BUILD_ROOT$DIRECTORY" ]; then
+		exit 0
+	fi
 fi
 
 find "$RPM_BUILD_ROOT$DIRECTORY" \( -type f -o -type l \) \( \
@@ -35,4 +35,4 @@ find "$RPM_BUILD_ROOT$DIRECTORY" \( -type f -o -type l \) \( \
 	-name core \) \
 	-delete
 
-find "$RPM_BUILD_ROOT$DIRECTORY" -type d -name CVS | xargs rm -rf
+find "$RPM_BUILD_ROOT$DIRECTORY" -type d -name CVS -o -name .git -o -name .svn | xargs rm -rf

@@ -7,13 +7,13 @@
 # (c) Andrey Bondrov <andrey.bondrov@rosalab.ru> 2016
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 for pc in $(find "$RPM_BUILD_ROOT" -name \*.pc -type f); do

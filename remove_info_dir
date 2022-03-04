@@ -1,13 +1,13 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 INFODIR=$(rpm --eval %{_infodir}/dir)
@@ -15,5 +15,5 @@ INFODIR=$(rpm --eval %{_infodir}/dir)
 dir="$RPM_BUILD_ROOT/$INFODIR"
 
 if [ -f $dir ] && [ ! -f "$RPM_BUILD_ROOT/sbin/install-info" ] && [ ! -f "$RPM_BUILD_ROOT/usr/sbin/install-info" ]; then
-    rm -f $dir
+	rm -f $dir
 fi

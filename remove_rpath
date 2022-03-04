@@ -1,37 +1,37 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 find "$RPM_BUILD_ROOT" \
-    ! -path "${RPM_BUILD_ROOT}/usr/lib/debug/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/doc/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/doc/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/man/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/mime/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/icons/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/pixmaps/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/zoneinfo/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/share/locale/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/src/*" \
-    ! -path "${RPM_BUILD_ROOT}/usr/include/*" \
-    -type f  -print0 |
+	! -path "${RPM_BUILD_ROOT}/usr/lib/debug/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/doc/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/doc/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/man/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/mime/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/icons/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/pixmaps/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/zoneinfo/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/share/locale/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/src/*" \
+	! -path "${RPM_BUILD_ROOT}/usr/include/*" \
+	-type f  -print0 |
 xargs  --no-run-if-empty -0 file -N -F ' //magic:' |
 grep -e "ELF" |
 sed -e 's# //magic:.*##g' |
 while read path; do
-    RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
-    [ -z "$RPATH" ] && continue
-    NEWRPATH=
-    for RDIR in $(print '%s\n' $RPATH|cut -d: --output-delimiter=" " -f1-); do
-	    case $RDIR in
+	RPATH=$(chrpath -l "$path" 2>/dev/null| grep -e RUNPATH -e RPATH|sed -e 's#.*RPATH=##g' -e 's#.*RUNPATH=##g')
+	[ -z "$RPATH" ] && continue
+	NEWRPATH=
+	for RDIR in $(print '%s\n' $RPATH|cut -d: --output-delimiter=" " -f1-); do
+		case $RDIR in
 		/lib|/lib32|/libx32|/lib64) 			print '%s\n' removing $RDIR from rpath;;
 		/usr/lib|/usr/lib32|/usr/libx32|/usr/lib64)	print '%s\n' removing $RDIR from rpath;;
 		# often RPM %buildroot is in RPATH, delete it
@@ -39,22 +39,22 @@ while read path; do
 		# often for a directory /.libs/ inside %buildroot
 		*/.libs/*|*/.libs)				print '%s\n' removing $RDIR from rpath;;
 		*)
-		    if [ -z "$NEWRPATH" ]; then
+			if [ -z "$NEWRPATH" ]; then
 			NEWRPATH="$RDIR"
-		    else
+			else
 			NEWRPATH="$NEWRPATH:$RDIR"
-		    fi
+			fi
 		;;
-	    esac
-    done
+		esac
+	done
 
-    if [ "$NEWRPATH" = "$RPATH" ]; then
-	    continue
-    elif [ -z "$NEWRPATH" ]; then
-	chrpath -d "$path"
-	printf '%s\n' "Removing rpath ($RPATH) from $path"
-    else
-	chrpath -r "$NEWRPATH" "$path"
-	printf '%s\n' "Removed parts of rpath ($RPATH) from $path, new rpath is $NEWRPATH"
-    fi
+	if [ "$NEWRPATH" = "$RPATH" ]; then
+		continue
+	elif [ -z "$NEWRPATH" ]; then
+		chrpath -d "$path"
+		printf '%s\n' "Removing rpath ($RPATH) from $path"
+	else
+		chrpath -r "$NEWRPATH" "$path"
+		printf '%s\n' "Removed parts of rpath ($RPATH) from $path, new rpath is $NEWRPATH"
+	fi
 done

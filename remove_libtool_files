@@ -1,13 +1,13 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 find "$RPM_BUILD_ROOT" \( -type f -o -type l \) -name \*.la  -print0 |
@@ -15,5 +15,5 @@ xargs  --no-run-if-empty -0 file -N -L |
 grep "libtool library file" |
 sed -e 's#: libtool library file.*##g' |
 while read path; do
-    rm -f "$path"
+	rm -f "$path"
 done

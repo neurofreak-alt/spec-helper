@@ -1,3 +1,8 @@
+2021-03-04 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.51
+	* Fix relink_symlinks and check_elf_files
+	* Drop fix_mo that has been obsolete for around 2 decades
+	* Clean up
+
 2018-03-29 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.46
 	* Make clean_perl actually do something useful
 

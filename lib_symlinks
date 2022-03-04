@@ -1,11 +1,11 @@
 #!/bin/sh
 #---------------------------------------------------------------
-# Project         : Linux-Mandrake
-# Module          : spec-helper
-# File            : lib_symlinks
-# Author          : Frederic Lepied
-# Created On      : Tue Nov  7 08:33:05 2000
-# Description     : Run ldconfig to create symlinks to libraries.
+# Project	: Linux-Mandrake
+# Module	: spec-helper
+# File		: lib_symlinks
+# Author	: Frederic Lepied
+# Created On	: Tue Nov  7 08:33:05 2000
+# Description	: Run ldconfig to create symlinks to libraries.
 #
 # Copyright (C) 2000 by Frederic Lepied <flepied@mandrakesoft.com>
 # Redistribution of this file is permitted under the terms of the GNU 
@@ -13,13 +13,13 @@
 #---------------------------------------------------------------
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 libs=$(find "$RPM_BUILD_ROOT" -type d \
@@ -27,7 +27,7 @@ libs=$(find "$RPM_BUILD_ROOT" -type d \
    -a ! "(" -path '*/usr/src/debug*' -o -path '*/usr/lib/debug*' ")")
 
 if [ -n "$libs" ] || [ -n "$EXTRA_LIBS_TO_SYMLINK" ]; then
-    /sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
+	/sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
 fi
 
 # lib_symlinks ends here

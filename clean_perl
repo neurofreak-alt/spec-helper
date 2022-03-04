@@ -1,31 +1,31 @@
 #!/bin/sh
 
 if [ -z "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "No build root defined" >&2
-    exit 1
+	printf '%s\n' "No build root defined" >&2
+	exit 1
 fi
 
 if [ ! -d "$RPM_BUILD_ROOT" ]; then
-    printf '%s\n' "Invalid build root" >&2
-    exit 1
+	printf '%s\n' "Invalid build root" >&2
+	exit 1
 fi
 
 perldirs="$RPM_BUILD_ROOT/usr/lib/perl5 $RPM_BUILD_ROOT/usr/lib64/perl5 $RPM_BUILD_ROOT/usr/share/perl5"
 d=""
 for i in $perldirs; do
-    [ -d "$i" ] || continue
-    d="$d $i"
+	[ -d "$i" ] || continue
+	d="$d $i"
 done
 [ -z "$d" ] && exit 0
 
 find $d -name ".packlist" -o -name perllocal.pod | xargs rm -f
 
 for i in $(find $d -name "*.bs"); do
-    if [ -s $i ]; then
-	printf '%s\n' "non empty .bs file!"
-    else
-	rm -f $i
-    fi
+	if [ -s "$i" ]; then
+		printf '%s\n' "non empty .bs file!"
+	else
+		rm -f "$i"
+	fi
 done
 
 find $d -depth -type d -exec rmdir {} 2>/dev/null \;

@@ -16,70 +16,63 @@
 shopt -s nullglob
 
 spec_count=`ls -1 *spec 2>/dev/null | wc -l`
-if [[ $spec_count != 1 ]] 
-then 
-    echo "Can't detect spec file to work with - current folder either contains no spec files or contains several spec files."
-    exit
+if [[ $spec_count != 1 ]]; then 
+	echo "Can't detect spec file to work with - current folder either contains no spec files or contains several spec files."
+	exit
 fi
 
 target_patch=$1
 tarball=$2
 
-if [[ $target_patch == '-h' || $target_patch == '--help' ]]
-then
-    echo "USAGE: $0 [patch_to_rediff] [source_tarball] "
-    echo "         * if patch is not specified and the current folder contains only one patch,"
-    echo "         then that patch will be rediffed"
-    echo "         * if tarball is not specified and the current folder contains only one tarball,"
-    echo "         then the patch will be applied to content of that tarball"
-    echo "         * all actions are performed in rediff_patch subfolder of the current folder"
-    echo "         if rediff fails, that subfolder will not be removed and you will be able to "
-    echo "         finalize rediff manually"
+if [[ $target_patch == '-h' || $target_patch == '--help' ]]; then
+	echo "USAGE: $0 [patch_to_rediff] [source_tarball] "
+	echo "		 * if patch is not specified and the current folder contains only one patch,"
+	echo "		 then that patch will be rediffed"
+	echo "		 * if tarball is not specified and the current folder contains only one tarball,"
+	echo "		 then the patch will be applied to content of that tarball"
+	echo "		 * all actions are performed in rediff_patch subfolder of the current folder"
+	echo "		 if rediff fails, that subfolder will not be removed and you will be able to "
+	echo "		 finalize rediff manually"
 
-    exit 1
+	exit 1
 fi
 
 # Remember number of patch files in current dir
 patch_count=`ls -1 *patch 2>/dev/null | wc -l`
 
-if [[ "${target_patch}" == "" ]]
-then
-    # if no patch is provided as script argument and there is only a single patch in the folder,
-    # let's proceed with that patch. Otherwise, exit
-    if [[ $patch_count != 1 ]]
-    then 
-        if [[ $patch_count == 0 ]]
-        then
-            echo "No patch specified as an argument and current directory contains no patches"
-        else
-            echo "No patch specified as an argument and current directory contains more than one patch file"
-        fi
-        exit 1
-    else
-        target_patch=`ls -1 *patch`
-        echo "No patch specified as an argument, processing ${target_patch}"
-    fi
+if [[ "${target_patch}" == "" ]]; then
+	# if no patch is provided as script argument and there is only a single patch in the folder,
+	# let's proceed with that patch. Otherwise, exit
+	if [[ $patch_count != 1 ]]; then 
+		if [[ $patch_count == 0 ]]; then
+			echo "No patch specified as an argument and current directory contains no patches"
+		else
+			echo "No patch specified as an argument and current directory contains more than one patch file"
+		fi
+		exit 1
+	else
+		target_patch=`ls -1 *patch`
+		echo "No patch specified as an argument, processing ${target_patch}"
+	fi
 fi
 
 # Detect how the patch should be applied
 grep -q '%apply_patches' *.spec
-if [[ $? == 0 ]]
-then
-    # %apply_patches is used
-    patch_cmd="patch -p1 --force"
-elif [[ $patch_count == 1 ]]
-then
-    # only one patch and no %apply_patches, so we can expect the only %patch command in the spec
-    patch_cmd=`grep '^%patch' *spec | cut -f1,2 -d- | sed 's/^%patch[[:digit:]]*/patch --force /'`
+if [[ $? == 0 ]]; then
+	# %apply_patches is used
+	patch_cmd="patch -p1 --force"
+elif [[ $patch_count == 1 ]]; then
+	# only one patch and no %apply_patches, so we can expect the only %patch command in the spec
+	patch_cmd=`grep '^%patch' *spec | cut -f1,2 -d- | sed 's/^%patch[[:digit:]]*/patch --force /'`
 else
-    # grep for Patch: record in spec corresponding to our patch
-    # drop name from the beginning of the patch name,
-    # since one can use %name or %{name} in patch name in spec
-    project=`basename "$PWD"`
-    patch_num=`grep "^Patch.*${target_patch/$project/}" *spec | sed 's/^Patch\([[:digit:]]*\).*$/\1/'`
+	# grep for Patch: record in spec corresponding to our patch
+	# drop name from the beginning of the patch name,
+	# since one can use %name or %{name} in patch name in spec
+	project=`basename "$PWD"`
+	patch_num=`grep "^Patch.*${target_patch/$project/}" *spec | sed 's/^Patch\([[:digit:]]*\).*$/\1/'`
 
-    # now grep for necessary %patch command
-    patch_cmd=`grep "\%patch${patch_num}[[:space:]]\|\%patch${patch_num}\$" *spec | cut -f1,2 -d- | sed 's/^\%patch[[:digit:]]*/patch --force /'`
+	# now grep for necessary %patch command
+	patch_cmd=`grep "\%patch${patch_num}[[:space:]]\|\%patch${patch_num}\$" *spec | cut -f1,2 -d- | sed 's/^\%patch[[:digit:]]*/patch --force /'`
 fi
 
 rm -rf rediff_patch
@@ -88,80 +81,62 @@ pushd rediff_patch
 
 # if we have relative path, add "../" to it
 echo $tarball | grep -q "^/"
-if [[ $? != 0 ]]
-then
-    tarball="../$tarball"
+if [[ $? != 0 ]]; then
+	tarball="../$tarball"
 fi
 
 # tarball is specified in cmd line, let's unpack it
-if [[ $tarball =~ ".tar.gz" ]] 
-then 
-    tar xzf $tarball
-elif [[ $tarball =~ ".tgz" ]] 
-then 
-    tar xzf $tarball
-elif [[ $tarball =~ ".tar.Z" ]] 
-then 
-    tar xZf $tarball
-elif [[ $tarball =~ ".tar.bz2" ]] 
-then
-    tar xjf $tarball
-elif [[ $tarball =~ ".tbz2" ]] 
-then
-    tar xjf $tarball
-elif [[ $tarball =~ ".tar.xz" ]] 
-then 
-    tar xJf $tarball
-elif [[ $tarball =~ ".zip" ]] 
-then 
-    unzip $tarball
-elif [[ ! $tarball =~ "" ]]
-then
-    echo "Tarball type is not recognized, failed to unpack"
-    popd
-    rm -rf rediff_patch
-    exit 1
+if [[ $tarball =~ ".tar.gz" ]]; then 
+	tar xzf $tarball
+elif [[ $tarball =~ ".tgz" ]]; then 
+	tar xzf $tarball
+elif [[ $tarball =~ ".tar.Z" ]]; then 
+	tar xZf $tarball
+elif [[ $tarball =~ ".tar.bz2" ]]; then
+	tar xjf $tarball
+elif [[ $tarball =~ ".tbz2" ]]; then
+	tar xjf $tarball
+elif [[ $tarball =~ ".tar.xz" ]]; then 
+	tar xJf $tarball
+elif [[ $tarball =~ ".zip" ]]; then 
+	unzip $tarball
+elif [[ ! $tarball =~ "" ]]; then
+	echo "Tarball type is not recognized, failed to unpack"
+	popd
+	rm -rf rediff_patch
+	exit 1
 fi
 
 # Tarball is not specified - let's detect it
 # We only support the situaiton with single tarball in the folder
-if [[ -n $(echo ../*.tar.gz) ]] 
-then 
-    tar xzf ../*tar.gz
-elif [[ -n $(echo ../*.tgz) ]] 
-then 
-    tar xzf ../*tgz
-elif [[ -n $(echo ../*.tar.Z) ]] 
-then 
-    tar xZf ../*tar.Z
-elif [[ -n $(echo ../*.tar.bz2) ]] 
-then
-    tar xjf ../*tar.bz2
-elif [[ -n $(echo ../*.tbz2) ]] 
-then
-    tar xjf ../*tbz2
-elif [[ -n $(echo ../*.tar.xz) ]] 
-then 
-    tar xJf ../*tar.xz
-elif [[ -n $(echo ../*.zip) ]] 
-then 
-    unzip ../*zip
+if [[ -n $(echo ../*.tar.gz) ]]; then 
+	tar xzf ../*tar.gz
+elif [[ -n $(echo ../*.tgz) ]]; then 
+	tar xzf ../*tgz
+elif [[ -n $(echo ../*.tar.Z) ]]; then 
+	tar xZf ../*tar.Z
+elif [[ -n $(echo ../*.tar.bz2) ]]; then
+	tar xjf ../*tar.bz2
+elif [[ -n $(echo ../*.tbz2) ]]; then
+	tar xjf ../*tbz2
+elif [[ -n $(echo ../*.tar.xz) ]]; then 
+	tar xJf ../*tar.xz
+elif [[ -n $(echo ../*.zip) ]]; then 
+	unzip ../*zip
 fi
 
 # Let's check how many folders exist in the current one after tarball unpacking
 # We support only the situation when we have a single folder (except .git)
 # which will be subjected to patching then
 count=`ls -l | grep -v .git | grep '^d' 2>/dev/null | wc -l`
-if [[ $count != 1 ]]
-then 
-    if [[ $count == 0 ]]
-    then
-        echo "No folders, something went wrong with unpacking of tarball"
-    else
-        echo "More than one folder found - it seems that we have a tarball bomb, this is not curently supported"
-    fi
-    popd
-    exit 1
+if [[ $count != 1 ]]; then 
+	if [[ $count == 0 ]]; then
+		echo "No folders, something went wrong with unpacking of tarball"
+	else
+		echo "More than one folder found - it seems that we have a tarball bomb, this is not curently supported"
+	fi
+	popd
+	exit 1
 fi
 
 # Create folder backup and try to apply the patch
@@ -174,39 +149,35 @@ cd $folder
 failed=0
 echo "$patch_cmd < $target_patch"
 $patch_cmd < $target_patch
-if [[ $? != 0 ]]
-then
-    failed=1
-    echo "Rediff failed, you should rework the patch"
+if [[ $? != 0 ]]; then
+	failed=1
+	echo "Rediff failed, you should rework the patch"
 fi
 
 cd ..
 
 
-if [[ $failed == 0 ]]
-then
-    # Patch succeeded, let's recreate it
-    rm -f $folder/$target_patch
-    find $folder -name "*.orig" -delete
-    diff -Naur ${folder}.orig $folder > ../${target_patch}.new
+if [[ $failed == 0 ]]; then
+	# Patch succeeded, let's recreate it
+	rm -f $folder/$target_patch
+	find $folder -name "*.orig" -delete
+	diff -Naur ${folder}.orig $folder > ../${target_patch}.new
 
-    # .. and replace patch command in spec
-    # in case of %apply_patches, nothing to do
-    grep -q '%apply_patches' ../*.spec
-    if [[ $? != 0 ]]
-    then
-        if [[ $patch_count == 1 ]]
-        then
-            sed -i 's/^\%patch\(.*\) -p[[:digit:]]*/\%patch\1 -p1/' ../*spec
-        else
-            sed -i "s/^\%patch${patch_num} -p[[:digit:]]*/\%patch${patch_num} -p1/" ../*spec
-        fi
-    fi
+	# .. and replace patch command in spec
+	# in case of %apply_patches, nothing to do
+	grep -q '%apply_patches' ../*.spec
+	if [[ $? != 0 ]]; then
+		if [[ $patch_count == 1 ]]; then
+			sed -i 's/^\%patch\(.*\) -p[[:digit:]]*/\%patch\1 -p1/' ../*spec
+		else
+			sed -i "s/^\%patch${patch_num} -p[[:digit:]]*/\%patch${patch_num} -p1/" ../*spec
+		fi
+	fi
 
-    rm -rf ${folder}.orig $folder
+	rm -rf ${folder}.orig $folder
 else
-    popd # out from rediff_patch folder
-    exit 1
+	popd # out from rediff_patch folder
+	exit 1
 fi
 
 popd # out from rediff_patch folder

@@ -33,10 +33,6 @@ rewrite "bla $TOTO bla" in "bla %s bla" $TOTO in
 echo/failure/success/passed/daemon/action and replace echo by gprintf.
 Set DONT_GPRINTIFY to disable.
 
-fix-mo
-Fix bad translations.
-Set DONT_FIX_MO to disable.
-
 fixpamd
 Fix pam.d config files.
 Set DONT_FIX_PAMD_CONFIGS to disable.

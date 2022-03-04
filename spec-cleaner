@@ -14,11 +14,11 @@ $pkgname = $spec;
 $pkgname =~ s/\.spec$//;
 
 if (!$newspec) {
-    $newspec = $spec.".tmp";
+	$newspec = $spec.".tmp";
 }
 
 if (@ARGV < 1) {
-    die "Usage: $0 OLD_SPEC [NEW_SPEC]";
+	die "Usage: $0 OLD_SPEC [NEW_SPEC]";
 }
 
 $changelog = 0;
@@ -184,146 +184,145 @@ $in_script=0;
 open(F, $spec);
 open(G, "> $newspec");
 while(<F>) {
-    if( /^BuildRoot:/i or /^Packager:/i ) {
-	next;
-    }
-
-    # Obsolete
-    if( /^(Build)?Requires(\(.*\))?:\s*info-install\s*$/i ) {
-	next;
-    }
-
-    $line = $_;
-
-    # Captitalize summary and drop dot from its end, if any
-    if( $line =~ /^(%define\s*)?Summary:\s*(\S+)/i ) {
-	$word = $2;
-	$word_old = $word;
-	$word =~ s/(^[a-z])/\u$1/;
-	if( $word_old !~ /^$pkgname/ ) {
-	    $line =~ s/Summary:(\s*)$word_old/Summary:$1$word/;
-	}
-	else {
-	    print STDERR "Won't capitalize summary - it starts with project name\n";
+	if( /^BuildRoot:/i or /^Packager:/i ) {
+		next;
 	}
 
-	chomp $line;
-	if( $line =~ /\.\s*$/ ) {
-	    $line =~ s/\.\s*$//;
+	# Obsolete
+	if( /^(Build)?Requires(\(.*\))?:\s*info-install\s*$/i ) {
+		next;
 	}
-	print G $line."\n";
-	next;
-    }
 
-    if( /^%changelog/i ) {
-	$changelog = 1;
-	# By default, we drop changelogs from specs
-	# nowadays changelogs are generated from Git
-	# and most spec files contains only ancient changelog entries
-	if( !$SPEC_LEAVE_CHANGELOG ) {
-	    last;
+	$line = $_;
+
+	# Captitalize summary and drop dot from its end, if any
+	if( $line =~ /^(%define\s*)?Summary:\s*(\S+)/i ) {
+		$word = $2;
+		$word_old = $word;
+		$word =~ s/(^[a-z])/\u$1/;
+		if( $word_old !~ /^$pkgname/ ) {
+			$line =~ s/Summary:(\s*)$word_old/Summary:$1$word/;
+		} else {
+			print STDERR "Won't capitalize summary - it starts with project name\n";
+		}
+
+		chomp $line;
+		if( $line =~ /\.\s*$/ ) {
+			$line =~ s/\.\s*$//;
+		}
+		print G $line."\n";
+		next;
 	}
-    }
 
-    if( $changelog or /\s*#/) {
+	if( /^%changelog/i ) {
+		$changelog = 1;
+		# By default, we drop changelogs from specs
+		# nowadays changelogs are generated from Git
+		# and most spec files contains only ancient changelog entries
+		if( !$SPEC_LEAVE_CHANGELOG ) {
+			last;
+		}
+	}
+
+	if( $changelog or /\s*#/) {
+		print G $line;
+		next;
+	}
+
+	if( $line =~ /^\%defattr\(-,root,root(,-)?\)\s*$/ ) {
+		next;
+	}
+
+	$line =~ s/\$\{?RPM_BUILD_ROOT\}?/\%\{buildroot\}/g;
+	$line =~ s/\$\{?RPM_OPT_FLAGS\}?/\%\{optflags\}/g;
+
+	if( $line =~/^\s*(\%\{?__rm\}?|rm) -rf \%\{?buildroot\}?\s*$/ )  {
+		next;
+	}
+
+	$line =~ s/\%mkrel\s+//;
+	$line =~ s/\%\{\?dist\}//;
+	$line =~ s/make \%\{\?_smp_mflags\}/\%make_build/;
+	$line =~ s/\%make test/\make test/;
+
+	# Cleanup old grep usage
+	$line =~ s/fgrep/grep -F/g;
+	$line =~ s/egrep/grep -E/g;
+
+	# Clean up obsolete macro usage
+	$line =~ s/({|%)webappconfdir/$1_webappconfdir/g;
+	$line =~ s/({|%)py_libdir/$1py_purelibdir/g;
+	$line =~ s/({|%)py_sitedir/$1py_puresitedir/g;
+	$line =~ s/({|%)python_sitearch/$1py_platsitedir/g;
+	$line =~ s/({|%)python_sitelib/$1py_puresitedir/g;
+	$line =~ s/({|%)python3_sitearch/$1py3_platsitedir/g;
+	$line =~ s/({|%)python3_sitelib/$1py3_puresitedir/g;
+	$line =~ s/({|%)python_version/$1py_ver/g;
+	$line =~ s/({|%)pyver/$1py_ver/g;
+	$line =~ s/\%py_requires -d/BuildRequires:  python-devel/;
+
+	foreach $var (@vars) {
+		$line =~ s/\%$var/\%\{$var\}/g;
+	}
+
+	foreach $macro (@macros) {
+		$line =~ s/\%\{$macro\}/\%$macro/g;
+		$line =~ s/\%\{__$macro\}/\%$macro/g;
+	}
+
+	foreach $macro (@macros_to_unroll) {
+		my $repl = $macro;
+		$repl =~ s/^__//;
+		$repl =~ s/_/ -/;
+		$line =~ s/\%\{?$macro\}?/$repl/g;
+	}
+
+	foreach my $cmd ('mv', 'cp', 'python', 'rm') {
+		$line =~ s/\%\{_?_?$cmd\}/$cmd/g;
+	}
+
+	# Drop definitions of %name, %version and %release
+	if( /\%define\s+name\s+(.+)$/ ) {
+		$name = $1;
+		next;
+	}
+
+	if( /\%define\s+version\s+(.+)$/ ) {
+		$version = $1;
+		next;
+	}
+
+	if( /\%define\s+release\s+(.+)$/ ) {
+		$release = $1;
+		next;
+	}
+
+	# If Name, Version or Release are defined using %name, %version and %relese macros
+	# replace macros with their values
+	# (manual definition of these macros is obsolete and not needed, they are get defined
+	# automatically on the basis of Name, Version and Release tags)
+	if( /^Name:(\s+)\%\{?name\}?$/ ) {
+		print G "Name:$1$name\n";
+		next;
+	}
+
+	if( /^Version:(\s+)\%\{?version\}?$/ ) {
+		print G "Version:$1$version\n";
+		next;
+	}
+
+	if( /^Release:(\s+)\%\{?release\}?$/ ) {
+		print G "Release:$1$release\n";
+		next;
+	}
+
 	print G $line;
-	next;
-    }
-
-    if( $line =~ /^\%defattr\(-,root,root(,-)?\)\s*$/ ) {
-	next;
-    }
-
-    $line =~ s/\$\{?RPM_BUILD_ROOT\}?/\%\{buildroot\}/g;
-    $line =~ s/\$\{?RPM_OPT_FLAGS\}?/\%\{optflags\}/g;
-
-    if( $line =~/^\s*(\%\{?__rm\}?|rm) -rf \%\{?buildroot\}?\s*$/ )  {
-	next;
-    }
-
-    $line =~ s/\%mkrel\s+//;
-    $line =~ s/\%\{\?dist\}//;
-    $line =~ s/make \%\{\?_smp_mflags\}/\%make_build/;
-    $line =~ s/\%make test/\make test/;
-
-    # Cleanup old grep usage
-    $line =~ s/fgrep/grep -F/g;
-    $line =~ s/egrep/grep -E/g;
-
-    # Clean up obsolete macro usage
-    $line =~ s/({|%)webappconfdir/$1_webappconfdir/g;
-    $line =~ s/({|%)py_libdir/$1py_purelibdir/g;
-    $line =~ s/({|%)py_sitedir/$1py_puresitedir/g;
-    $line =~ s/({|%)python_sitearch/$1py_platsitedir/g;
-    $line =~ s/({|%)python_sitelib/$1py_puresitedir/g;
-    $line =~ s/({|%)python3_sitearch/$1py3_platsitedir/g;
-    $line =~ s/({|%)python3_sitelib/$1py3_puresitedir/g;
-    $line =~ s/({|%)python_version/$1py_ver/g;
-    $line =~ s/({|%)pyver/$1py_ver/g;
-    $line =~ s/\%py_requires -d/BuildRequires:  python-devel/;
-
-    foreach $var (@vars) {
-	$line =~ s/\%$var/\%\{$var\}/g;
-    }
-
-    foreach $macro (@macros) {
-	$line =~ s/\%\{$macro\}/\%$macro/g;
-	$line =~ s/\%\{__$macro\}/\%$macro/g;
-    }
-
-    foreach $macro (@macros_to_unroll) {
-	my $repl = $macro;
-	$repl =~ s/^__//;
-	$repl =~ s/_/ -/;
-	$line =~ s/\%\{?$macro\}?/$repl/g;
-    }
-
-    foreach my $cmd ('mv', 'cp', 'python', 'rm') {
-	$line =~ s/\%\{_?_?$cmd\}/$cmd/g;
-    }
-
-    # Drop definitions of %name, %version and %release
-    if( /\%define\s+name\s+(.+)$/ ) {
-	$name = $1;
-	next;
-    }
-
-    if( /\%define\s+version\s+(.+)$/ ) {
-	$version = $1;
-	next;
-    }
-
-    if( /\%define\s+release\s+(.+)$/ ) {
-	$release = $1;
-	next;
-    }
-
-    # If Name, Version or Release are defined using %name, %version and %relese macros
-    # replace macros with their values
-    # (manual definition of these macros is obsolete and not needed, they are get defined
-    # automatically on the basis of Name, Version and Release tags)
-    if( /^Name:(\s+)\%\{?name\}?$/ ) {
-	print G "Name:$1$name\n";
-	next;
-    }
-
-    if( /^Version:(\s+)\%\{?version\}?$/ ) {
-	print G "Version:$1$version\n";
-	next;
-    }
-
-    if( /^Release:(\s+)\%\{?release\}?$/ ) {
-	print G "Release:$1$release\n";
-	next;
-    }
-
-    print G $line;
 }
 
 # newspec was not specified in command line,
 # so we are using temoporary file; now let's move it
 # to original one
 if (!$ARGV[1]) {
-    system "cat $newspec > $spec";
-    system "rm -f $newspec";
+	system "cat $newspec > $spec";
+	system "rm -f $newspec";
 }
