@@ -1,11 +1,10 @@
 #!/usr/bin/perl
-# $Id: gprintify 257533 2009-05-23 12:45:15Z guillomovitch $
 
 use strict;
 use warnings;
 
 use IPC::Run qw/run/;
-use Test::More tests => 72;
+use Test::More tests => 66;
 use FindBin qw/$Bin/;
 use File::Temp qw/tempdir/;
 
@@ -18,7 +17,6 @@ my @progs = (
     "clean_perl",
     "fix_eol",
     "fix_file_permissions",
-    "fix_mo",
     "fix_pamd",
     "fix_xdg",
     "lib_symlinks",
