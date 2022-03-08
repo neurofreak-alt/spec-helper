@@ -1,3 +1,6 @@
+2021-03-08 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.52
+	* Fix more relink_symlinks bugs
+
 2021-03-04 Bernhard Rosenkraenzer <bero@lindev.ch> 0.31.51
 	* Fix relink_symlinks and check_elf_files
 	* Drop fix_mo that has been obsolete for around 2 decades
