@@ -36,7 +36,7 @@ while read symlink; do
 			# ln will try follow symlink if source exists as symlink, so let's move
 			# it out of the way first, then back afterwards
 			stat "$path" &> /dev/null && mv "$path" "$path.origlink"
-			output="$(ln -svr \"$path\" \"$symlink\" 2>&1)"
+			output="$(ln -svr "$path" "$symlink" 2>&1)"
 			stat "$path.origlink" &> /dev/null && mv "$path.origlink" "$path"
 			if ! stat "$symlink" &> /dev/null; then
 				printf '%s\n' "symlink relativization failed:" >&2
