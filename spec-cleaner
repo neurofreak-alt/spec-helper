@@ -259,7 +259,7 @@ while(<F>) {
 	$line =~ s/({|%)python3_sitelib/$1py3_puresitedir/g;
 	$line =~ s/({|%)python_version/$1py_ver/g;
 	$line =~ s/({|%)pyver/$1py_ver/g;
-	$line =~ s/\%py_requires -d/BuildRequires:  python-devel/;
+	$line =~ s/\%py_requires -d/BuildRequires:  pkgconfig\(python\)/;
 
 	foreach $var (@vars) {
 		$line =~ s/\%$var/\%\{$var\}/g;

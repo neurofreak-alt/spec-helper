@@ -13,6 +13,6 @@ fi
 configs=$(find $RPM_BUILD_ROOT/etc/pam.d/ -type f ! -type l 2> /dev/null)
 if [ -n "$configs" ]; then
 	printf '%s\n' "Fixing pam.d config files..."
-	sed -e 's,/lib64/security/,,g ; s,/lib/security/,,g' $configs
+	sed -r 's,/(usr/)?(lib|lib64)/security/,,g' $configs
 	printf '%s\n' "...done"
 fi

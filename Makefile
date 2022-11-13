@@ -1,5 +1,5 @@
 NAME = spec-helper
-VERSION = 0.31.50
+VERSION = 0.31.53
 GITPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
