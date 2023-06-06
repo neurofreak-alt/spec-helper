@@ -1,10 +1,11 @@
 NAME = spec-helper
-VERSION = 0.31.53
+VERSION = 0.31.54
 GITPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
 		lib_symlinks fix_file_permissions fix_xdg fix_pkgconfig fix_pamd \
-		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol
+		remove_info_dir remove_libtool_files remove_rpath relink_symlinks fix_eol \
+		fix_lto_intermediates_in_static_libraries
 
 BIN_FILES    = rediff_patch spec-cleaner
 MACROS_FILES = macros.spec-helper
