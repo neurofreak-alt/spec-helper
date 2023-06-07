@@ -16,7 +16,7 @@ check_convert_bitcode() {
 
 	if printf '%s' "${llvm_file_type}" | grep -q "LLVM IR bitcode"; then
 		printf 'Compiling bitcode in %s to object code\n' "${llvm_file_name}"
-		llvm-lto -o "${llvm_file_name}" "${llvm_file_name}"
+		llvm-lto -o "${llvm_file_name}" $(llvm-nm "${llvm_file_name}" |while read r; do echo $r |awk '{print $3;}' |grep -vE '^$' |sed -e 's,^,--exported-symbol=,'; done) "${llvm_file_name}"
 		return 0
 	elif printf '%s' "${llvm_file_type}" | grep -q "current ar archive"; then
 		printf '%s\n' "Unpacking ar archive ${llvm_file_name} to check for LLVM bitcode components."
