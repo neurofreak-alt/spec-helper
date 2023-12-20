@@ -1,5 +1,5 @@
 NAME = spec-helper
-VERSION = 0.31.54
+VERSION = 0.31.55
 GITPATH = git@github.com:OpenMandrivaSoftware/spec-helper.git
 
 SCRIPT_FILES =  clean_files clean_perl check_elf_files \
@@ -62,7 +62,7 @@ tar: dir localcopy
 
 dist: dist-git
 
-dist-git: 
+dist-git:
 	git archive --prefix=$(NAME)-$(VERSION)/ HEAD | xz -v > $(NAME)-$(VERSION).tar.xz
 
 gittag:

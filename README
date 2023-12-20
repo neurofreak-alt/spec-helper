@@ -28,11 +28,6 @@ lib_symlinks
 Run ldconfig to create symlinks to libraries.
 Set DONT_SYMLINK_LIBS to disable.
 
-gprintify
-rewrite "bla $TOTO bla" in "bla %s bla" $TOTO in
-echo/failure/success/passed/daemon/action and replace echo by gprintf.
-Set DONT_GPRINTIFY to disable.
-
 fixpamd
 Fix pam.d config files.
 Set DONT_FIX_PAMD_CONFIGS to disable.

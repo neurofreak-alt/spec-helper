@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# $Id: gprintify 257533 2009-05-23 12:45:15Z guillomovitch $
+# $Id: 257533 2009-05-23 12:45:15Z guillomovitch $
 
 use strict;
 use warnings;
