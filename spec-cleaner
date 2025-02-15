@@ -1,328 +1,65 @@
-#!/usr/bin/perl
-#
-# A script to clean up spec files and bring them closer to ROSA packaging policies
-#
-# Author: Denis Silakov, ROSA, denis.silakov@rosalab.com
-#
+#!/usr/bin/env python3
 
-$spec = $ARGV[0];
-$newspec = $ARGV[1];
+import re
+import sys
 
-use Env qw(SPEC_LEAVE_CHANGELOG);
-
-$pkgname = $spec;
-$pkgname =~ s/\.spec$//;
-
-if (!$newspec) {
-	$newspec = $spec.".tmp";
+# Dictionary of macros to replace: key is the macro, value is its replacement
+MACROS_TO_REPLACE = {
+    r'%make\b': '%make_build',
+    r'%makeinstall_std\b': '%make_install',
+    r'%configure2_5x\b': '%configure',
+    r'%apply_patches\b': '%autopatch -p1',
+    r'\$\{?RPM_BUILD_ROOT\}?': '%{buildroot}',
+    # Add more macros here as needed
+    # Example:
+    # r'%old_macro\b': '%new_macro',
 }
 
-if (@ARGV < 1) {
-	die "Usage: $0 OLD_SPEC [NEW_SPEC]";
-}
+def replace_macros_and_clean(file_path):
+    try:
+        # Read the file content
+        with open(file_path, 'r') as file:
+            original_content = file.read()
+        content = original_content
 
-$changelog = 0;
+        # Track changes
+        changes = []
 
-# List of macros known to be variables, so they should be embraced with '{}'
-my @vars = (
-'name',
-'version',
-'release',
-'eposh',
-'EVRD',
-'py_ver',
-'buildroot',
-'optflags',
-'ldflags',
-'build_ldflags',
-'_bindir',
-'_libdir',
-'rlibdir',
-'_sbindir',
-'_mandir',
-'_datadir',
-'_sysconfdir',
-'_webappconfdir',
-'_webconfdir',
-'_jvmcommonsysconfdir',
-'_jvmsysconfdir',
-'_mavendepmapfragdir',
-'_mavendepmapdir',
-'_initddir',
-'_sys_macros_dir',
-'_systemdconfdir',
-'_systemdrootdir',
-'_systemgeneratordir',
-'_systemshutdowndir',
-'_systemunitdir',
-'_unitdir',
-'_userunitdir',
-'_sharedstatedir',
-'_desktopdir',
-'_gamesbindir',
-'_includedir',
-'firefox_pluginsdir',
-'_jnidir',
-'_jvmcommonlibdir',
-'_jvmjardir',
-'_jvmdir',
-'_jvmprivdir',
-'_kde_plugindir',
-'_menudir',
-'_qt_bindir',
-'_qt_demodir',
-'_qt_exampledir',
-'_qt_importdir',
-'qt4include',
-'_qt_includedir',
-'qt4plugins',
-'_qt_plugindir',
-'qt4dir',
-'_qt_translationdir',
-'_systemdlibexecdir',
-'tcl_sitearch',
-'_usergeneratordir',
-'sampler_libdir',
-'_kde_applicationsdir',
-'_kde_appsdir',
-'_kde_configdir',
-'_qt_docdir',
-'_lispdir',
-'_xfontdir',
-'_gamesdatadir',
-'_icons16dir',
-'_icons192dir',
-'_icons22dir',
-'_icons48dir',
-'_icons64dir',
-'_icons96dir',
-'_iconsbasedir',
-'_iconsscaldir',
-'_iconsdir',
-'_liconsdir',
-'_miconsdir',
-'_infodir',
-'_javadocdir',
-'_javadir',
-'_jvmcommondatadir',
-'_jvmdatadir',
-'_localedir',
-'_mavenpomdir',
-'php_pear_dir',
-'_rpm_helper_dir',
-'_spec_helper_dir',
-'_systemddatadir',
-'_userunitdir',
-'_prefix',
-'tcl_sitelib',
-'_filetriggers_dir',
-'_localstatedir',
-'_logdir',
-'_repackage_dir',
-'ruby_gemdir',
-'ruby_ridir',
-'ruby_libdir',
-'ruby_sitelibdir',
-'ruby_vendorlibdir',
-'ruby_sitedir',
-'ruby_vendordir',
-'py3_platsitedir',
-'py3_platlibdir',
-'py3_incdir',
-'py_incdir',
-'py_platsitedir',
-'py_platlibdir',
-'py_dyndir',
-'py_puresitedir',
-'py_purelibdir',
-'py3_puresitedir',
-'py3_purelibdir',
-'perl_archlib',
-'perl_privlib',
-'perl_sitearch',
-'perl_sitelib',
-'perl_vendorarch',
-'perl_vendorlib',
-'perl_version',
+        # Replace macros using the dictionary
+        for old_macro, new_macro in MACROS_TO_REPLACE.items():
+            # Use regex to replace only whole macros
+            new_content, count = re.subn(old_macro, new_macro, content)
+            if count > 0:
+                changes.append(f"Replaced '{old_macro}' with '{new_macro}' {count} times")
+            content = new_content
 
-);
+        # Remove trailing spaces from each line
+        lines = content.splitlines()
+        cleaned_lines = [line.rstrip() for line in lines]
+        cleaned_content = "\n".join(cleaned_lines) + "\n"  # Ensure trailing newline
 
-my @macros = (
-'make',
-'make_build',
-'make_install',
-'makeinstall_std',
-'configure',
-'configure2_5x',
+        # Check if trailing spaces were removed
+        if cleaned_content != content:
+            changes.append("Removed trailing spaces from all lines")
 
-);
+        # Check if any changes were made
+        if changes:
+            # Write the modified content back to the file
+            with open(file_path, 'w') as file:
+                file.write(cleaned_content)
+            print(f"Changes in file '{file_path}':")
+            for change in changes:
+                print(f"  - {change}")
+        else:
+            print(f"Nothing to clean in file '{file_path}'.")
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-my @macros_to_unroll = (
-'__mkdir_p',
-'__mkdir',
-'__ln_s',
-'__ln',
-'__mv',
-'__perl',
-'__python',
-'__python3',
-'__rm',
-'__rmdir',
-'__ruby',
-'__cp',
-'__grep',
-'__cat',
-'__chmod',
-'__chown',
-'__install',
-
-);
-
-# Indicates that we are inside post- or pre- script
-$in_script=0;
-
-open(F, $spec);
-open(G, "> $newspec");
-while(<F>) {
-	if( /^BuildRoot:/i or /^Packager:/i ) {
-		next;
-	}
-
-	# Obsolete
-	if( /^(Build)?Requires(\(.*\))?:\s*info-install\s*$/i ) {
-		next;
-	}
-
-	$line = $_;
-
-	# Captitalize summary and drop dot from its end, if any
-	if( $line =~ /^(%define\s*)?Summary:\s*(\S+)/i ) {
-		$word = $2;
-		$word_old = $word;
-		$word =~ s/(^[a-z])/\u$1/;
-		if( $word_old !~ /^$pkgname/ ) {
-			$line =~ s/Summary:(\s*)$word_old/Summary:$1$word/;
-		} else {
-			print STDERR "Won't capitalize summary - it starts with project name\n";
-		}
-
-		chomp $line;
-		if( $line =~ /\.\s*$/ ) {
-			$line =~ s/\.\s*$//;
-		}
-		print G $line."\n";
-		next;
-	}
-
-	if( /^%changelog/i ) {
-		$changelog = 1;
-		# By default, we drop changelogs from specs
-		# nowadays changelogs are generated from Git
-		# and most spec files contains only ancient changelog entries
-		if( !$SPEC_LEAVE_CHANGELOG ) {
-			last;
-		}
-	}
-
-	if( $changelog or /\s*#/) {
-		print G $line;
-		next;
-	}
-
-	if( $line =~ /^\%defattr\(-,root,root(,-)?\)\s*$/ ) {
-		next;
-	}
-
-	$line =~ s/\$\{?RPM_BUILD_ROOT\}?/\%\{buildroot\}/g;
-	$line =~ s/\$\{?RPM_OPT_FLAGS\}?/\%\{optflags\}/g;
-
-	if( $line =~/^\s*(\%\{?__rm\}?|rm) -rf \%\{?buildroot\}?\s*$/ )  {
-		next;
-	}
-
-	$line =~ s/\%mkrel\s+//;
-	$line =~ s/\%\{\?dist\}//;
-	$line =~ s/make \%\{\?_smp_mflags\}/\%make_build/;
-	$line =~ s/\%make test/\make test/;
-
-	# Cleanup old grep usage
-	$line =~ s/fgrep/grep -F/g;
-	$line =~ s/egrep/grep -E/g;
-
-	# Clean up obsolete macro usage
-	$line =~ s/({|%)webappconfdir/$1_webappconfdir/g;
-	$line =~ s/({|%)py_libdir/$1py_purelibdir/g;
-	$line =~ s/({|%)py_sitedir/$1py_puresitedir/g;
-	$line =~ s/({|%)python_sitearch/$1py_platsitedir/g;
-	$line =~ s/({|%)python_sitelib/$1py_puresitedir/g;
-	$line =~ s/({|%)python3_sitearch/$1py3_platsitedir/g;
-	$line =~ s/({|%)python3_sitelib/$1py3_puresitedir/g;
-	$line =~ s/({|%)python_version/$1py_ver/g;
-	$line =~ s/({|%)pyver/$1py_ver/g;
-	$line =~ s/\%py_requires -d/BuildRequires:  pkgconfig\(python\)/;
-
-	foreach $var (@vars) {
-		$line =~ s/\%$var/\%\{$var\}/g;
-	}
-
-	foreach $macro (@macros) {
-		$line =~ s/\%\{$macro\}/\%$macro/g;
-		$line =~ s/\%\{__$macro\}/\%$macro/g;
-	}
-
-	foreach $macro (@macros_to_unroll) {
-		my $repl = $macro;
-		$repl =~ s/^__//;
-		$repl =~ s/_/ -/;
-		$line =~ s/\%\{?$macro\}?/$repl/g;
-	}
-
-	foreach my $cmd ('mv', 'cp', 'python', 'rm') {
-		$line =~ s/\%\{_?_?$cmd\}/$cmd/g;
-	}
-
-	# Drop definitions of %name, %version and %release
-	if( /\%define\s+name\s+(.+)$/ ) {
-		$name = $1;
-		next;
-	}
-
-	if( /\%define\s+version\s+(.+)$/ ) {
-		$version = $1;
-		next;
-	}
-
-	if( /\%define\s+release\s+(.+)$/ ) {
-		$release = $1;
-		next;
-	}
-
-	# If Name, Version or Release are defined using %name, %version and %relese macros
-	# replace macros with their values
-	# (manual definition of these macros is obsolete and not needed, they are get defined
-	# automatically on the basis of Name, Version and Release tags)
-	if( /^Name:(\s+)\%\{?name\}?$/ ) {
-		print G "Name:$1$name\n";
-		next;
-	}
-
-	if( /^Version:(\s+)\%\{?version\}?$/ ) {
-		print G "Version:$1$version\n";
-		next;
-	}
-
-	if( /^Release:(\s+)\%\{?release\}?$/ ) {
-		print G "Release:$1$release\n";
-		next;
-	}
-
-	print G $line;
-}
-
-# newspec was not specified in command line,
-# so we are using temoporary file; now let's move it
-# to original one
-if (!$ARGV[1]) {
-	system "cat $newspec > $spec";
-	system "rm -f $newspec";
-}
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: /usr/bin/spec-cleaner foo.spec")
+    else:
+        file_path = sys.argv[1]
+        replace_macros_and_clean(file_path)
