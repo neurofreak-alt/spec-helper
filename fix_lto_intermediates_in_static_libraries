@@ -9,6 +9,12 @@ if [ -z "$RPM_BUILD_ROOT" ] || [ "$RPM_BUILD_ROOT" = "/" ]; then
 	exit 0
 fi
 
+# Check if llvm-lto is available
+if ! command -v llvm-lto >/dev/null 2>&1; then
+    echo "llvm-lto not found, skipping LLVM IR bitcode compilation."
+    exit 0
+fi
+
 check_convert_bitcode() {
 	printf "Checking %s for LLVM IR bitcode\n" "${1}"
 	llvm_file_name="$(realpath ${1})"
