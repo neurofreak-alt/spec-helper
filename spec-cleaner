@@ -9,6 +9,7 @@ MACROS_TO_REPLACE = {
     r'%makeinstall_std\b': '%make_install',
     r'%configure2_5x\b': '%configure',
     r'%apply_patches\b': '%autopatch -p1',
+    r'%makeinstallqt\b': '%make_install INSTALL_ROOT="%{buildroot}"',
     r'\$\{?RPM_BUILD_ROOT\}?': '%{buildroot}',
     r'%setup_compile_flags\b': '%set_build_flags',
     # Add more macros here as needed
