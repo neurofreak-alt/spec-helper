@@ -10,6 +10,7 @@ MACROS_TO_REPLACE = {
     r'%configure2_5x\b': '%configure',
     r'%apply_patches\b': '%autopatch -p1',
     r'\$\{?RPM_BUILD_ROOT\}?': '%{buildroot}',
+    r'%setup_compile_flags\b': '%set_build_flags',
     # Add more macros here as needed
     # Example:
     # r'%old_macro\b': '%new_macro',
@@ -32,6 +33,20 @@ def replace_macros_and_clean(file_path):
             if count > 0:
                 changes.append(f"Replaced '{old_macro}' with '{new_macro}' {count} times")
             content = new_content
+
+        # Remove lines containing %serverbuild or %serverbuild_hardened
+        lines = content.splitlines()
+        filtered_lines = []
+        server_build_removed = 0
+        server_build_pattern = re.compile(r'%serverbuild\b|%serverbuild_hardened\b')
+        for line in lines:
+            if server_build_pattern.search(line):
+                server_build_removed += 1
+            else:
+                filtered_lines.append(line)
+        if server_build_removed > 0:
+            changes.append(f"Removed {server_build_removed} lines containing %serverbuild or %serverbuild_hardened")
+        content = "\n".join(filtered_lines)
 
         # Remove trailing spaces from each line
         lines = content.splitlines()
