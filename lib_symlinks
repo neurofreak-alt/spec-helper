@@ -27,7 +27,7 @@ libs=$(find "$RPM_BUILD_ROOT" -type d \
    -a ! "(" -path '*/usr/src/debug*' -o -path '*/usr/lib/debug*' ")")
 
 if [ -n "$libs" ] || [ -n "$EXTRA_LIBS_TO_SYMLINK" ]; then
-	/sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
+	/usr/sbin/ldconfig -n -N $libs $EXTRA_LIBS_TO_SYMLINK
 fi
 
 # lib_symlinks ends here
