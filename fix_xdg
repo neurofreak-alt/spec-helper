@@ -13,6 +13,9 @@ fi
 
 # Find .desktop files
 find "$RPM_BUILD_ROOT" -name "*.desktop" -type f -print | while read f; do
+	# Ensure we have write permissions
+	[ -w "$f" ] || chmod u+w "$f" 2>/dev/null || continue
+
 	# Add trailing semicolons to lines starting with 'Actions=' or 'MimeType='
 	# if these lines do not end with '='
 	sed -i 's/^\(Actions=.*\|MimeType=.*\|OnlyShowIn=.*\|Categories=.*\)\([[:alnum:]]\)[[:space:]]*$/\1\2;/' "$f"
